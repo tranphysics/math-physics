@@ -1,0 +1,206 @@
+\documentclass[10pt]{scrartcl}
+\usepackage[sexy]{evan}
+\usepackage{braket}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\usepackage{courier}
+\usepackage{tikz}
+\usepackage[compat=1.1.0]{tikz-feynman}
+\usepackage{comment}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+	pdftitle={Overleaf Example},
+	pdfpagemode=FullScreen,
+}
+
+
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+
+\hypersetup{
+	colorlinks=true, %set true if you want colored links
+	linktoc=all,     %set to all if you want both sections and subsections linked
+	linkcolor=blue,  %choose some color if you want links to stand out
+}
+\usepackage{geometry}
+%\usepackage{showframe} %This line can be used to clearly show the new margins
+
+
+\newgeometry{vmargin={30mm}, hmargin={20mm,20mm}}   % set the margins
+\begin{document}
+	\title{classical fields} % Beginner
+	\date{Nov 2021}
+	\maketitle
+	
+	\begin{abstract}
+		\sffamily\small
+		Here is a collected notes on physics readings.
+	\end{abstract}
+	
+	\vspace{1em}
+	
+	\tableofcontents
+	\newpage
+	
+\section{Basic Equations}
+
+\subsection{Scalar fields}
+Legendre transform from hamiltonian to lagrangian
+\[ ML[\phi, \dot{\phi}] = \pi[\phi, \dot{\phi}]  \dot{\phi} - \MH[\phi, \pi[\phi, \dot{\phi}]] \]
+Euler Lagrange equation
+\[S = \int \dd^4 x \ML\]
+\[\delta S = \int \dd^4 x \left[\pder[\ML]{\phi} \delta \phi + \pder[\ML]{(\partial_\mu \phi)} \delta(\partial_\mu \phi) \right]\]
+\[ \int \dd^4 x \left[\pder[\ML]{\phi} -   \partial_\mu \pder[\ML]{(\partial_\mu \phi)} \right] \delta \phi(x) + \underbrace{}{\text{surface term}} \]
+\[\rightarrow \pder[\ML]{\phi} -   \partial_\mu \pder[\ML]{(\partial_\mu \phi)}  = 0 \text{ \textbf{Euler Lagrange}}\]
+
+Noether's theorem:
+\[ \vec{\phi} \rightarrow U(\underbrace{\alpha}_{\text{continuous param}}) \vec{\phi} \]
+\[J_\mu = \underbrace{\sum_n}_{\text{field component sum}} \pder[\ML]{(\partial_\mu \phi_n)} {\delta \phi_n \over \delta \alpha} \]
+
+SHO/wave equation
+\[E = \dot{\phi}^2 + m^2 \phi^2 - \underbrace{(\nabla \phi)^2} \]
+\[L = - \phi (\underbrace{\partial_t^2 - \partial_x^2}_{\partial_\mu \partial^\mu \equiv \partial^2}+ m^2) \phi \]
+
+\subsection{Gauge Fields}
+
+Maxwell's equations, tensor notation:
+\begin{align*}
+	F^{\mu \nu} &= \partial^\mu A^\nu - \partial^\nu A^\mu \\
+	\partial^\mu &= (\pder{t}, - \grad) \\
+	F &= d A \\
+	g_{\alpha \beta} &= \text{diag} (+1, -1, -1, -1) = g^{\alpha \beta} \\
+	F^{\mu \nu} &= \begin{pmatrix}
+		0 & -E_x & -E_y  & -E_z \\
+		E_x & 0 & -B_z & B_y  \\ 
+		E_y & B_z &  0 & -B_x \\
+		E_z & -B_y & B_x & 0 \\
+	\end{pmatrix} \\
+	F_{\mu \nu} &= g_{\mu \alpha} F^{\alpha \beta} g_{\beta \nu} \\
+	&=   \begin{pmatrix}
+		0 & E_x & E_y  & E_z \\
+		-E_x & 0 & -B_z & B_y  \\ 
+		-E_y & B_z &  0 & -B_x \\
+		-E_z & -B_y & B_x & 0 \\
+	\end{pmatrix} \\
+	\text{Faraday Tensor}: G^{\alpha \beta} & = \frac12 \epsilon^{\alpha \beta \mu \nu} F_{\mu \nu} \\
+	G^{\alpha \beta} &= \begin{pmatrix}
+		0 & -B_x & -B_y  & -B_z \\
+		B_x & 0 & E_z & -E_y  \\ 
+		B_y & -E_z &  0 & E_x \\
+		B_z & E_y & -E_x & 0 \\
+	\end{pmatrix}  \\
+	& \text{EM duality: } (E, B) \rightarrow (B, -E) \\
+	G &= * F \\
+\end{align*}
+
+$F_{\mu \nu}$ is a covariant 2-tensor.  It transforms accordingly:
+\begin{align}
+	F_{\mu \nu} = \Lambda^{\sigma}_{\mu} \Lambda^{\rho}_{\nu} F_{\rho \sigma}
+\end{align}
+
+A natural lagrangian density is:
+\begin{align*}
+	\mathcal{L} & = -\frac14 F_{\mu \nu} F^{\mu \nu} \\
+	& = - \underbrace{2}_{\text{symmetric sum}}  \times (\frac14) \left( E \times  (-E) - + B \times B\right) \\
+	& = \frac12 \left(E^2 - B^2 \right)
+\end{align*}
+
+Furthermore one can compute the energy momentum tensor:
+\begin{align}
+	T^{\mu}_{\nu} = \pder[ \mathcal{L} ]{\left( \partial^\mu \phi \right)}  \partial_\nu \phi - \mathcal{L} \delta^{\mu}_{\nu}
+\end{align}
+
+Note the energy-momentum tensor is not unique.  One can always add a completely anti-symmetric divergence (see landau lifshitz vol. 2, 33):
+\begin{align}
+	\partial_{\mu} T^{\mu \nu} = 0 \rightarrow \partial_\mu \left(T^{\mu \nu} + \partial_{\rho} \underbrace{U^{\rho \mu \nu}}_{\text{anti-symmetric}} \right) = 0 
+\end{align}
+
+We can rewrite the equations compactly
+
+\begin{align}
+	& \curl \Bb =  - \pder{t}{\Eb} &   \nabla \cdot \Eb = 0 \\
+	& \partial_\mu F^{\mu \nu} = J^\nu  &  \dd * F = * J  \\
+	& \curl \Eb = \pder{t}{\Bb}  & \nabla \cdot B = 0  \\
+	& \partial_{[\alpha} F_{\beta \rho ]} = 0  & \dd F = 0 
+\end{align}
+
+Generalized charged conservation:
+\begin{align}
+	\dd (\dd * F) = 0 \rightarrow \int_{\partial \MR} *J = 0
+\end{align}
+
+\begin{example}
+	Duality symmetries.
+	\begin{align}
+		\tilde{F} \equiv F + i *F \label{eq:emduality} \\
+		d \tilde{F} = 0.
+	\end{align}
+	Note \ref{eq:emduality} only make sense in 4 dimensions where the F is a (0,2) tensor and *F is a (2, 0) tensor.
+	There's a continous set of duality transformation, of which hodge is 1 special case for $\theta = {\pi \over 2}$ (Zee, Penrose)
+	\begin{align}
+		\tilde{F} \rightarrow e^{i \theta} \tilde{F}
+	\end{align}
+	E, B rotate into each other (literally) under this transformation.
+\end{example}
+
+
+\section{Solving the Equations}
+s\subsection{Klein gordon}
+Solution:
+\[e^{ikx} = e^{i (\mathbf{k} \cdot \mathbf{x} - \omega t)} \]
+In fourier space:
+\[k_\mu k^\mu - m^2 = 0 \rightarrow -\omega^2 + |\mathbf{k}|^2 + m^2 = 0 \]
+Green function:
+\begin{align}
+G(x) &= \int \dkk {e^{-ikx} \over k^2 - m^2 + i \epsilon}  = {1 \over (2 \pi)^4} \int \dd^3 k \dd \omega { e^{-i (\omega t - \mathbf{k} \cdot \mathbf{x}) }  \over \omega^2 - |\mathbf{k}|^2 - m^2} \\
+ \text{poles at $\omega =\pm \omega_k$}
+\rightarrow  & = {1 \over (2 \pi)^{d}} \int d^{d-1} k {1 \over 2 \underbrace{\omega_k}_{\sqrt{|\bf{k}|^2 + m^2}}} \left(e^{- i \omega_k t} \theta(t) + e^{i \omega_k t} \theta(-t) \right) e^{i \bf{k} \cdot r} \\
+& = {1 \over (2 \pi)^d} \int d^{d-1} k {1 \over 2 \omega_k} \exp(-i \omega_k |t| - i \bf{k} \cdot \bf{r})
+\end{align}
+
+Volume element in spherical coordinate:
+$$ dV_d = r^{d-1} \underbrace{\sin(\theta_1)... \sin(\theta_{d-2})}_{d-2 \text{terms}} \cos(\phi) dr d\phi d\theta_1 ... d \theta_{d-2}$$
+
+\begin{align}
+	G(x) &= {S_d \over (2 \pi)^d} \int_0^\infty  dk k^{d-1}  \int_{-\pi}^{\pi}  d \theta \sin(\theta)^{d-2} \exp \left(i \omega_k |t| - i k r \cos(\theta) \right) \\
+	& = {1 \over 2 (2 \pi )^{d \over 2} r^{{d \over 2} -1} } \int_0^{\infty} dk k^{d-1} \underbrace{J^1_{{d \over 2}-1}}_{\text{bessel}} \exp \left(-i \omega_k |t| - i kr \right)
+	\end{align}
+
+
+For the full general derivation, see \texttt{ https://arxiv.org/pdf/0811.1261.pdf }
+
+Point source.  If the point source is $J(r, t) = \delta^{d-1} (r)$ and time independent, it reduces to the hemholtz equation.
+\begin{align}
+	(- \grad^2 + m^2) \phi = \delta^{d-1} (r)
+	\end{align}
+2 ways to solve:
+\begin{itemize}
+	\item Direct fourier:
+	\begin{align}
+		\phi(\mathbf{x}) &= \int \dkk {e^{i {\mathbf{k}} \cdot{\mathbf{x}}}  \over k^2 + m^2}
+		\end{align}
+	in $d = 3$, it's simple
+	\begin{align}
+		\phi(x) &={2 \pi  \over (2 \pi)^3} \int k^2 dk \int_{-1}^1 d (\cos(\theta)) {e^{-ikr \cos(\theta)} \over k^2 + m^2} \\
+		&= \int_0^{\infty} {k dk \over (2 \pi^2)} {\sin(kr) \over k^2 + m^2} \\
+		\text{residue at $\pm im$} &= {e^{-mr} \over 4 \pi r}
+		\end{align}
+\item The laplace operator in d dimension is in arbitrary curvilinear coordinate:
+\begin{align}
+	\text{laplace beltrami:  } \Delta = {1 \over \sqrt{|g|}} \pder{\xi^i} \left(\sqrt{|g|} g^{ij} \pder{\xi^j}  \right)
+	\end{align}
+For spherical symmetric:
+\begin{align}
+	\Delta = {1 \over r} \pder{r} \left(r^{d-1} \pder{r} \right) + \text{angular part}
+	\rightarrow 
+	\end{align}
+\end{itemize}
+
+
+
+
+
+\end{document}

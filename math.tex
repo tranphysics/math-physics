@@ -1,0 +1,1069 @@
+
+\documentclass[11pt]{scrartcl}
+\usepackage[sexy]{evan}
+\usepackage{braket}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage[compat=1.1.0]{tikz-feynman}
+\usepackage{comment}
+
+
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+
+\hypersetup{
+	colorlinks=true, %set true if you want colored links
+	linktoc=all,     %set to all if you want both sections and subsections linked
+	linkcolor=blue,  %choose some color if you want links to stand out
+}
+\usepackage{geometry}
+%\usepackage{showframe} %This line can be used to clearly show the new margins
+
+
+\newgeometry{vmargin={30mm}, hmargin={20mm,20mm}}   % set the margins
+\begin{document}
+	\title{Notes 2018, Part I} % Beginner
+	\date{December 2017}
+	\maketitle
+	
+	\begin{abstract}
+		\sffamily\small
+		Here is a collected notes on physics readings.
+	\end{abstract}
+	
+	\vspace{1em}
+	
+	\tableofcontents
+	\newpage
+
+
+\section{Resources}
+Most of the math literature is not geared toward physics.  Here's some resources we found useful:
+
+\begin{itemize}
+	\item Gravitation, Gauge Theories and Differential Geometry (Eguchi, Hanson 1980 paper).  Basically sparknotes with extremely condensed information on everything geometry for physics, written in concrete way with examples.  Very good to know main results.  Basically math by examples.
+	\item Lecture by Hirosi Ooguri on mathematical Physics.  More modern account of Eguchi and Hanson.
+	\item Nakahara.  Same topics as Ooguri but more detailed and slightly more formal.
+	\item Joseph Minahan Mathematical Physics Notes.  Really condensed lecture notes (80 pages) covering both group/lie representation theory and differential geometry.
+	\item Srednicki section 2, 33, 34, 70.  Mostly lie algebra representations, include lorentz representation and spinors.  Not much intuition but enough to calculate stuff.
+	\item Stone, Goldbart, Mathematics for Physics Graduate Student.  Covers stuff in Nakahara, but more informally, and has more examples on how to actually compute stuff.  Pretty good to understand what differential forms actually do.
+	\item Carroll Spacetime and Geometry.  Being a GR book it's quite good on keeping upper and lower index notation clean, good for differential form definitions.  Not much computational examples.
+\end{itemize}
+
+\section{Geometry}
+\subsection{Exterior Algebra}
+\emph{Ooguri Lecture 1 and 2}
+Denote $\V$ to be an n-dimensional linear vector space.  Elements of the vector space are \vocab{vectors}. An element $v \in \V$ can be written as a linear combination of a basis vectors $\{ e_i \}, i = 1, ... n$:
+\begin{align}
+	v = \sum_{i=1}^{n} v^i e_i = v^i e_i
+\end{align}
+The space of linear functions on $\mathbb{V}$ is denoted as a \vocab{dual} space $\V^*$.  An element $\omega \in \mathbb{V}^*$ can be shown to admit a decomposition in terms of basis \vocab{orthonormal basis vectors} ${e^i}, i = 1...n$:
+\begin{align}
+	\omega \in \V^* \rightarrow \omega(v) \in \R \\
+	\omega = \omega_j e^j \\
+	\text{ require :} e^j(e_i) = \delta^{j}_i \\
+	\rightarrow \omega(v) = \omega_i v^i 
+\end{align}
+
+We can tensor product these vectors spaces to build \textbf{multilinear} functions:
+\begin{align}
+	\underbrace{V^* \otimes V^* ... \otimes V^*}_{\text{k times}} = \otimes_k V^* \\
+	\omega \in \otimes_k V^* \rightarrow \omega(v_1, v_2, .. v_k) \in \R
+\end{align}
+Similarly one can show $\omega$ admits a basis decomposition:
+\begin{align}
+	\omega &= \omega_{i1 , i_2, i_3 ..., i_k} e^{i_1} \otimes e^{i_2}... \otimes e^{i_k} \\
+	\omega(v) \text{ (abstract form) } &= \omega_{i1 , i_2, i_3 ..., i_k} v^{i_1, i_2 ... i_k} \text{ (component form)}
+\end{align}
+
+A \vocab{form} is a dual vector that is antisymmetric with respect to its arguments.  If $\omega$ is a 2-form:
+\begin{align}
+	\omega(v_1, v_2) = -\omega(v_2, v_1)
+\end{align}
+
+\begin{definition} Denote $\sigma: (1, ..., k) \rightarrow \sigma(1), \sigma(2), .. \sigma(k))$ to be a permutation map.  Denote $(-1)^\sigma = 1$ if it's an even permutation, and $-1$ if its an odd permutation.
+\end{definition}
+
+\begin{definition}
+	$\omega \in \otimes_k \V^*$ is a form means that:
+	\begin{align}
+		\omega(v_{\sigma(1)}, v_{\sigma(2)} ..., v(\sigma(k)) ) = (-1)^\sigma \omega(v_1, ... v_k) 
+	\end{align}
+\end{definition}
+We now introduce operations between forms, the first of which is the exterior product:
+\begin{definition}
+	A \vocab{exterior product} maps a k and an l form to a $k + l$ form.
+	\begin{align}
+		& \alpha \in \otimes_k \V^*, \beta \in \otimes_l \V^* \\
+		& \alpha \wedge \beta \in \otimes_{k+l} \V^* \\
+	\end{align}
+\end{definition}
+
+\begin{example}
+	It is straightforward to show for 2 forms that:
+	$$ \alpha \wedge \beta (u, v) = \alpha(u) \beta(v) - \alpha(v) \beta(u)$$
+	One nontrivial example is that the wedge product of k 1 forms gives a k-form.  Its action on the linear vector space $\V^k$ is that of a determinant (the unique up to a multiple completely antisymmetric linear function).
+\end{example}
+
+\begin{lemma}
+	\begin{align}
+		&\alpha_1, \alpha_2 ... \alpha_k \text{ are 1 -forms} \\
+		& \alpha_1 \wedge \alpha_2 ... \wedge \alpha_k = \omega \\
+		& \omega (v_1, ... , v_k) = \det_{ab} \left(\alpha_a(v_b) \right) \label{eq:3}
+	\end{align}
+\end{lemma}
+
+\begin{example}
+	The action for the wedge of forms $\omega_i$ on vectors $\bf{v}_j$ can be written explicitly from \ref{eq:3}:
+	\begin{align}
+		\left(\omega_1 \wedge \omega_2 ... \wedge \omega_k \right) \left( \bf{v_1}, ..., \bf{v_k} \right)
+		&= \text{det} \begin{vmatrix}
+			\omega_1(\bf{v_1}) & .. & .. & \omega_k(\bf{v_1}) \\ 
+			.. & .. & .. & .. \\ 
+			.. &  .. & .. & .. \\ 
+			\omega_k(\bf{v_1}) & .. & .. & \omega_k(\bf{v_k}) \notag
+		\end{vmatrix}
+	\end{align}
+\end{example}
+
+
+\begin{definition}
+	Denote the $\epsilon$ completely antisymmetric symbol (\textbf{it's not a tensor!}) to be:
+	$$\epsilon_{12...k} = 1$$
+	$$\epsilon_{\sigma(1)... \sigma(k)} = (-1)^\sigma$$
+\end{definition}
+
+Using the $\epsilon$ symbol, we can show in component form the wedge product for k-form $\alpha$ and l-form $\beta$:
+\begin{align} 
+	(\alpha \wedge \beta)_{i_1, ..., i_{k+l}} = {1 \over k! l!} \epsilon^{i_1, i_2, .....i_{k+l}} \alpha_{i_1, ..., i_k} \beta_{i_{k+1}, ..., i_{k+l}} \label{eq:1}
+\end{align}
+
+\textbf{Note}: the $ k! l!$ normalization sometimes is different between different texts, causing confusion.  The motivation to mod out internal permutations that do not mix the indices between the 2 forms.  There are $k!$ internal permutation of alpha indices and $l!$ internal contribution of beta indices but we only want 1 of them!
+
+\begin{definition}
+	The space of k-forms is denoted as $\Lambda^k \V^*$
+\end{definition}
+
+We can  $\Lambda_k \V^*$ is spanned by the set of basis vectors.   In particular, an k-form can be written in terms of its components as:
+\begin{align}
+	\alpha \in \Lambda^k \V^* \rightarrow \alpha = {1 \over k!} \alpha_{i1, ... i_k} e^{i1} \wedge e^{i2} \wedge ... \wedge e^{i_k} \label{eq:2}
+\end{align}
+
+\begin{problem} Denote $\alpha$ is a 1-form, $\beta$ is a 2-form.  Express $\omega = \alpha \wedge \beta$ in component form.
+\end{problem}
+Use formula \ref{eq:1}
+$$ (\alpha \wedge \beta)_{ijk} = {1 \over 2} \left[\alpha_i \beta_{jk} - \alpha_{i} \beta_{kj} + \alpha_k \beta_{ij} - \alpha_{k} \beta_{ji} + \alpha_j \beta_{ki} - \alpha_j \beta{ik} \right]$$
+as expected there are 3! (6) permutations to account for.
+The 1/2 factor kills half of the terms giving only mixing permutations:
+\begin{align}
+	(\alpha \wedge \beta)_{ijk} = \alpha_i \beta_{jk} + \alpha_j \beta_{ki} + \alpha_k \beta_{ji}
+\end{align}
+
+\begin{problem}
+	$\alpha$ is k form, $\beta$ is l form.
+	Show $\alpha \wedge \beta = (-1)^{kl} \beta \wedge \alpha$
+\end{problem}
+
+Use \cite{eq:2}.  To switch the order, we need to permute all the l labels of  $\beta$ indices pas the k labels of $\alpha$ indices.
+
+An exterior product maps k forms and l forms to k+l forms.  We can define an interior product definition to reduce the form.
+
+\begin{definition}
+	Denote $i(v) \omega$ to be an interior product operation between vector $v$ and form $\omega \in \Lambda^k V^*$.  $i(v) \omega$ is a k-1 form, which acting on $k-1$ vectors behave as follow:
+	\begin{align}
+		(i(v) \omega) (u_1, u_2, ..., u_{k-1}) = \omega(v, u_1, ... u_{k-1})
+	\end{align}
+\end{definition}
+
+
+\begin{lemma}
+	The interior product has the following properties ($\alpha$ is k-form)
+	\begin{align}
+		i(u) i(v) &= -i(v) i(u) \\
+		i(v) (\alpha \wedge \beta) &= ( i(v) \alpha) \wedge \beta + (-1)^k \alpha \wedge i(v) \beta
+	\end{align}
+\end{lemma}
+
+So far we have no notion of length on our vector space.  It turns out that introduction of a metric allows us to do more interesting things (\vocab{Hodge dual} operation etc..).
+
+\begin{definition} A \vocab{metric} g is a 2-tensor that is non-degenerate and positive definite, and symmetric.
+\end{definition}
+
+In math this means:
+\begin{align}
+	&g(u, v) = g(v, u) \text{ u, v or co-vectors} \\
+	&g(u, v) > 0 \forall u, v \in \V
+\end{align}
+
+Because the metric is a symmetric non-degenerate matrix in a given orthogonal basis, it can always be diagonalized.   This means there exist a basis $\{ O^i \} $ of 1 forms such that in that basis:
+\begin{align}
+	g(O^i, O^j) = \delta^i_j \\
+\end{align}
+
+Given a metric, one can define a \vocab{volume form}
+The volume form $\eta$ of an n-dimensional space is defined as a :
+\begin{align}
+	\eta = O^1 \wedge O^2 \wedge ... \wedge O^n \\
+	= \sqrt{\text{det}(g_{ij})} e^1 \wedge e^2... \wedge e^n
+\end{align}
+
+\begin{definition}
+	Define \begin{align}
+		A_[i_1, i_2, i_3, ... i_n] \equiv {1 \over n!} \epsilon^{i_{1}, ..., i_n} A_{i_1, ..., i_n}
+	\end{align}
+\end{definition}
+
+
+To motivate the \vocab{Hodge star} operator, notice that for n-dimensional space, the space of k-form is isomorphic to the space of n-k forms, thanks to the combinatorial identity ${n \choose k } = {n \choose n-k}$.
+\begin{definition}
+	The Hodge dual of form k-form $\omega$ denoted as $\omega^*$ is an n-k form with components:
+	\begin{align}
+		(*\omega)_{i_{k+1}, ..., i_{n}} = {1 \over k!} \omega_{\color{red} j_1, ..., j_k} \eta^{{\color{red}j_1, .., j_{k}} {\color{blue} j_{k+1},... j_n}} g_{{\color{blue} j_{k+1}}, i_{k+2}} g_{{\color{blue} j_{k+2}}, i_{k+2}}...g_{{\color{blue} j_{n}}, i_n}
+	\end{align}
+\end{definition}
+Note we used colors to denote which index contrack with which one.
+
+\begin{lemma}
+	\begin{align}
+		*(*\omega) =(-1)^{kn} \omega
+	\end{align}
+\end{lemma}
+\subsection{Manifold}
+
+Heuristically a manifold is:
+\begin{itemize}
+	\item A collection of points that resembles a "continuum"
+	\item More precisely, a real (complex) manifold is a collection points that at each point looks locally like $\R^n$ ($\Cbb^n$)
+	\item Additionally we want to be able to do calculus on it so we'll talk exclusively about \vocab{differential manifolds}.  This requires the ability to define $C^\infty$ differentiable functions on it, and stitch differentiable coordinate patches together.  We won't care about those details for now.
+\end{itemize}
+
+\subsection{Differential Geometry}
+
+What we've seen so far is a single vector space. We are interested in doing the same study of exterior algebras defined over manifold $\M$.
+The starting point is to define covariant and contravariant vectors and tensors which live on the manifold, and algebras over them.
+
+\begin{definition}
+	The \vocab{Tangent Space} $T_p( \M)$ of a manifold $\M$ at point p is vector space on $\M$ that sits at p.  It's part of the vector bundle.
+\end{definition}
+
+Geometrically, just think like a bunch of tangent planes at each point in the manifold.  Each of those planes are linear vector spaces where we can do all the math we wanted.
+
+Suppose the manifold is mapped by some coordinates $\M \rightarrow (x_1, x_2, ... x_n)$ over some open subset.  A natural basis for the tangent space is $e^i = {\partial \over \partial x^i}$.
+
+A covariant vector $v$ sitting in the tangent space would be expressed as linear combinations of basis:
+\begin{align}
+	v = v^i {\partial \over \partial x^i}
+\end{align}
+
+Since we \textbf{require} the vector to be invariant under coordinate transformation, this requires the components $v^i$ to transform:
+\begin{align}
+	v &= v_i {\partial \over \partial x_i} \\
+	&= v'_i {\partial \over \partial x'_i} \\
+	&= v'_i {\partial x_j \over \partial x'_i} {\partial \over \partial x_j} \\
+	\rightarrow v'_i &= {\partial x'_i \over \partial x_j} v_j
+\end{align}
+Define the cotangent space $T_p^*(\M)$ to be the space of linear functions on the tangent space.  The cotangent space is spanned by the \vocab{dual basis} vectors $\dx^i$ with property:
+\begin{align}
+	\braket{{\partial \over \partial x_i}, \dx^j} = \delta^{j}_i
+\end{align}
+
+Under coordinate change $x \rightarrow x'$, the contravariant vector  $\omega$ components transform:
+\begin{align}
+	\omega'^j = {\partial x_j \over \partial x_i'} \omega^i
+\end{align}
+
+These transformation laws guarantee the invariance of the innerproduct of a covariant u and contravariant vector v denoted $\braket{u | v} = u_i v^i$ under coordinate change.
+
+Differential forms are made from wedging of the contravariant vectors.  A differential form is a completely anti-symmetric tensor $\omega_{i_1, ... i_n}$ which, can be written as:
+\begin{align}
+	\omega = {1 \over k!} \omega_{i_1, ..., i_k} \dx^i \wedge ... \wedge dx^k  \\
+	\omega \in \Omega_k \text{ (space of k differential forms)}
+\end{align}
+
+The exterior derivative maps a k-form to a k+1 form, that satisfies the following criterions:
+\begin{align}
+	\dd^2 &= 0 \\
+	\dd (\alpha \wedge \beta) &= (\dd \alpha) \wedge \beta + (-1)^k \alpha \wedge \dd \beta
+\end{align}
+
+It can be shown in component form that:
+\begin{align}
+	\dd \omega &= {1 \over k!} {\partial \over \partial x_j} \omega_{i_1, ..., i_k} \dx^j \wedge \dx^{i_1} \wedge ... \wedge \dx^{i_k}
+\end{align}
+
+
+
+
+\begin{example}
+	\begin{itemize}
+		\item Going from 0 to 1 form (the gradient):
+		$$ \dd \left( f(x) \right)  = {\partial \over \partial x_i} f \dx^i$$
+		\item Going from 1 to 2 form (the curl in $\R^3$)
+		$$ \dd  \left( f_{j}(x) \dx^j \right) = {\partial \over \partial x_i} f_j \dx^i \wedge \dx^j$$
+	\end{itemize}
+\end{example}
+
+
+Similar to the linear vector space, we can introduce a metric
+\begin{definition}
+	The \vocab{metric} g is a bilinear symmetric tensor
+\end{definition}
+
+Once we introduce a metric on the manifold $\M$, we can create a set of local orthogonal basis $e^{a}_i$ called the \vocab{vielbeins}:
+\begin{align}
+	g_{ij} = \sum_a e^{a}_i e^a_j
+\end{align}
+
+One you introduce the vielbein basis, then you can define the volume form
+\begin{definition}
+	The volume form is just the top form of the vielbein:
+	\begin{align}
+		e^a & \equiv e^a_{i} \dx^i \\
+		\eta \text{ (volume form) }&= e^1 \wedge e^2 ... \wedge e^n
+	\end{align}
+\end{definition}
+\begin{lemma}
+	If $\M$ is \vocab{orientable}, the volume form is \vocab{globally defined}.
+\end{lemma}
+The volume form is called the volume form because it computes the volume (duh):
+\begin{align}
+	\eta &= e^1_{i_1} \dx^{i_1} \wedge e^2_{i_2} \dx^{i_2} ... \wedge e^n_{i_n} \dx^{i_n} \\
+	&= \underbrace{\text{det} (e^{a}_i)}_{\text{volume factor}} \dx^1 \wedge \dx^2 ... \wedge \dx^n \\
+	\text{det}(g) &= \text{det}(e^T e) = \text{det}(e)^2 \\
+	\rightarrow \text{det}(e) &= \sqrt{|g|}
+\end{align}
+In component form, we can express the volume form as:
+\begin{align}
+	\eta = \sqrt{|g|} \epsilon_{i_1, ... i_n} \dx^{i_1} \wedge ... \wedge \dx^{i_n}
+\end{align}
+Similar to the simple exterior algebra section, we will define the hodge operator by mapping k-forms to n-k forms:
+\begin{definition}
+	Define the Hodge * operation to be the map from $\Omega_k \rightarrow \Omega_{n-k}$:
+	\begin{align}
+		(*\omega)_{i_{k+1}, ..., i_{n}} = {1 \over k!} {1 \over \sqrt{|g|}} \omega_{\color{red} j_1, ..., j_k} \epsilon^{\color{red}j_1, .., j_{k}}_{\color{blue} j_{k+1},... j_n}
+	\end{align}
+\end{definition}
+
+\begin{lemma}
+	The hodge dual can be written for component vectors as
+	\begin{align}
+		*(\dx^{i_1} \wedge .. \dx^{i_p}) = {1 \over (n-p)!}  \sqrt{|g|} \epsilon_{\color{red} i_1, ..., i_p}^{i_{p+1}, ..., i_n} \dx^{i_{p+1}} \wedge ... \wedge \dx^{i_{n}} 
+	\end{align}
+\end{lemma}
+
+Note the metric $g^{\alpha \beta}$ and its inverse $g_{\alpha \beta}$ are used to raise and lower indices accordingly.
+
+\begin{example}
+	Consider $\R^3$ with x, y, z coordinates.  The Hodge dual of each basis vector
+	just produce the cyclic permutation complement:
+	\begin{align}
+		* \dx &= \dd y \wedge \dd z \\
+		* \dd y &= \dd z \wedge \dd y \\
+		* \dd z &= \dd x \wedge \dd y \\
+		*(\dx \wedge \dd y) &= \dd z
+	\end{align}
+\end{example}
+
+\begin{example}
+	Consider Minkowski space with signature $g = \text{diag}(+, -, -, -)$.  It is similar, except everytime you have a $t$ you need to flip sign:
+	\begin{align}
+		* \dx \wedge \dd y = - \dd z \wedge \dd t
+	\end{align} 
+\end{example}
+
+\begin{lemma}
+	\begin{align}*(* \omega) = (-1)^{k(n-k)} \omega \end{align}
+\end{lemma}
+
+
+
+\subsection{Integration on forms}
+
+Consider the integration of a 2-form $\dd f \wedge \dd g$ over a 2-dimensional oriented region $\Omega$.  One way to visualize this is to cut the space into tubes formed by iso-surfaces of f, and g, and count the number of tubes that interset $\Omega$.  For example, if the 2-form was just $\dx \wedge \dd y$ we'd get the area of surface $\Omega$.
+
+\includegraphics[width=15cm]{integration_form}
+
+Another way to visualize how to compute the integral is to tile $\Omega$ with a coordinate system $x_1, x_2$. At each point of the surfaces, it has 2 dimensional vector space spanned by tangent vectors $(e_1, e_2) \equiv \pder{x_1}, \pder{x_2}$.  Integrating the 2-form $\omega$ on the surface involves computing the weight $\omega (e_1, e_2)$ and summing that up.
+
+\includegraphics[width=15cm]{integration_form2}
+
+\begin{theorem}
+	\vocab{Stokes Theorem} says for any $\MR$ p-dimensional with a boundary $\partial \MR$ and $\omega_{p-1}$ is a $p-1$ form:
+	\begin{align}
+		\int_{\MR} \dd \omega_{p-1} = \int_{\partial \MR} \omega_{p_1}
+	\end{align}
+\end{theorem}
+
+\begin{example}
+	In $\R^3$, we have:
+	\begin{itemize}
+		\item $\int_{\MR} \underbrace{(\curl \vec{f})}_{\text{2 form}} \underbrace{d A}_{\text{2 form}} = \oint_{\partial \MR} \underbrace{\vec{f}}_{\text{1-form}}  \cdot dx$
+	\end{itemize}
+\end{example}
+
+
+
+\begin{definition}
+	Define the inner product between p forms $\alpha_p, \beta_p$ to be
+	\begin{align}
+		(\alpha, \beta) = \int  \alpha_p \wedge *\beta_p
+	\end{align}
+\end{definition}
+
+
+\begin{problem}
+	Show that in terms of components
+	\begin{align}
+		(\alpha_p, \beta_p) = p! \int \alpha_{i_1, ..., i_p} \beta_{i_1, ..., i_p} \dx^1 \wedge ... \wedge \dx^n
+	\end{align}
+\end{problem}
+
+\begin{definition}
+	Define the \vocab{adjoint} derivative $\delta$ which takes a p form to a p-1 form, such that
+	\begin{align}
+		(\alpha_p, d \beta_{p-1}) = (\delta \alpha_{p}, \beta_{p-1}) \rightarrow \delta = (-1)^{np + n + 1} * \dd *
+	\end{align}
+\end{definition}
+
+\begin{definition}
+	The \vocab{Laplace Beltrami} operator takes a p form to a p form, and is defined as:
+	\begin{align}
+		\Delta = (\delta  + \dd)^2 = \delta d + d \delta
+	\end{align}
+\end{definition}
+
+We'll now define a few useful terms
+\begin{itemize}
+	\item A \vocab{closed form} $\omega$ satisfies
+	$ d \omega = 0$
+	\item An \vocab{exact form} $\omega$ satisfies
+	$ \omega = d \alpha$ for some form $\alpha$.
+	\item Any exact form is closed.    A closed form is locally exact, but \textbf{not necessarily globally exact}.  The failure to be so classifies the topology fo the space.
+	\item A form is \vocab{co-closed} if it can be expressed
+	$\delta \omega = 0$.  A form is \vocab{co-exact} if it can be expressed as $\omega = \delta \alpha$.
+	\item A \vocab{harmonic} form satisfies $\Delta \omega = 0$.  A form is harmonic iff of it is closed and co-closed.
+	\item A \vocab{simple} form $\omega_p$ can be written as product of 1 forms:
+	$$\underbrace{\omega_p}_{\text{simple}} = \alpha_1 \wedge \beta_1 \wedge....$$
+	One can show a form is simple iff
+	$$\omega_{[i_1...i_p} \omega_{i_{p+1}], ...} = 0$$
+	\item A \vocab{decomposable} form $\omega$ can be written as the wedge of 2 other forms:
+	$$ \underbrace{ \omega}_{\text{decomposable}} = \alpha \wedge \beta$$
+	A form $\omega$ is decomposable iff
+	$$ \omega \wedge \omega = 0$$
+\end{itemize}
+
+\subsection{Cohomology}
+
+Denote the space of closed forms of degree k on a manifold $\M$ to be $Z^k$:
+\[Z^k(\M) = \{\omega \in \Omega^{k}(\M): \dd \omega = 0 \}  \]
+Denote the space of exact forms of degree k on a manifold $\M$ to be $B^k$:
+\[B^k(\M) = \{\omega \in \Omega^{k}(\M): \omega = \dd \lambda \} \]
+
+The cohomology of degree k, denoted $H^k$ to be the quotient space:
+\[H^k (\M) = {Z^k(\M) \over B^k(\M)}\]
+
+The dimension of $H^k$ is a topological invariant called the \vocab{Betti number}
+\[b_k = \text{dim}(H^k)\]
+The alternative sum of the betti number is called the \vocab{Euler Characteristic}:
+\[ \chi(\M) = b_0 - b_1 + b_2 - b_3 +.... \]
+\begin{lemma}
+	\vocab{Poincare's lemma} states that every closed form on $\R^N$ is exact.
+\end{lemma}
+
+Poincare's lemma is just the statement the cohomology of $\R^N$ is trivial.
+
+One way to compute the cohomology is to note that it reduces to modding out gauge equivalence:
+$\tilde{\omega} \sim \omega \text{ if } \tilde{\omega} = \omega + \dd \lambda$.
+
+To remove this gauge equivalence, note we can always choose a gauge $\lambda$ to make $\omega$ harmonic if $\omega$ is closed.  Furthermore, if this choice of $\lambda$ is unique, it collapse the equivalence class to a single point. This means $H^k(\M)$ is the space of harmonic forms of degree k on $\M$.
+
+\begin{proof}
+	Note that $[\Delta, \dd ] = 0$, which implies they can be simultaneously diagonalized.  In this basis:
+	\[\Delta \omega  = \epsilon \omega \]
+	Because $\omega$ is closed, $\Delta \omega = \dd \delta \omega $.
+	If $\epsilon \neq 0$, we have $\omega = {1 \over \epsilon} \dd \left( \delta \omega \right)$.  Thus if you pick 
+	$\lambda = {-1 \over \epsilon} \delta \omega$, you can make a gauge transformation of a closed form so that it is harmonic.  This implies we only need to look at different harmonic forms to understand the cohomology.
+	Furthermore, note that the laplace operator is positive definite:
+	\[ (\omega, \Delta \omega) = \epsilon (\omega, \omega) = (\dd \omega, \dd \omega) + (\delta \omega, \delta \omega) \rightarrow \epsilon \geq 0 \]
+	Furthermore, this implies that if $\omega$ is harmonic, both $d\omega$ and $\delta \omega = 0$: it is both closed and co-closed.
+	\[\Delta \omega = 0 \rightarrow \{ \delta \omega = 0, \delta \omega= 0\} \]
+	This can be used to prove that making $\omega$ is harmonic using a gauge transformation uniquify the gauge degree of freedom.
+	Suppose we made a gauge transformation $\omega \rightarrow \omega +d \lambda$:
+	\[ \delta (d \lambda) = 0 \rightarrow (\lambda, \delta(\dd \lambda)) = 0 \rightarrow (\dd \lambda, \dd \lambda) = 0\]
+	So the gauge transformation is trivial.	
+\end{proof}
+
+Furthermore using the previous technique, we can show Hodge's decomposition:
+\begin{theorem}{Hodge's Theorem}
+	Any form $\omega$ on a closed manifold $\M$ can be uniquely decomposed as exact, co-exact and harmonic form:
+	\begin{align}
+		\omega_p = \underbrace{ \dd \alpha_{p-1}}_{\text{exact}} + \underbrace{\delta \beta_{p+1}}_{\text{co-exact}} + \underbrace{\gamma_p}_{\text{harmonic}}
+	\end{align}
+\end{theorem}
+
+\begin{theorem}
+	$H^1(\M) = 0$ for any simply connected manifold $\M$
+	\end{theorem}
+\vocab{Simply connected} means that $\pi^1(\M) = 0$, in other words any curve can be smoothly deformed to a point.   This comes from the fact that $\dd f = 0$ on that space, one can show $\oint_\gamma f = 0$ since we can always deform the integral contour to a point.
+
+\begin{example}
+	To build intuition over cohomology, let's compute a few examples.
+	First note $H^0 (\M) = \R$ since there's not -1 exact forms.
+	\newline
+	\emph{$S_1$}:
+	For the circle, closed 0 forms are just constant functions $f(\theta)$.
+	$H^0 (S_1) = \R$.
+	consider a 1 form on the circle $f(\theta) \dd \theta$.
+	Because f is $ 2 \pi$ periodic, it has a fourier series decomposition:
+	\[f(\theta) = \underbrace{c_0 \dd \theta}_{\text{closed}} + \underbrace{\sum_n c_n e^{in\theta}}_{\text{exact}}  \dd \theta \]
+	This implies the $c_0$ part is the mod of closed by exact, giving $H^1(S_1) = \R$.
+	Since $S_1$ is 1 dimensional, there's not 2 forms.
+	\newline
+	\emph{$S_n$}:
+	First note that $H^1(S^n) = 0$ since $S^n$ is simply connected.
+	Note $S^n$ is not contractible.  However one can show $H^p(S^n) = H^{p-1} (S^{n-1})$.  
+	\emph{proof}: Consider a  closed form $\omega$ on $S^n$.
+	Split the sphere $S^n$ into 2 contractible spaces, the north and south hemisphere.  On each of those spaces, every closed form is exact:
+	$\omega = \dd \phi_1$ and $\omega = \dd \phi_2$.  Around the equator, they may disagree:
+	\[ \phi_1 -  \phi_2 =  \phi \neq 0 \]
+	where $\dd \phi = 0$, or $\phi$ is closed.
+	
+	But forms on the  equator is equivalent to forms on $S^{n-1}$.
+	This implies $H^n(S_n) = H^0(S_n) = \R$ and $H^p(S^n) = 0$ for $1 \leq p \leq n-1$.
+	\end{example}
+
+\subsection{Topology}
+
+\subsection{Fiber Bundles}
+
+
+\emph{(motivation)}
+Denote $\M$ to be the differential manifold.  This is the arena of physics.  However, just studying manifolds is not rich enough.  Our universe is described my more than just empty spacetime.  There's also stuff (fields, matter, etc...).  So physics is concerned with manifolds that have at each point $x \in \M$ some additional mathematical structure. The thing composed of both $\M$ and the stuff at every point in $\M$ is called a \vocab{bundle}.
+
+
+More formally, a fiber bundle is made of a \vocab{base space} manifold $\M$, and on each point x in $\M$, we attach another manifold $F$ called the \vocab{fiber}, which is equipped with a \vocab{projection} map $\pi$ and set of transition functions $\phi_{ij}$.
+
+\begin{align}
+	\text{Fiber bundle E over fiber F with base manifold M:} \\ \underbrace{\M}_{\text{base space (a manifold)}} , \underbrace{F}_{\text{fiber (another manifold)}},  \underbrace{\pi}_{\text{projection}}, \underbrace{\phi_{ij}}_{\text{transition functions}} 
+\end{align}
+
+\begin{figure}[h!]
+	\caption{Constructing a bundle}
+	\includegraphics[width=0.7\textwidth]{bundle3}
+\end{figure}
+
+\begin{figure}[h!]
+	\caption{ Visualizing examples of bundles}
+	\includegraphics[width=0.7\textwidth]{bundle0}
+\end{figure}
+
+
+We require:
+\begin{itemize}
+	\item Locally at each point x in $\M$, the bundle is \vocab{trivial}:
+	it looks like $\M \times F$.
+	\begin{figure}[h!]
+		\caption{From Eguchi and Hanson}
+		\includegraphics[width=1\textwidth]{bundle4}
+	\end{figure}
+	\emph{mathematically}: Around a neiborhood $U_i \in \M$, the bundle is equipped with an isomorphic map $\phi_i$ which maps $U_i \times F \rightarrow \pi^{-1}(U_i)$.
+	\item We want to connect those fibers together.  This is where things can be non-trivial:
+	\emph{Mathematically}: Provide the set of transition functions $\phi_{ij}$ to map the fibers from open subset $U_i, U_j$ in their intersection region:
+	$$ \phi_{ij} = F|_{U_i} \rightarrow F|_{U_j} \in U_i \cap U_j$$
+	Nontrivial transition functions lead to non-trivial global topology for the fiber bundle.
+	\emph{Mathematical linguo:}  The transition functions can be defined using the local maps $\phi$ as follow:
+	$$\phi_{ij} = \phi_i^{-1} \phi_j$$
+	They sastify co-cycle conditions below for obvious consistency requirement:
+	$$ \phi_{ii} = \text{identity }$$
+	$$ \phi_{ij} \phi_{jk} = \phi_{ik} \text{ for } x \in U_i \cap U_j \cap U_k $$
+\end{itemize}
+
+\begin{figure}[h!]
+	\caption{Mobius Strip construction (Penrose)}
+	\includegraphics[width=0.8\textwidth]{bundle1}
+\end{figure}
+
+\begin{figure}[h!]
+	\caption{Taking a section of mobius strip (Penrose)}
+	\includegraphics[width=1\textwidth]{bundle2}
+\end{figure}
+
+Now we have a fiber bundle, we can make a bunch of special ones and name them.
+\begin{itemize}
+	\item If all transition functions can be smoothly deformed to the identity globally on the bundle, we say the bundle is \vocab{trivial}.
+	\emph{Any bundle over a contractible base space is trivial}
+	\item A \vocab{section} s(x) is a rule that picks out one point in each fiber in the manifold.  Due to the non-triviality of the bundle, there may be no global definition of a section (sections can globally disagree if the fiber is non-trivial).
+	\item A \vocab{vector bundle} is one where the fibers are $\R^k$, and the transition functions belong to $\mathbb{GL}^k$ (group of $k \times k$ invertible matrices).
+	\item A \vocab{tangent} or \vocab{cotangent bundle} is a bundle where the fibers are made of the tangent/cotangent spaces.
+	\item a \vocab{principal bundle} (often denoted P) is one where the fiber and the connection functions are of the same type.  For example a principal G-bundle, the fibers and the transition functions are both in $\Gbb \Lbb^N$
+\end{itemize} 
+
+\subsubsection{Principal G bundles (Gauge theory)}
+
+A principal G bundle is a bundle where the fiber and the transitions functions are both elements of a group or subgroup  $\mathbb{GL}^N$ called the gauge group.
+This is the arena of gauge theories as we can see below:
+\begin{itemize}
+	\item Fibers at each point x are the space of local gauge transformations.
+	\item A "section" is a rule to pick out a particular point of each fiber continuously as a function of $x \in \M$.  This is just gauge fixing!
+	\item Bundles that are "equivalent" differ only by a gauge transformation.
+	\item Trivial bundles can be deformed to the product bundle $E \times \M$ means that a gauge transformation makes the gauge field configuration "trivial".
+	\end{itemize}
+We now define a notion of \vocab{covariant derivative} as follows:
+
+\begin{itemize}
+\item To be able to differentiate objects, we need a way to compare fibers at nearby points.  Consider some curve $C = x(t)$ parameterized by $t \in \R$. The derivative of a vector is:
+\[ {d \over d t} v|_{t = 0} = \lim_{\epsilon \rightarrow 0} {v(x+\epsilon) - \overbrace{\Omega(\epsilon)}^{\in \mathbb{GL}^N} v^\alpha(x) \over \epsilon} \]
+The infinitesimal transformation rules $\Omega(\epsilon)$ \emph{completely specifies} the covariant derivative.  Specifying this is equivalent to specifying a 1-form matrix valued \vocab{connection}:
+\[ \nabla_\mu v^\alpha = \partial_\mu v^\alpha +\underbrace{A^{\alpha}_{\beta}}_{\text{connection}} v^\beta\]
+
+\item In order for $\nabla_\mu v^\alpha$ to transform well under a gauge change $g(x)$, we need the connection to transform as:
+\[ A \rightarrow \underbrace{g^{-1} A g}_{\text{tensor like}} - \dd \ln(g) \]
+
+\item The \vocab{curvature} of a gauge field is just the field strength 2 form:
+\[  [ \nabla_\mu, \nabla_\nu ] = \frac12 F_{\mu \nu}  \]
+
+For a given closed path $\gamma$, the transformation $\Omega(\gamma)$ is the \vocab{holonomy} of the path $\gamma$.  Holonomies form a group:
+
+\end{itemize}
+
+\subsubsection{Characteristic Classes}
+
+It would be nice if we could compute gauge invariant quantities that classify given fiber bundle.
+
+\section{Group Theory}
+
+\subsection{Definitions}
+Let's collect once and for all those math notations.
+\begin{itemize}
+	\item $Z_n$: integer modulo n.
+	\item $\Gbb \Lbb(n, F)$: \vocab{General Linear} group of invertible $n \times n$ matrices over field F.  Examples
+	$\Gbb \Lbb(n, \R)$.
+	\item $\Sbb \Lbb(n, F)$: \vocab{Special Linear} group of invertible matrices over field F with determinant = 1.
+	Example $SL(2, Z)$ is the \vocab{modular group}.
+	\item $\Obb(a, b)$: \vocab{Lorentz group}, $n \times n$ real matrices preserving
+	$x_0^2 - \sum_{i=1}^b x_i^2$.  (S or \vocab{special} comes in front if determinant = 1)
+	\item  $\Ubb(n)$ $n \times n$ \vocab{Unitary} group, complex matrices preserving length.
+	\item $S_n$: the \vocab{symmetric group}.  Group whose elements are permutation operations of n elements.
+	\item $Sp(2n, F)$: the \vocab{symplectic group}.  Group of elements that corresponds to transformations that preserve the symplectic innerproduct, over field F:
+	\[ \braket{v|v} = v^T \Omega v \]
+	\[ \Omega = 
+	\left( \begin{array}{cc} 
+		0 & I_n \\
+		-I_n & 0
+	\end{array} \right) \]
+	
+	\item $ISO(1, 3)$:  This is the \vocab{Poincare group}, or the group of isometries of minkowski space.
+\end{itemize}
+
+\subsection{Group Theory Cheat Sheet}
+
+\begin{lemma}
+	\[ {SU(2) \over Z_2} = SO(3) \]
+	\[ {SL(2, \Cbb) \over Z_2} =  SO(1, 3) \]
+	Furthermore, SU(2) and SL(2, C) are \vocab{universal covers} of SO(3) and SO(3, 1) respectively
+\end{lemma}
+
+\begin{proof}
+	Consider the vector space V of traceless hermitian $2 \times 2$ matrices, which is spanned by the 3 pauli matrices.  Any element of V can be written $v = v_x \sigma_x + v_y \sigma_y + v_z \sigma_z$.
+	
+	Define an inner product in $V$:
+	\begin{align}
+		\braket{u | v} = \frac12 \mathrm{Tr} (u v)
+	\end{align}
+	The pauli matrices form an orthonormal basis under this inner product because:
+	\[ \sigma_{a} \sigma_{b} = \delta_{ab} \mathbb{I} + i \epsilon_{abc} \sigma_c \]
+	
+	This means that we have an isomorphism from $V \rightarrow \R^3$ (just project the components and map the coordinates).
+	
+	Consider an element $U \in SU(2)$ and $x \in V$.  The map defined by:
+	\[ U, x \in V \rightarrow U x U^{-1} \in V \]
+	sends the vector space V to itself ("rotates the vector v"), while preserving the norm $\braket{v | v}$.  This property is shared by action of the $SO(3)$ on v.
+	Therefore we have a group homorphism from $SU(2) \rightarrow SO(3)$.
+	However, this mapping is 2 to 1 because $U$ and $-U$ map to the same vector rotation, hence the mod $Z_2$.One can further show that SU(2) is simply connected, which implies it is the \vocab{universal cover} of SO(3).
+\end{proof}
+
+\begin{proof}
+	Use the same procedure to prove. Consider the vector space V now of 
+	hermitian $2 \times 2$ matrices, which is spanned by 
+	$\underbrace{\mathbb{I}}_{\sigma_0}, \underbrace{\sigma_1, \sigma_2, \sigma_3}_{\text{pauli matrices}}$.  It is parametrized as:
+	\[ v = \left( \begin{array}{cc}
+		x_0 + x_3 & x_1 + i x_2 \\
+		x_1 - i x_2 & x_0 - x_3
+	\end{array} \right)  \in V\]
+	Note that $\text{det}(v) = x_0^2 - \sum_{i=1}^3 x_i^2$.
+	One can now map any element $x \in V$ using elements of $SL(2,C)$ as follow:
+	\[ x \rightarrow U x U^{-1} \]
+	\[det(x) \rightarrow det(U x U^{-1}) = det(x)  \text{ (det(U) = 1)} \]
+	This map maps directly elements of SL(2, C) to lorentz transformations in SO(3, 1). The map is 2 to one because U and -U map to the same lorentz transformation.  Finally SL(2, C) is simply connected, so it's also the universal cover of SO(3, 1).
+\end{proof}
+
+\subsection{Lie Algebras}
+\emph{barton zwiebach 8.324 notes}
+\begin{definition}
+	\begin{itemize}
+		\item A \vocab{Lie Algebra} is a vector space $\MG$ with a bilinear operation $\MG \times \MG \rightarrow \MG$ with a commutator operation that satisfies the jacobi identity.
+		\[ [x, x] = 0 \forall x \in \MG \]
+		\item The \vocab{generators} of the lie algebra are a set of basis $\{ T_{a} \}$.   The algebra is completely defined by their commutators:
+		\[ [T_a, T_b] = if_{ab}^c T_c \]
+		The numbers $f_{ab}^c$ are called the \vocab{structure constants} of the lie algebra
+		\item An \vocab{ideal} $\MI$ is an invariant subalgebra of $\MG$. In math speak $$ [\MG, \MI] \subset \MI$$
+		\item It is a \vocab{proper ideal} if it is not the null set $\{ 0\}$ or $\MG$ itself (both are trivial).  The quotient space $\MG /  \MI$ is also a lie algebra.
+		\item  A \vocab{derived series} is a sequence generated by commutating the algebra:
+		\[ [\MG, \MG] = \MG^{(1)}, [\MG^{(1)}, \MG^{(1)}] = \MG^{(2)} ... \]
+		Each term $\MG^{(1)}$ is an ideal of $\MG$.
+		\item $\MG$ is \vocab{solvable}  if its derived series ends with $\{ 0 \}$
+		\item The \vocab{center} of $\MG$ is the set of all non-zero elements of $\MG$ that commutes with every element in $\MG$.
+		\item The \vocab{radical} $\MG_r$ of $\MG$ is the maximal solvable ideal.
+	\end{itemize}
+\end{definition}
+
+Using these basic definitions, we can start defining special lie algebras.  We will see there are abelian and non-abelian, simple and semi-simple lie algebras.
+
+\begin{definition}
+	\begin{itemize}
+		\item An \vocab{abelian} lie algebra satisfies that all elements commute: $[\MG, \MG] = 0$
+		\item The direct sum operator $\dirsum$ of lie algebras $\MG= \MG_1 \dirsum \MG_2 \dirsum ...$ is a lie algebra such that $[\MG_i, \MG_j] = 0 $ for $i \neq j$.
+		\item A \vocab{simple} lie algebra is a non-abelian lie algebra with no proper ideas.
+		\item A \vocab{semi-simple} lie algebra is a lie algebra whose radical $\MG_r$ vanishes.  One can show semi-simple lie algebras are direct sums of simple lie algebras.
+	\end{itemize}
+\end{definition}
+
+\begin{theorem}
+	Any finite-dimensional representation of a semi-simple Lie Algebra can be made to be hermitian.
+	\end{theorem}
+
+\begin{example}
+	\begin{itemize}
+		\item The vector space $\R^3$ and the its cross product $\times$ forms a lie algebra.
+		One can check $ \bf{a} \times \bf{b} = - \bf{b} \times \bf{a}$ and
+		\[ \bf{a} \times \bf{b} \times \bf{c} + \bf{b} \times \bf{c} \times \bf{a} + \bf{c} \times \bf{a} \times \bf{b} = 0\]
+		
+	\end{itemize}
+\end{example}
+
+\begin{example}
+	The \textbf{Heisenberg} Algebra is seen in quantum mechanics. Here on has the position operator $\hat{q}$, the momentum operator $\hat{p}$, with commutator satisfying:
+	\[ [q, p] = i \hbar \].
+	The basis of the heisenberg algebra is then $\{\hat{q}, \hat{p}, 1 \}$
+\end{example}
+
+\begin{example}
+	The \textbf{angular momentum} algebra in quantum mechanics has basis $\sigma_x, \sigma_y, \sigma_z$, with commutators 
+	\[ [\sigma_i, \sigma_j]  = i \hbar \epsilon_{ijk} \sigma_k \]
+\end{example}
+
+\begin{example}
+	Every abelian lie algebra is solveable by definition since 
+	$[\MG, \MG] = 0$ if $\MG$ is abelian.
+\end{example}
+
+\begin{example}
+	If $\MI$ and $\MJ$ are ideals, so is $\MI + \MJ$.
+\end{example}
+\begin{example}
+	The requirement that a lie algebra is compact and simple is incredibly restrictive.  They have all been classified and correspond to the so called \vocab{classical groups}.
+	They generate:
+	\begin{itemize}
+		\item SU(N): all $N \times N$ unitary matrices satisfying $det(U) = 1$.  There are $N^2 - 1$ independent matrices satisfying this condition
+		\item SO(N): all $N \times N$ matrices that preserve the inner product with $\delta_{ab}$.  It has ${N(N-1) \over 2}$ components.
+		\item Symplectic group: This set of matrices preserve the anti-symmetric inner product
+	\end{itemize}
+\end{example}
+
+\begin{example}
+	so(N) and su(N) are \vocab{simple} Lie algebras.  The standard model is \vocab{semi-simple}: it is based on the gauge group $SU(3) \times SU(2) \times U(1)$ or alternatively the lie-algebra:
+	$su(3) \oplus su(2) \oplus u(1)$.
+\end{example}
+
+\subsubsection{Representation Theory}
+
+\begin{itemize}
+	\item A \vocab{representation} (of a group) is a \vocab{homomorphism} that maps group G to invertible matrices.  In math speak:
+	\[ \underbrace{\rho}_{\text{rep}}: G \rightarrow \Gbb \Lbb^N \] "\vocab{homomorphism}" $\rightarrow$ consistent with group multiplication structure.
+	\item The \vocab{universal cover} of a lie group is the group obtained by exponentiating its generators. 
+	\item A \vocab{Lie Group} $G$ is a continuous group specified by a set of parameters.  If the parameter space is compact, it is a \vocab{compact} lie group.  A mathy way to say this is that a lie group is both a group and a differentiable manifold.
+	\item One can show a lie group is locally characterized by its lie algebra.  Expand close to the identity and use the fact the group multiplication is closed:
+	\[U = \exp \left(i \sum_a \underbrace{T_a}_{\text{generator}} \theta_a \right)\]
+	\[ U \approx 1 + i \sum_a \epsilon_a T^a \text{ ,   } V \approx 1 + \sum_b \epsilon_b' T^b \]
+	\[ U^{-1} V^{-1} UV  = 1 - i \epsilon_a \epsilon_b' T^a T^b + i \epsilon_a \epsilon_b' T^{b} T^{a}\MO(\epsilon^2)  \]
+	\[ [T^a, T^b] = i f^{abc} T^c \]
+	\item The number of independent generators is the \vocab{dimension} of the algebra.
+	\item A representation is \vocab{irreducible} if one cannot make all generators block diagonal through a change of basis. 
+	\item One irreducible representation is formed by the generators $T_R^a$. This is the \vocab{fundamental} or \vocab{defining} representation.  It has the smallest dimension.
+	\item For a compact non-abelian group, the \vocab{adjoint representation} \textbf{A} is given by the structure constants:
+	\[ (T_A^a)^{bc} = -i f^{abc} \] 
+	This follows from jacobi's identity
+	\item The operator that commutes with all generators is called the \vocab{Casimir Operator}.  For SU(2), it is the total spin operator with eigenvalue j(j+1).  It is proportional to the identity for irreducible representation (\vocab{schur's lemma})
+	\[\underbrace{ \sum_a T^a T^a}_{\text{casimir}} = \underbrace{C_2(R)}_{\text{quadratic casimir}} \mathbb{I} \]
+	\item For any representation R, define an inner product
+	\[ \braket{T_R^a | T_R^b} = \mathrm{Tr}(T_R^a T_R^b) = \underbrace{T(R)}_{\vocab{Dynkin Index}} \delta^{ab} \]	
+	For example, in the fundamental representation $D(F) = \frac12$ by convention.
+	\item It follows that \[ \underbrace{d(G)}_{\text{num generators of group}} \times T(R) = C_2(R) \times \underbrace{d(R)}_{\text{dimension of representation R}}\]
+	Therefore $C_F \equiv C_2(\mathrm{fund}) = {N^2 -1 \over 2N}$ and $C_A \equiv C_2(\mathrm{adj}) = N$.
+	\item A final invariant is the \vocab{anomaly coefficient} A(R):
+	\[ \frac12 d^{abc} A(R) = \mathrm{tr}[T_a \{ T_b, T_c \}] \]
+	\item Summarizing
+	\[\mathrm{tr} (T^a T^b) = C_F \delta^{ab} \text{ Fundamental
+	generators form orthogonal basis} \]
+	\[ \sum_a T^{a} T^a = C_F \mathbb{I}  \text{  Casimir is multiple of identity} \]
+	\[f^{abc} f^{bcd} = C_A \delta^{ab} \text{  same equation in adjoint rep} \]
+	
+\end{itemize}
+
+\begin{example}
+	The fundamental representation of $SU(2)$ is pseudo real:
+	\[-\sigma_a^\dagger \neq \sigma_a\]
+	\[- \sigma_a^{\dagger} = \sigma_2^{-1} \sigma_{a} \sigma_2\]
+\end{example}
+
+\begin{example}
+	The adjoint representation is \textbf{real}.  This is because 
+	$f^{abc} = - f^{acb}$. So the matrices are $T_A^a$ are hermitian and antisymmetric, so 
+	\[ -(T_A^a)^\dagger = T_A^a \]
+\end{example}
+
+\begin{example}
+	One often imposes the condition for SU(N) representation
+	$\mathrm{Tr} (T^a T^b) = \frac12 \delta^{ab}$
+	or equivalently
+	\[ \sum_{c,d} f^{acd} f^{bcd} = N \delta_{ab} \]
+	
+	This means that $\mathrm{Tr} (T^a T^b)$ can be used as a definition of an inner product $\braket{T^a| T^b}$ and the generators form an orthonormal basis.
+	In particular, it follows trivially:
+	\begin{align}
+	 T^a T^b &= \frac12 \left( \{ T^a, T^b\} + [T^a, T^b] \right) \\
+	 &= {1 \over 2 N} \delta_{ab} + d^{abc} T^c + if^{abc} T^c  \\
+	 d^{abc} &\equiv 2 \mathrm{Tr}(T^a, \{  T^b, T^c \})
+	 \end{align}
+ 	
+ 	 To obtain the $\delta_{ab}$ term, take the trace of both sides and note the trace of the generators are 0.
+ 	 To obtain the $d^{abc}$, project the RHS onto the $T^a$ component.
+\end{example}
+\begin{example}
+	An alternate definition of a compact representation is one where
+	\[\mathrm{Tr} (T^a T^b) \]
+	is positive definite.  
+\end{example}
+
+Let's do some math with the representations:
+\begin{itemize}
+	\item For a complex representation R, the \vocab{complex conjugate} representation $\bar{R}$  is obtained by conjugating the generators:
+	$T^a_{\bar{R}} = -(T^a_R)^*$
+	\item \emph{direct sum}: Consider a reducible representation.  In math speak
+	\[ d(R_1 \oplus R_2) = d(R_1) \oplus d(R_2) \]
+	\[T(R_1 \oplus R_2) = T(R_1) + T(R_2) \]
+	\item \emph{direct product}: Consider a field $\psi_{IJ}$ that transforms under representation $R_1$ for index $I$ and representation $R_2$ for index J:
+	\[d(R_1 \otimes R_2) = d(R_1)d(R_2) \]
+	\[T(R_1 \otimes R_2)= T(R_1) d(R_2) + d(R_1) T(R_2) \]
+	\item An \vocab{invariant symbol} is a tensor that doesn't transform via conjugation.  One example is the identity
+	\[U \delta^{i}_j U^{-1} = \delta^{i}_j\]
+	\item We have a few group identities:
+	\begin{align}
+		R \otimes \bar{R} = 1 \oplus A \oplus ...
+		\end{align}
+	
+	For SU(N) this implies 
+	\[\underbrace{R \otimes \bar{R}}_{d(R) = N^2} = 1 \oplus \underbrace{A}_{d(A) = N^2-1} \]
+	If the representation R is real, we have
+	\[ R \otimes R = 1 \oplus A \]
+	
+	\item We denote the representation $\bf{1}$ to be the \vocab{singlet} representation.  A singlet of any algebra is the state that has zero eigenvalue under the Casimir operators. These are the generators of the center of the algebra and are simultaneously diagonalizable.
+	\item We also denote a \vocab{doublet} representation to be the fundamental representation of $SU(2)$.  For example, the single spin 1/2 particle transforms as a doublet under rotations.
+\end{itemize}
+
+Note tensor products have all the nice good properties of fields (associative, distributive, commutative).  This allows for some quick decompositions, called \vocab{Clebsh Gordon decomposition}  For example for SU(2) rep
+$V_l$ with dimension $2l+1$:
+
+\[ V_{l} \otimes V_{m} = V_{l+m} \oplus V_{l+m-1} \oplus ... \oplus V_{|l-m|} \text{ Angular moment addition} \]
+Let's compute some examples:
+\[V_{3 \over 2} \otimes V_{1} = V_{5 \over 2} \oplus V_{3 \over 2} \oplus V_{1 \over 2} \]
+This is often written in short hand as:
+\[ \mathbf{4} \times \mathbf{3} = \mathbf{6} + \mathbf{4} + \mathbf{2} \]
+where the numbers really denote the index of the representation (it has to be conserved!)
+
+
+\subsubsection{The Lorentz Group}
+\emph{Schwartz section 10, Coleman lectures: }
+The set of matrices that preserves the inner product
+$(ct)^2 - \mathbf{x}^2$ form a group. This group is called the \vocab{Lorentz Group}, denoted $O(1, 3)$.
+
+There are 6 independent operations (3 rotations, 3 boosts) that can generate all elements.
+
+Denote the boost generators $K_i$ and rotation generators $J_i$.
+Any lorentz transformation can be written as:
+\[ \Lambda(\theta, \beta) = \exp\left(i (\theta_i J_i + \beta_i K_i) \right) \]
+
+The lorentz algebra is:
+\begin{align}
+	[J_i, J_j] = i \epsilon_{ijk} J_k \text{  Rotations}\\
+	[K_i, K_j] = - i \epsilon_{ijk} J_k \text{  Boosting can cause rotations}  \\
+	[J_i, K_j] = i \epsilon_{ijk} K_k 
+\end{align}
+
+The 4 x 4 transformation matrices is the fundamental or vector representation of the lorentz group. However, any representation must satisfy the lorentz algebra.
+
+A compact way to write the lorentz algebra is with a completely antisymmetric matrix $V^{\mu \nu}$:
+
+\[ \Lambda = \exp \left(i \theta_{\mu \nu} V^{\mu \nu} \right)\]
+
+\[ \left( \begin{array}{cccc}
+	0 & K_1 & K_2 & K_3 \\
+	& 0 & J_3 &  -J_2\\
+	&  & 0 & J_1  \\
+	&  &    & 0 \\
+\end{array} \right)
+\]
+
+\[ [V^{\mu \nu}, V^{\rho \sigma}] = i \left(g^{\nu \rho}V^{\mu \sigma} - g^{\mu \rho} V^{\nu \sigma} - g^{\nu \sigma} V^{\mu \rho} + g^{\mu \sigma} V^{\nu \rho} \right)\]
+
+\emph{Addenda}
+The group elements connected to the identity is called the \vocab{proper orthochronous lorentz group} denoted $SO^+(1, 3)$.  With parity and time inversion, one can form the whole lorentz group.
+
+We'll now show that the lorentz algebra is reducible, aka it decomposes:
+\begin{align}
+	\underbrace{so(1, 3)}_{\text{lorentz algebra}} = su(2) \oplus su(2)
+\end{align}
+
+\begin{align}
+	J_i^{+/-} &\equiv \frac12 \left(J_i \pm i K_i \right) \\
+	[J_i^+, J^+_j] &= i \epsilon_{ijk} J^+_k \\
+	[J_i^-, J^-_j] &= i \epsilon_{ijk} J^-_k \\
+	[J_i^+, J_j^-] &= 0
+\end{align}
+
+We know su(2) algebra corresponds to rotation generators and that any \footnote{Note that for spin $1/2$ representations, we are allowing projective representations, aka $D(g_1) D(g_2) = (-1)^{n} D(g_1 g_2)$ } representation (of angular momentum) is labelled by half integer s (the spin).  The dimension of the representation is 2s+1.
+This means that representations of the lorentz group is characterized by \vocab{2 numbers} $(s_1, s_2)$ with $(2s_1 + 1)(2s_2+1)$ degrees of freedom.
+Let us call the irreducible representations of the rotation group labelled by spin $s$ $D^s(R)$.
+
+\begin{lemma}
+	The clebsh gordon decomposition of spins state that:
+	\[D^{s_1}(R) \otimes D^{s_2}(R) = \sum_{|s_2 - s_1|}^{s_2 + s_1} D^{s} (R) \]
+	
+	This is just a fancier way to write down angular momentum addition.
+\end{lemma}
+
+
+Use clebsh decomposition, let's work out a few examples of the representations of the lorentz group:
+\begin{itemize}
+	\item $s_1, s_2 = 0, 0$: this is just a scalar
+	\item $s_1, s_2 = (\frac12, 0)$: this is just a spin 1/2 particle, decomposes to $\frac12$
+	\item $s_1, s_2 = (\frac12, \frac12)$: this decomposes to a $ 0 \oplus 1$.
+	\item $s_1, s_2 = (1, 0)$ decomposes to just $1$.
+	\item $s_1, s_2 = (1, 1)$ decomposes to $0 \oplus 1 \oplus 2$.
+	\item A 4- vector transforms has 4-components.  so we need $(2 s_1 + 1) (2 s_2+1) = 4$.  
+\end{itemize}
+
+\subsection{Spinors}
+We showed that the lorentz group could be decomposed into various spin representations.  One particular representation of special significance to physics is the \vocab{spinor representation}, denoted by $(\frac12, 0) \oplus (0, \frac12 ) $.
+
+\begin{itemize}
+\item In the \vocab{Weyl} representation we have 2 2 component spinors transforming separately under lorentz rotation and boost, $\psi_{R/L}$.  The generators $J_{i}^{\pm}$ are satisfied by pauli matrices in the SU(2) representation:
+\[\mathbf{J}^{\pm} = \frac12 \left(\mathbf{J} \pm i \mathbf{K} \right) \]
+\[\mathbf{J}^{\pm} = \frac12 \left(\mathbf{\sigma} \pm i \mathbf{ \sigma} \right) \]
+The weyl spinors therefore under boost $\beta_j$ and rotation $\theta_i$
+\[ \psi_{R/L} \rightarrow \exp \left( {1 \over 2} (i \theta_i \sigma_i \pm \beta_j \sigma_j) \right) \psi_{R/L} \]
+or infinitsimally:
+\[ \delta \psi_{R/L} = {1 \over 2} \left( i \theta_j  \pm \beta_j \right) \sigma_j \psi_{R/L} \]
+Note how the mass term rotates the weyl spinors into each other.
+
+\item This representation is not unitary.  This is obvious since the generators are not hermitian due to the boost part.  This is OK, since the basis vectors will be momentum dependent also.  Unitarity is restored by making the combined spinor and its momentum basis vector an infinite dimensional representation.
+
+\item To build a lagrangian, note that $\psi_R^\dagger \psi_R$ is not a lorentz scalar, but 
+$\psi_R^\dagger \psi_L + \psi_L^\dagger \psi_R$ is one.
+The dirac mass then:
+\[ \ML = m \left( \psi_R^\dagger \psi_L + \psi_L^\dagger \psi_R \right) \]
+\item To build a kinetic term, we need to build lorentz 4-vectors.
+Note: 
+\[ \delta (\psi_R^\dagger \sigma_i \psi_R) = \beta_i \psi_R^\dagger \psi_R - \theta_j \epsilon_{ijk} \psi_R^\dagger \sigma_k \psi_R \]
+
+We therefore have the following lorentz 4 vectors
+\[ \psi_R^\dagger \underbrace{(\mathbb{I}, \vec{\sigma})}_{\sigma^\mu} \psi_R \]
+\[ \psi_L^\dagger \underbrace{(\mathbb{I}, \vec{\sigma})}_{\bar{\sigma}^\mu} \psi_L \]
+\item We therefore have the following lorentz covariant action:
+\[ \ML = \bar{\psi} \left(i \gamma^\mu \partial_\mu - m \right) \psi \]
+where
+\[ \psi = (\psi_L, \psi_R), \bar{\psi} = (\psi_R^\dagger, \psi_L) \]
+\[ \gamma^\mu = 
+\begin{pmatrix}
+	0 & \sigma^\mu \\
+	\bar{\sigma}^\mu & 0 \\
+\end{pmatrix} \]
+
+\item What we did is we just build the \vocab{weyl representation} of the \vocab{clifford algebra}, which is the algebra satisfying:
+\[  \{ \gamma^\mu, \gamma^\nu \} = 2 g^{\mu \nu} \]
+
+Note that the generators $S_{\mu \nu}$ defined as:
+\[ S_{\mu \nu} = {i \over 4} \left[\gamma^\mu, \gamma^\nu \right] \]
+satisfy the lorentz algebra:
+\[ [S^{\mu \nu}, S^{\rho \sigma}]  = i \left(g^{\nu \rho} S^{\mu \sigma} 
+- g^{\mu \rho} S^{\nu \sigma} 
+- g^{\nu \sigma} S^{\mu \rho}
++ g^{\mu \sigma} S^{\nu \rho}\right) \]
+
+\item These generators are \emph{different} from the generators of lorentz transformations for the 4-vector representation.  We have therefore found 2 inequivalent representations of the lorentz algebra.  The vector representation with generators $V^{\mu \nu}$ is $(\frac12, \frac12) $ representation and is irreducible. Its transformation matrix is:
+
+\[ \Lambda_V = \exp(i \theta_{\mu \nu} V^{\mu \nu})\]
+
+ This \vocab{Dirac} representation $(\frac12, 0) \oplus (0, \frac12)$ representation is reducible with lorentz transformations generated as:
+\[ \Lambda_s = \exp(i \theta_{\mu \nu} S^{\mu \nu})\]
+
+In particular, the gamma matrices transform as 4 vectors under a lorentz transformation as:
+$\Lambda_s^{-1} \gamma^\mu \Lambda_s = \Lambda_V \gamma^\mu$
+
+\item  One can construct many lorentz covariant quantities from these spinor fields.
+\begin{align}
+	\bar{\psi} \psi = \text{ scalar} \\
+	\bar{\psi} \sigma^{\mu \nu} \psi = \text{ rank 2 lorentz tensor} \\
+	\bar{\psi} \gamma^5 \psi = \text{ pseudo scalar } \\
+	\bar{\psi} \gamma^5 \gamma^\nu \psi = \text{  pseudo vector } 
+	\end{align}
+
+$\gamma^5 \equiv i \gamma^0 \gamma^1 \gamma^2 \gamma^3 = {i \over 4!} \epsilon_{\mu \nu \lambda \sigma} \gamma^{\mu} \gamma^{\nu} \gamma^{\lambda} \gamma^{\sigma}$
+This definitiona shows that $\gamma^5$ changes sign under a parity transformation because $\epsilon$ changes sign, so $\bar{\psi} \gamma^5 \psi$ is a \vocab{pseudo scalar}.
+	\end{itemize}
+
+\section{Questions and Answers}
+\subsection{Group Theory}
+\subsection{Geometry}
+
+
+\begin{myquestion}
+	What does the curvature equation $\Omega = d \omega + \omega \wedge \omega$ actually mean?
+	\end{myquestion}
+$\Omega$ is the curvature 2-form on a principle G bundle.  $\omega$ is the connection 1 form, whose elements are lie-algebra valued (sit in the generator space of G).
+
+This equation is deceptively simple.  The wedge operation here is not zero, because the lie algebra generators do not commute in general.  In fact one defines the wedge as:
+\[ [\omega(X), \omega(Y) ] \equiv ( \omega \wedge \omega) (X, Y)\]
+where $X, Y$ are vectors and $[,]$ is the lie algebra braket.
+
+\begin{myquestion}
+	What is the relation between the clifford algebra and the lorentz algebra?
+	What's the origin behind:
+	\[ \{ \gamma^\mu, \gamma^\nu \} = 2 \eta^{\mu \nu} \]
+	\[ S^{\mu \nu}= [\gamma^\mu, \gamma^\nu] \]
+	\[ \exp(i S \Lambda) \gamma_\mu \exp(-i S \Lambda)= \Lambda^{\mu \nu} \gamma_\nu \]
+	\end{myquestion}
+
+One way to see the connection is to start from Dirac's original insight of "factoring" Klein gordon equation.  Dirac wanted to find object $\gamma$ such that:
+\begin{align}
+	(m - i \gamma^\mu \partial_\mu) (m + i \gamma^\nu \partial_\nu) = m^2 + \partial^2 \\
+	m^2 + \frac12 
+	\{ \gamma^\nu, \gamma^\mu \}  \partial_\mu \partial_\nu + 
+	\frac12 \cancel{[\gamma^\mu, \gamma^\nu] \partial_\mu \partial_\nu}= m^2 + \partial^2
+	\end{align}
+
+This requires that the gamma's satisfy the clifford algebra:
+\[ \{ \gamma^\nu, \gamma^\mu \} = 2 \eta^{\mu \nu}\]
+
+One can also see that this set of commutation relations is all you need  for $S^{\mu, \nu} \equiv [\gamma^\mu, \gamma^\nu]$ to satisfy the generator of the lorentz group commutation relations.
+
+An additional insight:  the $\gamma$'s have to transform in the adjoint representation (via conjugation) in order for $\gamma^\mu p_\mu$ to be a lorentz scalar:
+
+\[\text{ under boost } \Lambda: \gamma^\mu p_\mu \rightarrow  \left(\exp(i S(\Lambda)) \gamma^\mu \exp(- i S(\Lambda)) \right) \left( \Lambda^{\nu}_\mu p_\nu \right) \]
+
+\[ \exp(i S) \gamma^\mu \exp(- i S) = \Lambda^{\nu}_\mu \gamma^\mu \]
+
+
+
+
+\end{document}

@@ -1,0 +1,423 @@
+\documentclass[10pt]{scrartcl}
+\usepackage[sexy]{evan}
+\usepackage{braket}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\usepackage{courier}
+\usepackage{tikz}
+\usepackage[compat=1.1.0]{tikz-feynman}
+\usepackage{comment}
+\usepackage{cancel}
+
+\hypersetup{
+	colorlinks=true, %set true if you want colored links
+	linktoc=all,     %set to all if you want both sections and subsections linked
+	linkcolor=blue,  %choose some color if you want links to stand out
+}
+\usepackage{geometry}
+%\usepackage{showframe} %This line can be used to clearly show the new margins
+
+
+\newgeometry{vmargin={30mm}, hmargin={20mm,20mm}}   % set the margins
+
+\begin{document}
+	\title{(Non-relativistic) Quantum Mechanics} % Beginner
+	\date{Nov 2021}
+	\maketitle
+	
+	\begin{abstract}
+		\sffamily\small
+		Here is a collected notes on physics readings.
+	\end{abstract}
+	
+	\vspace{1em}
+	
+	\tableofcontents
+	\newpage
+
+	
+\section{Kinematics}
+\newpage
+\section{Dynamics}
+
+\subsection{Notes}
+\begin{itemize}
+	\item Conservation of probability implies time evolution is \vocab{unitary}.  Unitary operators are just operators that preserve the norm of the wavefunction (which must be 1 because probabilities add to 1).  They are generalizations of rotations for vectors in hilbert space. 
+	\footnote{Unitary time evolution means you cannot "destroy" parts of the wavefunction.  This trivial statement underlies many statements like "quantum mechanics requires information to be conserved" and debates regarding the black hole information paradox}
+	\[ \underbrace{\MU(t, t_0)}_{\text{time evolution}} \ket{\psi(t_0)} \equiv \ket{\psi(t)} \]
+	\[ \MU^\dagger \MU = \mathbb{I} \rightarrow \braket{\psi | \psi}(t) = 1 \forall t \]
+	
+	
+	\item In general, unitary operators can be written as exponentiated hermitian operators. This can be seen with a short taylor expansion.
+	\[ \MU = \exp \left(-{i \over \hbar} \hat{H} t \right) \approx \mathbb{I} - {i \over \hbar} \hat{H} t + \MO(t^2)\] 
+	The hermitian operator $\hat{H}$ that \vocab{generates} \footnote{An operator A that "generates" a continuous change parametrized by $\alpha \in \R$ transforms the state as $\ket{\psi} \rightarrow \exp(i \alpha A) \ket{\psi}$ } time evolution is defined/called the \vocab{Hamiltonian} of a system.  It has units of energy and corresponds to the energy operator (eigenvalues are the energy levels).
+	\item This directly implies \vocab{Schrodinger's equation}:
+	\[ i \hbar \pder{t} \MU(t) = \hat{H} \MU \]
+	or equivalently
+	\[i \hbar \pder{t} \ket{\psi} = \hat{H} \ket{\psi} \]
+	Time evolution in quantum mechanics is \emph{linear} \footnote{The \vocab{linearity} of time evolution underlies "no-cloning" theorems for example}.
+	\item The \vocab{Dyson Series} solution to the schrodinger equation is \footnote{This series solution is mostly useful for formal manipulations, but most of the time it is not practical to compute}:
+	\[\MU(t, t_0) = \underbrace{ \text{T}}_{\equiv \text{time ordered}} \exp \left( - {i \over \hbar} \int_0^t dt' \hat{H} (t') \right)  \]
+	\[ \equiv \mathbb{I} - {i \over \hbar} \int_0^{t}  \hat{H} (t') dt'  - \left({i \over \hbar} \right)^2 \int_{t_1}^{t} dt'  \int_{0}^{t_1} dt'' \hat{H}(t') \hat{H}(t'')  + ...\]
+     
+	\item If the hamiltonian is time independent, the solution is easier, by working in the eigenbasis of the hamiltonian:
+	\[\hat{H} \ket{n} \equiv E_n \ket{n} \]
+	\[\MU(t) = \sum_n e^{-i {E_n t \over \hbar}} \ket{n} \bra{n} \]
+	\[\ket{\psi(t)} = \sum_n e^{-i {E_n t \over \hbar}} \ket{n} \braket{n| \psi(0)}\]
+	This is the motivation behind finding the energy eigenvalues $E_n$ and eigenvectors $\ket{n}$ of the hamiltonian.  The states $\ket{n}$ are called \vocab{stationary} because it remains in that subspace modulo a complex phase factor over time.
+	\item An alternate way to compute time evolution is to time evolve the operators while keeping the state vector fixed.  This is called the \vocab{Heisenberg Picture}:
+	\[{d \over dt} \hat{O} (t)= {1 \over i \hbar} [\hat{H}, \hat{O}(t)] \]
+	Note the similarity to the classical evolution of function of coordinate and momentum $O(x, p)$ via Poisson brackets:
+	\[{d \over dt} O(x, p) = - \{H, O\}\], \
+	The process of replacing poisson brackets with commutators to quantize a classical system is sometimes called \vocab{canonical quantization}.
+	\item A useful trick called the \vocab{Baker-Campbell-Haussdorf (BCH)} lemma can be used to transform operators\footnote{A common notation is to write $e^{A} B e^{-A} \equiv \exp_{\text{Ad} A}  B$. The fancy mathspeak is A is a "generator" of [blahblah] transformation and it lives in the \vocab{adjoint} representation of that [blahblah] group of transformations.}:
+	\[e^A B e^{-A} = B + [A, B] + {1 \over 2!} [A, [A, B]] + {1 \over 3!}[A, [A, [A, B]]] + ... \]
+	\[e^{i \hat{p}a \over \hbar} \hat{x} e^{- i \hat{p} a \over \hbar} = \hat{x} + a \]
+	\[e^{i \sigma_x} \sigma_y e^{- i \sigma_x} = \]
+	\item The schrodinger equation satisfies not only unitarity but also a local conservation law:
+	\[ \pder{t}{\rho} = \nabla \cdot \mathbf{j} \]
+	\[\rho \equiv |\psi(\mathbf{x}, t)|^2 \]
+	\[\mathbf{j} \equiv {\hbar \over m} \mathrm{Im} (\psi \nabla \psi)\]
+	$\mathbf{j}$ and $\rho$ can be interpreted as the probability \vocab{flux} and probability \vocab{density} respectively.  If we write $\psi \equiv \sqrt{\rho} e^{i S(x, t) }$, we see that the probability \vocab{flux} is proportional to the phase variation of the wavefunction:
+	\[\mathbf{j}  = {\rho \hbar \over m} \nabla S \]
+	\item The harmonic oscillator is arguably the most important classical and quantum system that has an analytical solution. This is because around any minimum, the potential energy looks quadratic.
+	\item The stationary states of the harmonic oscillator can be "solved" by factoring the hamiltonian in terms of \vocab{creation and annahilation} operators:
+	\[\hat{H} = \hbar \omega \left(a^\dagger a + 1 \right)\]
+	\[[a, a^\dagger] = 1\]
+	\[a \equiv \sqrt{m \omega \over 2 \hbar} \left( \hat{x} + {i \hat{p} \over m \omega} \right) \]
+	\[a^\dagger \ket{n} = \sqrt{n+1} \ket{n+1} \]
+	The ground state is a gaussian in the position representation, and the excited states are hermite polynomials times gaussians.
+	\item Eigenvectors of $a$ are called \vocab{coherent states} \footnote{a and $a^\dagger$ are \textbf{not} hermitian operators.  Their eigenstates actually do not form a orthogonal basis.  In fact coherent states form an overcomplete basis}.  They are called so because they look like localized wavepackets that under time evolution oscillate back and forth like a classical mass-spring system:
+	\[{d \over dt} a = a e^{-i \omega t} \text{ use heisenberg equation} \]
+	
+	\item The \vocab{WKB} approximation is a way to solve a PDE when the wavelength is small relative to the change in the potential V(x) \footnote{In optics, one talks about the \vocab{eikonal} approximation which is the first order WKB approximation.}.  Intuitively, one just integrates the rate of change of the phase locally:
+	\[\psi(x) = e^{i S(x) \over \hbar} \rightarrow {d S \over dx} \propto {p \over \hbar} = {1 \over \hbar } \sqrt{2 m (E-V)} \]
+	\[\psi(x) \propto \exp \left( {i \over \hbar} \int_0^x dx' \sqrt{2 m (E - V(x'))}  \right) \]
+	The intuition behind this formula is that it tries to signore the variation of the potential by solving schrodinger's solution for a constant potential:
+	\[\nabla^2 \psi = {2m (E - V) \over \hbar^2} \psi \rightarrow \psi = C e^{-{i \over \hbar} x \sqrt{2m (E-V)}} \]
+	Therefore it is the first order expansion arounda  slowly varying potential in space.
+	This formula is handy to calculate tunneling amplitudes when $E < V(x)$ (classically disallowed!), bound state condition (\vocab{Bohr-Sommerfield Quantization}).  
+	\item In general, one can use the saddle-point approximation to evalute the path integral in the limit $\hbar \rightarrow 0$.  This is called the \vocab{semi-classical} expansion which connects quantum mechanics to the hamilton-jacobi equation which is classical mechanics. 
+	\item Linear PDE's can be solved for some boundary conditions via superposition. This implies that if you know the solution to schrodinger's equation for a dirac delta at a given time, you know the solution for any initial condition by superposing them.  The \vocab{propagator} \footnote{Electrical engineers call it the \vocab{impulse response function}  It is also called the \vocab{kernel} or \vocab{green function}} is the solution to schrodinger's equation for a dirac delta function:
+	\[  K(x'', t''; x', t') \equiv \underbrace{\braket{x'', t'' | x', t'}}_{\text{amplitude to start at } x', t' \text{ and end at } x'', t''}  \]
+	
+	 We superpose those solutions for a given initial wavefunction: \footnote{This is also known as a convolution}
+	\[ \underbrace{\psi(x'', t'')}_{\text{evolved wavefunction}} = \int dx' K(x'', t''; x', t') \underbrace{\psi(x', t')}_{\text{initial condition}} \]
+	For example the propagator for the free schrodinger equation is:
+	\[ K(x'', t''; x', t') = \sqrt{m \over 2 \pi \hbar i (t'' - t')} \exp \left( {i m (x'' - x')^2 \over 2 \hbar (t'' -  t')}\right)\]
+	As you see the wavepacket of a free particle just spreads into a gaussian with variance $\propto t$.
+	The propagator for the simple harmonic oscillator is:
+	\[K(x'', t'';  x', t') = \sqrt{m \omega \over 2 \pi i \hbar \sin \left( \omega (t'' - t') \right) } \exp \left({i m \omega \over 2 \hbar i \sin(t'' - t')}  \times \left[ 2 (x'' + x')^2 \cos \left( \omega t \right) - 2 x' x'' \right] \right)   \]
+	
+	One can solve these propagators by evolving a dirac delta function. Another way is  by evaluating the transition amplitude using the path integral.  The path integral for these simples systems is a (\emph{very big}) gaussian integral.
+	
+	\item The propagator picture leads naturally to a  \vocab{path integral} \footnote{Many partial differential equations beside the schrodinger equation also admit path integral solutions.  Examples are the black-scholes equation, the diffusion equation etc...  The path integral plays a key role in the quantization of fields.} solution.  The path integral is a solution to a PDE by summing over amplitudes of paths (which is a space of functions). 
+	
+	\[ K(x_2, t_2; x_1, t_1) = \underbrace{\int \D x|_{x(t_1) = x_1}^{x(t_2) = x_2}}_{\sum \text{ over paths with boundary conditions on x}} \exp \left( -{i \over \hbar} \int_{t_1}^{t_2} dt \ML(x, \dot{x}, t) \right) \]
+	
+	\item  Classical electromagnetism is an example of a \vocab{gauge theory}: it exhibits \vocab{gauge invariance}, which is that the physics is unchanged by a gauge transformation \footnote{One perspective on gauge invariance is that it is a constrained system (since not all dynamical variable is physical).  Note that gauge invariance is not a symmetry like rotation in the sense a gauge transformation does not map physical states to each other.  It is a "do-nothing" operation.}:
+	\[H = {1 \over 2m}(p - {qA \over c})^2 + q \phi \]
+	\[A \rightarrow A + \grad \lambda, \space \phi \rightarrow \phi - {1 \over c} \partial_t \lambda, \space H \rightarrow H \]
+	\item Quantum mechanically, the wavefunction picks up a phase factor under gauge transformation.
+	$\psi \rightarrow e^{i \lambda \over \hbar c} \psi$.
+	For a pure spacial gauge transformation, $\lambda(x) \propto \int \mathbf{A} \cdot \mathbf{dx}$
+	
+	\item  When there is a magnetic field, $\nabla \times \mathbf{A}$ is not 0.  This implies that the phase factor acquired by the wavefunction depends on the path taken by the particle, \emph{even when the particle does not cross through a region with the magnetic field}.  This is the \vocab{Aharonov Bohm} (AB) effect \footnote{The AB effect variants appears in many other areas of physics.  Some examples include quantum-hall systems (Berry phase and curvature), spin 1/2 particle Berry phase, Wilson lines in QCD etc...}
+	\item The existence of a single magnetic monopole of charge value $e_M$ and the requirement the wavefunction be single valued implies the quantization of charge:
+	\[{2 e e_M \over  \hbar c} \in \mathbb{Z} \]
+	This was realized by Paul Dirac.
+	
+	\end{itemize}
+
+\subsection{QA and comments}
+
+\begin{myquestion}
+	What is the intuition behind the propagator for the free schrodinger equation?
+	\end{myquestion}
+
+The schrodinger equation is the same as the equation for diffusion in imaginary time. 
+\[i \hbar \pder{t} \psi =  -\underbrace{\#}_{\text{some constant}} \grad^2 \psi \]
+\[t \rightarrow i t \space :  \underbrace{- \hbar \pder{t} \psi= - \space ( \# ) \space \grad^2 \psi}_{\text{diffusion eqn with diffusion rate } \propto \hbar}\] The diffusion kernel is a gaussian due to the central limit theorem \footnote{Diffusion processes for example brownian motion can be seen as a random walk with roughly IID steps. In the limit of large number of steps, the central limit theorem states the limiting distribution is gaussian}.  Note that $\int dx |K(x, t)|^2 = 1$ so the crazy normalization constant in from of the propagator is just to normalize the wavefunction.  The interesting physics is all contained in the exponential:
+\[ K(x, t, x'=0, t'=0) = \underbrace{\sqrt{m \over 2 \pi \hbar i t}}_{\text{normalization}}  \underbrace{\exp \left[ {i m x^2 \over 2 \hbar t} \right]}_{\text{gaussian}} \]
+
+What is the rate of diffusion? Note that as you take the limit of $\hbar \rightarrow 0$, the variance ${\hbar t \over im}$ goes to 0.  This implies there is no spreading of the wavepacket when quantum mechanics is "turned off".  The spreading is a fundamental quantum mechanical effect due to uncertainty: since you localized the wavefunction by imposing a $\delta(x, t=0)$ initial condition, the particle's momentum is completely uncertain and causes the spreading.
+
+\begin{myquestion}
+	What is the intuition behind the path integral?
+	\end{myquestion}
+
+The path integral solution fundamentally comes from the property that quantum evolution is \vocab{markovian} in nature.  This means that the evolution has a composition rule that "don't care" about anything else other than the current state of affairs:
+\[\MU(t, 0) = \MU(t, t_1) \MU(t_1, 0)\]
+
+You can repeat this ad infinitum and add complete set of states:
+\[\MU(t, 0) = \MU(t, t_n) \MU(t_n, t_{n-1}) ... \MU(t_1, 0)\]
+\[ =  \int dx_1 \int dx_2 .... \int d x_{n-1} \MU(t, t_n) \ket{x_{n-1}} \bra{x_{n-1}} \MU(t_n, t_{n-1}) \ket{x_{n-2}} \bra{x_{n-2}} ...  \ket{x_1} \bra{x_1}\MU(t_1, 0) \]
+What you have integrated over is over all possible set of interpolating points between $x(t=0) \rightarrow x(t)$ which which means you have summed over all "paths":
+\[\int dx_1 \int dx_2 .... \int d x_{n-1} = \sum_{\text{paths}} \equiv \int \D x \]
+
+For more discussion of this topic, Zinn Justin's book "Path Integrals and Quantum Mechanics" is a good read.
+
+\begin{myquestion}
+	What is the link between classical and quantum mechanics?
+	\end{myquestion}
+
+I think there are 2 ways to see it.  One direct way is through heisenberg's equations of motions:
+\[{d \over dt} \MO  = {1 \over i \hbar} [H, \MO] \]
+For example for the momentum and position operator, we have:
+\[{d \over dt} \hat{x} = {\hat{p} \over m} \]
+\[{d \over dt} \hat{p} = {1 \over i \hbar} [H, p] = -V'(\hat{x}) \]
+Note the similarity to the classical equation $F = ma = {dp \over dt} = - V'(x)$ and ${p \over m} = \dot{x}$.
+
+If you sandwidch any operator with a state you have:
+\[{d \over dt} \braket{\hat{x}} = \braket{\hat{p} \over m} \]
+
+What this means is that \emph{on average}, the quantum values will match the classical values.  This is just a restatement of \vocab{Ehrenfest's theorem}.
+
+The other way to see it is by evaluating the semiclassical expansion of the path integral.  This is a very useful trick in more advanced applications since very often that's the only thing we can do!  This approximation is called \vocab{saddle-point integration} \footnote{The reason behind the name is from picking the integration contour at a critical point of the function.  Because the function is analytic, this looks like a saddle point in the complex plane}. Suppose we have a function f(x) which has a minimum at $x = x_0$.  The saddle point approximation says in the limit $\hbar \rightarrow 0$:
+\[\int_{-\infty}^\infty dx e^{- {1 \over \hbar} f(x)} \approx \int_{-\infty}^\infty dx e^{ - {1 \over \hbar} f(x_0) + \frac12 {1 \over \hbar} f''(x) (x - x_0)^2 + ...} \approx_{\hbar \rightarrow 0} e^{- {1 \over \hbar} f(x_0)} \sqrt{ 2 \pi \over f''} \times e^{ \MO(\ln \hbar)}  \]
+
+Similarly, the path integral admits a saddle point approximation, except now expanded around the solution $x(t)$ which minimizes the \vocab{action} S: this is the solution to classical equations of motion, with trajectory $x_{cl}$  and action $S_{cl}$.  Note the action  $S[x]$ is a \vocab{functional}: it is a map from a function to numbers $x(t) \rightarrow \R$:
+\[S[x(t)] \equiv \int_{\gamma = x(t)} dt \ML(x, \dot{x}) \]
+\[\int \D x e^{-{i \over \hbar} S} \approx_{\hbar \rightarrow 0} e^{-{i \over \hbar} S_{cl}} \sqrt{ 2 \pi \over \text{det}(H)} = \exp \left( -{i \over \hbar} \left[ \underbrace{S_{cl}}_{\text{classical action}} - \underbrace{{\hbar \over 2} \text{Tr} \ln(H)  + \MO(\ln \hbar)}_{\text{quantum correction (has $\hbar$!)}} \right]  \right) \] 
+\[H_{x(t_i), x(t_j)} \equiv {\delta^2 \over \delta x(t_i) \delta x(t_j)} S[x(t)] |_{x = x_{cl}} \]
+H here is the \vocab{Hessian} of the action functional evaluated around the classical trajectory, and is the analog of $f''$ above.
+
+\section{Unclassified}
+\[ (\vec{a} \cdot \sigma) (\vec{b} \cdot \sigma) = \mathbb{I} \vec{a} \cdot \vec{b} + i (\vec{a} \times \vec{b}) \cdot \sigma  \]
+\[ \exp \left( i \theta \hat{n} \cdot \sigma \right) = \cos(\theta) \mathbb{I} + i \hat{n} \cdot \sigma \sin(\theta) \]
+
+\section{Angular Momentum}
+
+\subsection{Sakurai Notes}
+
+\subsection{QA and comments}
+
+
+\section{Symmetry}
+
+\section{Unclassified QA}
+
+\begin{myquestion}
+	How does one get from the path integral with gauge field $A^\mu$ to schrodinger's equation?  How does ito calculus prescription enter the integral?
+\end{myquestion}
+
+
+\begin{myquestion}
+What links the green's function to the statistical correlation function? (one solves a PDE with delta function boundary condition, the other is statistical correlator)
+	\end{myquestion}
+
+\begin{myquestion}
+(Sakurai 1.11) Find energy eigenket and eigenvalues for
+\begin{align}
+	H = H_{11} \ket{1} \bra{1} + H_{22} \ket{2} \bra{2} + H_{12} \left(\ket{1} \bra{2} + \ket{2} \bra{1} \right) 
+	\end{align}
+
+	\end{myquestion}
+
+The key is to decompose the hamiltonian as:
+\[ H = \underbrace{{H_{11} + H_{22} \over 2} \mathbb{I} }_{\equiv E_0 \mathbb{I}}+ \underbrace{{H_{11} - H_{22} \over 2} \sigma_z + H_{12} \sigma_x}_{\text{spin 1/2 hamiltonian} \equiv |B| \hat{n} \cdot \vec{\sigma}} \]
+
+We further explicity compute the angular direction of $\hat{n}$
+\begin{align}
+	\alpha &= 0 \text{  (magnetic field lies in x-z plane)} \\
+	\beta &= \arctan \left({2 H_{12} \over H_{11} - H_{22}} \right) \\
+	|B| &= \sqrt{{H_{12}}^2 + \left({H_{11} - H_{22} \over 2} \right)^2}
+	\end{align}
+
+The first term $E_0 \mathbb{I}$ is just a constant energy shift (since $\mathbb{I}$ commutes with $|B| \hat{n} \cdot \vec{\sigma}$, the eigenvalues just add while eigenkets of the spin 1/2 are automatically eigenkets of the identity operator).
+
+Sakurai provides to us the eigenkets for a spin 1/2 generally as:
+\[ \ket{\hat{n}, +} = \cos {\beta \over 2} \ket{1} + e^{i \alpha} \sin{{\beta \over 2}} \ket{2}	\]
+with eigenvalues $\pm 1$ (for $\vec{\sigma} \cdot \hat{n}$).
+
+We already have computed $\beta$ and $\alpha$ for one eigenket.  The other eigenket is just the orthogonal vector to this one.
+ The eigenvalues can be read off as:
+$E_0 \pm |B|$
+
+\newpage
+\begin{myquestion}
+	(Sakurai 2.3) An electron is subject to a uniform, time-independent magnetic field of strength B in the positive z direction.  At time t = 0, the electron  is known to be in an eigenstate of $\mathbf{S} \cdot \mathbf{n}$.  with eigenvalue ${\hbar \over 2}$ where $\mathbf{n}$ is a unit vector, lying in the x-z plane, that makes an angle $\beta$ with the z-axis.
+	
+	a) Obtain the probability for finding the electron in the $S_x = {\hbar \over 2}$.
+	b) Find the expectation value of $S_x$ as a function of time.
+	c) Check your answers in the limit $\beta \rightarrow 0$ and $\beta \rightarrow {\pi \over 2}$.
+	\end{myquestion}
+
+a)  In order to obtain the probability over time, it behooves us to compute the wave-vector over time.  It is known initially that the initial state is an eigenstate of $\mathbf{S} \cdot \mathbf{n}$.  Those eigenstates in the z basis are
+\begin{align}
+	\ket{\hat{n}, +} (t = 0) = \begin{pmatrix}
+		\cos({\beta \over 2}) \\
+		e^{i \alpha} \sin({\beta \over 2})
+	\end{pmatrix}
+	\end{align}
+
+Since the initial spin is in the xz plane, $\alpha = 0$.  The hamiltonian for a magnetic field B in the z direction is:
+\begin{align}
+	H & = - {e \over mc} \mathbf{S} \cdot B = - {e \hbar \over 2mc} 
+	 \sigma_z \\
+	 & \equiv {\hbar \omega \over 2} \sigma_z 
+	\end{align}
+
+The eigenvalues are $\pm {\hbar \omega \over 2}$ so the wavefunction vs time is:
+\begin{align}
+	\ket{\psi} (t) = \begin{pmatrix}
+		\cos({\beta \over 2}) e^{i \omega t \over 2} \\
+		\sin({\beta \over 2}) e^{-i \omega t \over 2}
+	\end{pmatrix}
+	\end{align}
+
+The probability to be in a particular state can be computed by the inner product squared with respect to that state. Denote P(t) to be the probability to be in aligned in the +x direction:
+\begin{align}
+	\ket{\hat{x}, +} &= {1 \over \sqrt{2}} \begin{pmatrix}
+		1  \\
+		1
+	\end{pmatrix}\\
+P(t) &= |\braket{\hat{x}, +| \psi (t)}|^2 \\
+&= \left| {1 \over \sqrt{2}} \begin{pmatrix}
+	1  & 1
+\end{pmatrix} \cdot 
+\begin{pmatrix}
+	\cos({\beta \over 2}) e^{i \omega t \over 2} \\
+	\sin({\beta \over 2}) e^{-i \omega t \over 2}
+\end{pmatrix} \right|^2 \\
+&= {1 \over 2} \cancelto{1}{|e^{i \omega t \over 2}|^2}  \underbrace{\left| \cos({\beta \over 2}) + 
+\sin({\beta \over 2}) e^{-i \omega t})\right|^2}_{\cos^2({\beta \over 2}) + \sin^2({\beta \over 2})  + \cos({\beta \over 2}) \sin({\beta \over 2}) (e^{i \omega t} + e^{- i \omega t}) }  + \\
+& = \frac12 \left(1 + \sin(\beta) \cos(\omega t) \right)
+	\end{align}
+
+b)  The expectation of $S_x$ is the sum of the probabilities times their $S_x$ values.
+\begin{align}
+	\braket{S_x}(t) & = \left( {\hbar \over 2} P(t) + {-\hbar \over 2} (1-P(t)) \right) \\ 
+	& = {\hbar \over 2} \left( 1 + \sin(\beta) \cos(\omega t) - 1 \right) \\
+	& = {\hbar \over 2} \left( \sin(\beta) \cos( \omega t) \right)
+	\end{align}
+
+Note that this expectation is consistent with a classical spin gyrating around the z axis at $\omega$.  Its projection along the x axis gives the expectation. 
+
+c) In the limit where $\beta \rightarrow 0$, the spin is aligned with the z axis.  It is therefore an eigenstate of the hamiltonian and it is a stationary state.   We expect $P(t) = \frac12$, or complete uncertainty about its value in the x direction (could be equally up or down in the x direction).  This is accurately captured by the formula:
+\[  \frac12 \left(1 + \cancelto{0}{\sin(\beta) \cos(\omega t)} \right)\]
+We also expect $\braket{S_x}$ to be 0 for all times since the eigenstate stays pointed in the +z direction.
+\[ \braket{S_x} = {\hbar \over 2} \left( \sin(\beta = 0) \cos( \omega t) \right) = 0 \]
+
+In the limit where $\beta \rightarrow {\pi \over 2}$, the spin starts aligned with the x axis.  It therefore gyrates in the xy plane, at a rate of $\omega$.
+
+This is accurately captured with $P(t)$ being a maximum and equal  to 1 at time t = 0:
+\[ P(t) =  \frac12 \left(1 + \sin(\beta = {\pi \over 2}) \cos(\omega t) \right) = 
+\frac12 \left(1 +  \cos(\omega t) \right) \]
+Similarly the gyration of the spin is accurately captured with $\braket{S_x}$:
+
+\[ \braket{S_x} = {\hbar \over 2} \left( \sin(\beta={\pi \over 2}) \cos( \omega t) \right) = {\hbar \over 2} \cos(\omega t) \]
+
+\newpage
+\begin{myquestion}
+	(Sakurai 2.10)  A box containing a particle is divided into a right and left compartment by a thin partition.
+	If the particle is known to be on the right (left) side with certainty, the state is represented by the position eigenket $\ket{R}$ ($\ket{L}$), where we have neglected spatial variation within each half of the box.
+	
+	We model tunnelling between left and right side with the hamiltonian:
+	\[H = \Delta \left(\ket{L} \bra{R} + \ket{R} \bra{L} \right) \]
+	where $\Delta \in \mathbb{R}$
+	a) Find the normalized energy eigenkets.  What are the energy eigenvalues.
+	b) In the schrodinger picture, the base kets are fixed and the state moves with time.  Suppose the system is represented by $\ket{\alpha}$ as given above at t= 0.  Find the state vector for $t > 0$ by applying the appropriate evolution operator.
+	c)  Suppose that at time t= 0, the particle is on the right side with certainty.  What is the probability for observing the particle on the left side as a function of time?
+	d)  Write down the coupled schrodinger equations for the wave functions $\braket{R| \alpha(t)}$ and $\braket{L| \alpha(t)}$.  Show that the solutions are just what you expect from b.
+	\end{myquestion}
+
+a) We could easily diagonalize the 2 x 2 matrix.  However any 2-dimensional quantum problem can be mapped to a spin 1/2 problem. We quickly recognize this hamiltonian is $H = \Delta \sigma_x$.  This is the hamiltonian for a magnetic field in the x direction for a spin 1/2 particle.  We can trivially write down the eigenkets from previous problems (1st index denote $R$ and 2nd index denote $L$) \footnote{Because the pauli matrices and identity form a basis for 2 x 2 hermitian matrices, it is a true statement that one can solve any 2 x 2 quantum problem with the spin $\frac12$ eigenvectors and eigenvalues modulo an energy shift}.
+\begin{align}
+	\frac{1}{\sqrt{2}}
+	\begin{pmatrix}
+		1 \\
+	\pm 1
+	\end{pmatrix} \\
+	\end{align}
+with eigenvalues $\pm \Delta$ respectively. 
+
+b)  The time evolution operator for a time-independent hamiltonian is $ \hat{U} = e^{- i  \hat{H} t \over \hbar}$.  A useful lemma to use when evaluating polymials of pauli matrices is:
+\[ \left(\vec{\sigma} \cdot \vec{a} \right) \left( \vec{\sigma} \cdot \vec{b} \right) = (\vec{a} \cdot \vec{b}) \mathbb{I}_{2 \times 2} + i (\vec{a} \times \vec{b}) \cdot \vec{\sigma}  \]
+This in particular implies $\sigma_x^{n} = \mathbb{I}_{2 \times 2}$  if n even and  $\sigma_x^{n} = \sigma_x$ if n odd.
+
+We will calculate rather explicitly the time evolution operator (we can skip most of this in the future since the result is a well known identity):
+\begin{align}
+	\hat{U} = e^{-i \Delta \sigma_x t \over \hbar} \\
+	& = \sum_n {1 \over n!} (- i {\Delta \over \hbar} t)^n \sigma_x^n \\
+	& = \sum_{n \text{  even}} {1 \over n!} (- i {\Delta \over \hbar} t)^n \sigma_x^n + 
+	\sum_{n \text{  odd}} {1 \over n!} (- i {\Delta \over \hbar} t)^n \sigma_x^n \\
+	& = \sum_{n \text{  even}} {1 \over n!} (- i {\Delta \over \hbar} t)^n \mathbb{I}_{2 \times 2} + \sum_{n \text{  odd}} {1 \over n!} (- i {\Delta \over \hbar} t)^n \sigma_x \\
+	& = \cos({\Delta  \over \hbar}t) \mathbb{I}_{2 \times 2} - i \sin({\Delta \over \hbar} t) \sigma_x
+	\end{align}
+
+A quick check we can make here is that the time evolution operator is unitary as it should:
+\[ U U^\dagger = \left(\cos({\Delta  \over \hbar}t) \mathbb{I}_{2 \times 2} - i \sin({\Delta \over \hbar} t) \sigma_x \right)  \left(\cos({\Delta  \over \hbar}t) \mathbb{I}_{2 \times 2} + i \sin({\Delta \over \hbar} t) \sigma_x \right)\]
+\[= \cos^2({\Delta  \over \hbar}t) \mathbb{I}_{2 \times 2}  + \sin^2({\Delta \over \hbar} t) \sigma_x^2 = \mathbb{I}_{2 \times 2}\]
+Consider an initial state 
+\[\ket{\alpha} \equiv \begin{pmatrix}
+	\alpha_R \\
+	\alpha_L
+\end{pmatrix} \]
+Applying time evolution operator to the state gives
+\begin{align}
+	\hat{U}\ket{\alpha} = 
+	 \begin{pmatrix}
+		\alpha_R \cos({\Delta \over \hbar}t) - i \sin({\Delta \over \hbar} t) \alpha_L\\
+		\alpha_L \cos({\Delta \over \hbar} t)  - i \sin({\Delta \over \hbar} t) \alpha_R
+	\end{pmatrix} 
+\end{align}
+
+c) This problem is not unlikely a spin 1/2 particle, with a magnetic field in the x direction and the spin pointed in the z direction initially.  You expect the spin to gyrate in the z-y plane, and the probability to oscillator between 1 and 0.
+
+Calculating with $\alpha_R = 1, \alpha_L = 0$
+
+\begin{align}
+	\ket{\alpha (t)} &= 
+	\begin{pmatrix}
+		 \cos({\Delta \over \hbar}t)\\
+		i \sin({\Delta \over \hbar} t)
+	\end{pmatrix}  \\
+   P(t) & = \left| \braket{L| \alpha(t)} \right|^2 = \\
+   & \sin^2({\Delta \over \hbar}t)
+\end{align}
+
+d) Denote $\alpha_{R/L}(t) \equiv \braket{ R/L | \alpha(t)}$
+The coupled schrodinger equation is a 2 x 2 matrix equation:
+\begin{align}
+	i \hbar \pder{t}{\ket{\alpha}} & = \hat{H} \ket{\alpha} \\
+	i \hbar \pder{t}{} \begin{pmatrix}
+		\alpha_R \\
+		\alpha_L
+	\end{pmatrix} & = 
+\begin{pmatrix}
+	0  & \Delta \\
+	\Delta & 0 
+\end{pmatrix} 
+\begin{pmatrix}
+	\alpha_R \\
+	\alpha_L
+\end{pmatrix} 
+	\end{align}
+
+In component form:
+\begin{align}
+	\dot{\alpha}_R = - {i \over \hbar} \Delta \alpha_L \\
+	\dot{\alpha}_L = - {i \over \hbar} \Delta \alpha_R 
+	\end{align}
+
+If we plug in the solution to (b) in here, it trivially follows that it is satisfied.  In general one solves coupled differential equations by expanding in terms of normal modes.  The normal modes (un-surprisingly) are:
+\[\begin{pmatrix}
+	1 \\
+	\pm 1
+\end{pmatrix} \]
+with eigenvalues $\mp {i \Delta \over \hbar}$.  We could carry on but this is nothing but reproducing sakurai equation 2.1.36-2.1.38.
+
+
+
+
+ 
+
+
+
+
+
+
+	
+	
+\end{document}

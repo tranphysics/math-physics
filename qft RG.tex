@@ -1,0 +1,1949 @@
+\documentclass[11pt]{scrartcl}
+\usepackage[sexy]{evan}
+\usepackage{braket}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage[compat=1.1.0]{tikz-feynman}
+\usepackage{comment}
+
+
+
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+
+\hypersetup{
+    colorlinks=true, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=blue,  %choose some color if you want links to stand out
+}
+\usepackage{geometry}
+    %\usepackage{showframe} %This line can be used to clearly show the new margins
+
+
+\newgeometry{vmargin={30mm}, hmargin={20mm,20mm}}   % set the margins
+\begin{document}
+\title{Notes 2018, Part I} % Beginner
+\date{December 2017}
+\maketitle
+
+\begin{abstract}
+	\sffamily\small
+	Here is a collected notes on physics readings.
+\end{abstract}
+
+\vspace{1em}
+
+\tableofcontents
+\newpage
+
+
+\section{Resources}
+\begin{itemize}
+	\item David Skinner Advanced QFT notes: has interesting material on renormalization, very formal for gauge theory using differential geometry throughout.  Very good link from 0+1d QFT to 3+1d QFT, and uses path integral. \url{https://dec41.user.srcf.net/h/III_L/advanced_quantum_field_theory}
+	\item Joseph Minahan QFT notes: best for path integral of harmonic oscillator and feynman rules, as well as explicit QED and $\phi^4$ calculations in dimensional regularization. \url{https://www.physics.uu.se/digitalAssets/405/c_405910-l_3-k_wholeshebang_hyper.pdf}
+	\item Timothy Hollywood \url{https://arxiv.org/abs/0909.0859}
+	\item Jorge Crispim Romero:  Very detailed loop calculation and appendix for feynman tricks and integrals useful reference. \url{http://porthos.ist.utl.pt/ftp/textos/tca.pdf}
+	\item Kardar Statistical Physics of Fields.  Clearest treatment of wilsonian RG for $O(N)$ model.
+	\item Michio Kaku: Very concise, to the point but easy to read and not too dense.  Lots of material covered, but page layout is clean and very pleasant to read.  Highlights: group theory chapter (at the start!), non-abelian gauge theory and standard model.
+	\item Peskin and Schroeder: nonlinear sigma model is done pretty well, and all derivations are very explicit (albeit very brute force). Some highlights: chapter on path integral, QED rules and basic calculations, non-abelian gauge symmetry, classical fields.  The problems are very good but some are quite hard/long.
+	\item Fradkin: Renormalization group, OPE, Conformal Field Theory. Many applications peskin leaves to the exercises, fradkin actually carries it out making it very encyclopedic.  However due to the breadth of material shown, it is quite dilute.
+	\item Weinberg: Quantum Theory of Fields Vol. II.  A bit too much detail/sophisticated/nuanced reasoning on pretty much every topic.  However the authoritative reference, everything is carefully reasoned, no carpet is left un-turned.   I especially liked discussion on spontaneous symmetry breaking, the effective potential and topology.
+	\item Matthew Schwartz:  Especially done well is gauge invariance, the lorentz group, derivation of spinor representation and derivation of feynman diagrams.  formulas are very explicit make easier to use for solving problems.
+	\item Srednicki: $\phi^3$ theory renormalization, gamma function and dim-reg tricks, path integrals and feynman rules derivation.  Uses the weird (relativist) minkowski signature unfortunately.  Sometimes the calculations are too brute force with little intuition.
+	\item Zee QFT in a nutshell: very good for differential form and gauge theory. Sketch notation sometimes.  Many article sized chapters on condensed matter applications.  The problems are quite good and not too hard.
+	\item Xi yin, harvard 253b notes:  super dense, not much intuition.  Covers Weinberg vol. 2 in half the number of pages.
+	\item Preskill les houches notes on vortices and monopoles: \url{http://theory.caltech.edu/~preskill/pubs/preskill-1987-vortices.pdf}
+	\item Nair, Quantum field theory, a modern perspective: good material on differential geometry ch. 14.  Uses forms throughout making it quite clean.  Selection of topics and math used is very nice for high energy, but no problems :(
+\end{itemize}
+
+
+\section{Breakdown of Mean-Field}
+
+\subsection{Landau's Symmetry Breaking Theory}
+
+
+\subsection{The Free energy functional (Goldenfeld 5.6)}
+
+Landau postulates a free energy functional of the form:
+\begin{align}
+L = \int d^d x \mathcal{L}[m, m^2, (\nabla m)^2, ...](x)
+\end{align}
+While it has units of energy, it is not the Free energy, and nor is it the Gibbs free energy.  Both of those
+thermodynamic functions are convex functions while L can clearly be non-convex.
+Consider a coarse grained theory with microscopic degrees of freedom $m'(x)$, which are averaged over boxes of size ${1 \over \Lambda}$.
+\begin{align}
+e^{L} = \sum_{m'} e^{\beta H(m')} |_{m(x)}
+\end{align}
+where the sum is over all configurations of $m'$ (microscopic order parameter) such that the coarse grained order parameter m is fixed.
+It then automatically follows from this definition that the partition function is just a functional integral:
+
+\begin{align}
+\boxed{Z = \int \mathcal{D}m e^{- \int d^d x \mathcal{L}[m]}}
+\end{align}
+
+
+\subsection{Mean Field Solution}
+
+We consider a Landau Ginzburg statistical field $m(x)$ to model O(N) symmetric systems, for example magnetic spins etc...:
+\begin{align}
+Z \propto \int \mathcal{D}m \exp\left( \int dx K (\nabla m)^2 + {t \over 2} m^2 + u m^4 \right)
+\end{align}
+
+Note that $t \equiv {T- T_c \over T_c}$.
+
+Consider a mean field ansatz where $m(x) = \bar{m}$.  The free energy is minimized at $\bar{m} = 0$
+if $ t > 0 $ (disordered phase), and at $\bar{m} = \sqrt{-t \over 4 u}$ for $t < 0$ (ordered phase).
+
+\subsection{Goldstone Theorem}
+
+In the ordered phase, we may expand the action as:
+\begin{align}
+m(x) = \bar{m} + \phi^l \hat{e}_l + \sum_i^{n-1} \phi^t \hat{e}_{i}
+\end{align}
+where $\phi^l$ and $\phi^t$ model the longitudinal and transverse fluctuations.
+It is straightforward to show that the transverse modes are massless, while the longitudinal mode
+is massive:
+\begin{align}
+\braket{\phi^l(q) \phi^l(q')} & \propto {\delta^d (q + q') \over K |q|^2 + {1 \over \xi_l^2}} \\
+\braket{\phi^t_\beta(q) \phi^t_\alpha(q')} & \propto {\delta_{\alpha \beta} \delta^d (q + q') \over K |q|^2 }
+\end{align}
+
+Those massless transverse modes in the ordered phase are what people refer to a "Goldstone Bosons".  
+
+\subsection{Mermin-Wagner-Coleman Theorem}
+
+\begin{theorem}
+There is no spontaneous symmetry breaking of a continuous symmetry in dimension 2 or less
+\end{theorem}
+
+\begin{proof}
+Consider the fluctuations of the goldstone modes, and its effect on the long range correlation.
+The spin spin correlation is:
+
+\begin{align}
+\braket{m(x) m(x')} \equiv G(x-x')
+\end{align}
+
+We can freeze the massive longitudinal mode for the low energy effective theory.  In that case, in 2 dimensions, we can parametrize the spin wave via the angle field $\theta$:
+
+\begin{align}
+m(x) \approx |\bar{m}| e^{i \theta(x)}
+\end{align}
+The low energy action is then governed by a gaussian action:
+
+\begin{align}
+P(\theta(x)) \propto \exp \left( -\int d^d x \frac12 K (\nabla \theta)^2 \right)
+\end{align}
+
+We can compute the fluctuation of the angle:
+\begin{align}
+\braket{\theta(q) \theta(q')} \propto {\delta(q + q') \over K |q|^2}
+\end{align}
+In real space, we have:
+\begin{align}
+\braket{\theta(x) \theta(0)} \equiv G(x) \propto x^{2-d} 
+\end{align}
+for $d > 2$.  For d = 2, we have $G(x) \propto \ln(x)$.
+What this means is that the long range order is destroyed, and hence there is no ordered phase
+in dimensions 2 or less.
+
+Dimension 2 is called the \vocab{lower critical dimension}
+\end{proof}
+
+\subsection{Upper Critical Dimension}
+
+Let us now compute the singular part to the heat capacity in dimensions larger than 2.  We are interested in its behavior close to the critical point where $t \rightarrow 0$ and $\xi^2 \rightarrow \infty$
+
+Recall the saddle point approximation is:
+\begin{align}
+\int dx e^{-f(x)} \approx e^{-f_{min}} \int dx' e^{- \frac12 f''(x_0) x'^2} = e^{- f_{min}} \sqrt{2 \pi \over f''}
+\end{align}
+
+In higher dimensions, where $f''$ is the Hessian operator $G^{-1}$, we have
+
+\begin{align}
+\int d\phi e^{-S[\phi]} \approx e^{- S_{min}} e^{-\frac12 \text{Tr} \ln \det(G)} e^{\frac12 \ln(2 \pi) }
+\end{align}
+
+The free energy is just $\ln(Z)$. 
+
+Let's compute the free energy density for the O(N) model:
+\begin{align}
+f \equiv {F \over V} = f_0 + \int {d^d q \over (2 \pi)^d} \ln(Kq^2 + {1 \over \xi^2})
+\end{align}
+
+where ${1 \over \xi^2} = t$ for $t > 0$ and ${1 \over \xi^2} = -2t$ for $ t< 0$.
+
+The heat capacity, $C$ can be computed as:
+\begin{align}
+C = \partial_{t}^2 {\beta f} \propto 0 + \int {d^d q \over (2 \pi)^d} {1 \over (K q^2 + {1 \over \xi^2})^2}
+\end{align}
+
+For dimensions $ d> 4$, the integral is dominated by the UV cutoff $\Lambda \equiv {1 \over a}$ where $a$ is the lattice spacing.  In other words:
+\begin{align}
+\int { d^d q \over (2 \pi)^d} {1 \over (K q^2 + {1 \over \xi^2})^2} \propto \Lambda^{d-4} \text{ (d $>$ 4)}
+\end{align}
+
+This quantity contributes a non-universal constant correction to the heat capacity discontinuity around $t = 0$.
+
+For dimensions $d < 4$, the integral is dominated by the IR divergence.  In fact, we can rescale and 
+shift the integration variable:
+
+\begin{align}
+x & \rightarrow \sqrt{K} q \xi \\
+C &\propto \xi^{4-d} \int {d^d x} {1 \over x^2 + 1}\\
+C &\propto \xi^{4-d} 
+\end{align}
+
+This integral diverges for dimensions $< 4$, since the correlation length $\xi$ diverges as as approach criticality.  We thus showed the following:
+\begin{itemize}
+\ii In dimensions $ \geq 4$, the divergent part of the heat capacity is well captured by mean field theory.  The fluctuation corrections to the saddle point approximation only contributes a non-universal constant correction to the heat capacity, but does not alter the critical exponent.
+\ii In dimensions of $< 4$, the fluctuations around the saddle point solution contributes singular corrections to the divergence of the heat capacity (and other response functions like susceptibility).  This means that the results of mean field theory, are unreliable.  For this reason, $d=4$ is called the \vocab{upper critical dimension} of the theory.
+\end{itemize}
+
+The way to get around dimension 4 is through a program first started by Kadanoff and later finished by Wilson and Fischer.  The main idea is that around the critical point, the correlation length diverges, which should wash out all UV related scales.  The system exhibits scale invariance, and analysis around scale invariant fixed point of statistical fields should be enough to predict the critical exponents.
+
+
+
+
+\section{Invitation to Renormalization}
+Before we treat RG, let's build some technology
+\subsection{The quantum effective action}
+\subsubsection{A list of analogies}
+Here are the QFT $\rightarrow$ stat mech analogies:
+\begin{itemize}
+	\item \[ \underbrace{\phi(x)}_{\text{field}} \rightarrow \underbrace{m(x)}_{\text{local mesoscopic magnetisation}} \]
+	\item \[ \underbrace{\mathcal{L}_{E} (x)}_{\text{euclidean lagrangian}} \rightarrow \underbrace{\mathcal{H}(x)}_{\text{landau energy functional}} \] 
+	\item \[ \underbrace{Z(J)}_{\text{generating functional}} \rightarrow \underbrace{Z(H)}_{\text{partition function}} \]
+	\item \[ \underbrace{W(J)}_{\text{connected generating functional}} \rightarrow \underbrace{F(J)}_{\text{free energy}} \]
+	\item \[ \underbrace{\Gamma(\braket{\phi})}_{\text{1PI generating functional or "effective action"}} \rightarrow \underbrace{\mathcal{G}(M)}_{\text{Gibbs Free Energy}} \]
+	\end{itemize}
+
+\subsubsection{Properties and definition (Xi Yin 253b notes)}
+
+The generator of connected correlations is denoted as $W(J)$.  It is the analog of the free energy of a statistical system. Differentiating it generates connected diagrams
+
+\begin{align}
+W(J) &= \ln \braket{ e^{\int dx J \phi}} \equiv \ln \left[ \int [d \phi] e^{- S[\phi] + \int dx J(x) \phi(x) } \right]  \\
+\prod_{i = 1}^N {\delta \over \delta J(x_i)}|_{J = 0} & = \braket{\prod_{i = 1}^N \phi(x_i)}_{c} \text{ ("c" denotes connected correlation)}
+\end{align}
+
+The legendre transform of the free energy with respect to J is the Gibbs free energy, denoted by $\Gamma$.  It is also called the "Quantum Action". The legendre transform is involutive (2 legendre transforms yields the identity), and bijective
+when the function is convex (failure to be bijective is related to the appearance of multiple phases).
+\begin{align}
+ \phi_{cl}(x) \equiv {\delta \over \delta J(x)} W(J) & \equiv \braket{\phi}_{J} \text{ (Note we let the J be anything for now)} \\
+   \Gamma(\phi_{cl} (x))  & = -W(J) - \int dy J(y) \phi_{cl} (y) \\
+   \rightarrow {\delta \over \delta \phi(y)} \Gamma  & = -J (y)
+\end{align}
+Note both W(J) and $\Gamma(\phi)$ are functionals: they map functions ($J$ or $\phi$) to numbers. 
+
+One useful property of the quantum action is that its tree level (classical) expansion gives the full connected correlations in the quantum  theory:
+\begin{align}
+\lim_{\hbar \rightarrow 0} \int [d\phi] e^{{-1 \over \hbar} \left(\Gamma[\phi] + \int dx J \phi \right)}  &= e^{\Gamma(\phi_0) + \int dx J \phi_0}  \\
+ &= e^{W(J)} \\
+\text{ where } {\delta \over \delta \phi} \Gamma(\phi) &= -J
+\end{align}
+
+Furthermore, we note the stationary point of $\Gamma$ is the expectation of the quantum field:
+\begin{align}
+{\delta \over \delta J} W(J) & = \braket{\phi} \\
+\phi_0 & = \braket{\phi}
+\end{align}
+
+This is why it is called the "quantum" effective action.  Its classical solutions incorporate all quantum fluctuations.
+
+\subsubsection{Generation function for 1PI vertices (Peskin 11.5)}
+
+The quantum action is also the generating function for 1PI vertices.  Its hessian is the inverse of the propagator.
+
+\begin{proof}
+Consider the following tautology:
+\begin{align}
+{\delta \over \delta J(y)}{\delta \over \delta \phi (x)} \Gamma[\phi] & = -\delta(x-y)
+\end{align}
+We can apply the (calculus of variation version) of the chain rule:
+\begin{align}
+\delta(x-y) & = - \int dz {\delta \phi(z) \over \delta J(y)} {\delta^2 \over \delta \phi(z) \delta \phi(y)} \Gamma(\phi)  \\
+  &= \int dz \underbrace{{\delta^2 \over \delta J(y) \delta J(z)} W(J) }_{G(y,z)} \underbrace{{\delta^2 \over \delta \phi(z) \delta \phi(y)} \Gamma(\phi)  }_{D(z, y)} \\
+ & \equiv \int dz G_{yz} D_{zy}
+\end{align}
+The last line shows that the hessian of $\Gamma$ is the inverse of the propagator (which is the hessian of $W$)
+
+To obtain the relation between the quantum action and the W  at higher orders, first note the following identities:
+\begin{align}
+{\delta \over \delta J(z)}  & = \int dw {\delta \phi \over \delta J} {\delta \over \delta \phi} = \int dw G(z, w) {\delta \over \delta \phi} \\
+{\partial \over \partial \alpha } M^{-1} (\alpha)  & = M^{-1} {\partial M \over \partial \alpha} M^{-1}
+\end{align}
+
+Applying it to the 3rd order connected function gives:
+
+\begin{align}
+{\delta^3 W \over \delta J_x \delta J_y \delta J_z}  & = \int dw D_{zw} {\delta \over \delta \phi(w)} \left( {\delta^2 \Gamma \over \delta \phi_x \delta \phi_y}\right)^{-1} \\
+  & = \int dw \int du \int dv  D_{zw} D_{xu} {\delta^3 \over \delta \phi_u \delta \phi_v \delta \phi_w} D_{vy} \\
+{\delta^3 W \over \delta J_x \delta J_y \delta J_z}   & = \int du dv dw  D_{xu} D_{yv} D_{wz} {\delta^3  \Gamma \over \delta \phi_u \delta \phi_v \delta \phi_w} 
+\end{align}
+
+The left hand side is the 3 point function.  The right hand size is 3 propagators hooking up to a blob, which is generated by $\Gamma$.  This means $\Gamma$ at 3rd order generates 3-point 'blobs' with external propagators chopped off ("amputated").  We can iterate to higher orders, but basically, we have that $\Gamma$ generates 1 Particle Irreducible diagrams.  In equation form it reads:
+
+\begin{align}
+\boxed{{\delta^n  \Gamma[\phi] \over \delta \phi(x_1) ... \delta \phi(x_n)} = \braket{\phi(x_1)... \phi(x_n)}_{1PI}}
+\end{align}
+
+\end{proof}
+
+
+\subsubsection{Alternate perspective (Xi yin 253b)}
+Let's evaluate $\Gamma$ directly from the definition and see what comes out:
+
+\begin{align}
+e^{i \Gamma[\phi_0]}  & = \int [d \phi] \exp \left({i \int dx \mathcal{L} + J \phi - J \phi_0} \right)_{{\delta W \over \delta J} = \phi_0} \text{ (Just using the definition of the quantum action )} 
+\end{align}
+Note that J is a background source, which is set by $\phi_0$.
+J(x) is a source configuration that makes $\braket{ \phi } = \phi_0$ in the quantum theory.  
+The expression above suggests
+we should shift variable to $\hat{\phi} \equiv \phi - \phi_0$:
+\begin{align}
+ e^{i \Gamma[\phi_0]}& =  \int [d \hat{\phi}] e^{i \int dx \mathcal{L}(\hat{\phi} + \phi_0) + J \hat{\phi}} \\
+\end{align}
+
+To compute the effective action for a field configuration $\phi_0$
+\begin{itemize}
+\item Expand the action in a background field $\phi = \phi_0 + \hat{\phi}$
+\item Add a term $J \hat{\phi}$ in the action to make $\braket{\hat{\phi}} = 0$.  In QFT language, add a source configuration J(x) such that all tadpoles are cancelled.
+
+This is the so called \vocab{background field} technique.
+\end{itemize}
+
+\subsubsection{Effective action for $\phi^4$ symmetry breaking}
+
+We'll compute $\Gamma$ in 2 step, first compute W(J).  For this calculation, we will do it in minkowski time and re-introduce $\hbar$ to make clear expansion around a classical solution.
+From the definition, 
+\begin{align}
+e^{{i \over \hbar}W(J) } =  \int d \phi \exp( S[\phi]] + \int dx J \phi) 
+\end{align}
+We first expand via the saddle point (classical solution) called $\phi_0$, which satisfies the classical equations of motion ${\delta S \over \delta \phi}|_{\phi_0} = -J$.  Shifting the field variables as a fluctuation around the classical solution, we define $\tilde{\phi} = \phi- \phi_0$:
+\begin{align}
+e^{{i \over \hbar} W(J)} \approx e^{{i \over \hbar} \left(S[\phi_0] + \int dx J \phi_0 \right)}   \int d \tilde{\phi} e^{\tilde{\phi} D^{-1} \tilde{\phi} } \\
+\end{align}
+Taking the log of both sides:
+\begin{align}
+W(J)  \approx S[\phi_0] + \int dx J \phi_0 + {\hbar \over 2 i} \text{Tr} \ln(D^{-1})
+\end{align}
+$\Gamma$ just removes the extraneous current (tadpoles!), giving
+
+\begin{align}
+\Gamma = \underbrace{S[\phi_0]}_{\text{Classical Action}} + { \hbar \over 2 i} \underbrace{\text{Tr} \ln(D^{-1})}_{\text{Quantum correction}} + ...
+\end{align}
+
+We now make the dramatic assumption that the minimum energy configuration of field $\phi(x)$ at fixed average field value is translation invariant (\textbf{this argument fails miserably when multiple phases appear, see convexity proof})
+\begin{align}
+\Gamma[\phi] \equiv VT \times V_{eff}(\phi)
+\end{align}
+
+One then defines the effective potential $V_{eff}$ as the intensive value of $\Gamma$ normalized in spacetime.
+
+\begin{example}
+\emph{Compute to first order the correction to the $V_{eff}$ for the following lagrangian (Zee section IV.3)}
+$$ \mathcal{L} = \frac12 (\partial \phi)^2 + \frac12 m^2 \phi^2 - {g \over 4!} \phi^4$$
+To 0th order, the quantum action is just the classical action.  For constant field, the effective potential is just the classical potential:
+$$V_{eff} =  -\frac12 m^2 \phi^2 + {g \over 4!} \phi^4$$
+
+To first order in, we need to compute the quantum correction.  First, the potential energy density can be rewritten as:
+$$ \int dx \mathcal{L} = \int dx dy \phi(x) \underbrace{[-\partial^2 - V''(\phi)] \delta(x-y)}_{D^{-1}} \phi(y)$$ 
+
+The operator D is just the propagator for a free theory with a different mass, and is diagonal in k space:
+\begin{align}
+\text{Tr} \ln(D^{-1}) = \int d^4 x \int \dkk \log({-k^2 + m'^2})  
+= V T I(d) 
+\end{align}
+This integral is divergent, but we can evaluate up to a cutoff $\Lambda$:
+\begin{align}
+I(d) = {\Lambda^2 \over 32 \pi^2} V''(\phi) - {V''(\phi)^2 \over 64 \pi^2} \log \left({e^{\frac12} \Lambda^2 \over V''(\phi)} \right)
+\end{align}
+The cutoff dependent terms will be absorbed by renormalization conditions.  However, the part that is not cutoff dependent, shows
+as a log correction to the potential:
+\begin{align}
+V_{eff} (\phi) = A \phi^2 + B \phi^4 (D + E \log({\phi^2 \over \Lambda^2}))
+\end{align}
+\end{example}
+\emph{Comments:}
+We see the effective potential will be deeper near the classical minima (see Peskin 378).  Note peskin does the higher dimensional
+version of this problem, which is why it looks a bit obscure.  
+
+The way the coefficients A, B, D, E are set are via renormalization conditions (lab measurements).
+There are 2 renormalization conditions (2 coupling constants in the bare lagrangian, the mass $m$ and the interaction $g$)
+\begin{itemize}
+\item We measure in lab the mass of the particle to be $m_P$ where P stands for physical.  This sets: $${d^2 V_{eff} \over d \phi^2}_{\phi=0} = m_P^2$$
+\item We measure the strength of the interaction at a given scale $M$ to be some coupling $g_P$.  This sets:
+$$ {d^4 V_{eff} \over d \phi^4}_{\phi = M} = g_P$$
+Question: Why can't we measure it at $\phi = 0$?  What is the meaning of this scale $M$ we picked?
+\end{itemize}
+
+\subsubsection{Convexity}
+\emph{Zinn Justin, Peskin and Schroeder, and Weinberg}
+
+The effective potential is convex.  The one computed from perturbation theory may not be because we \textbf{incorrectly} assume the field configuration that minimizes the energy is $\phi(x) = \phi$ constant.
+
+\begin{proof}
+	Suppose we have $V_1 = V_{eff}(\phi_1)$ and $V_2 = V_{eff} (\phi_2)$ values.
+	One can always construct a state with some intermediate value
+	\[ \braket{\phi} = (1-x) \phi_1 + x \phi_2 \]
+	Do this by mixing little islands of $\phi_1$ field values with $\phi_2$ field values in the desired ratio.  Because the total energy scales with the amount of islands you get a effective potential value:
+	\[ V(\braket{\phi}) = (1-x) V_1 + x V_2 \]
+	Since the effective potential minimizes the energy given some fixed constraint average field, this value must be an upper bound on the effective potential.  Hence the effective potential is subtended by the convex hull of the thermodynamic construction.
+\end{proof}
+
+\subsection{Diagrammatic interpretation}
+
+\emph{Francois David PIRSA or Zinn Justin}
+
+
+We can interpret easiest the quantum action by studying the case of $\phi^4$ theory with the following Lagrangian:
+$$ \mathcal{L} = \frac12 \phi( \Box   + m^2) \phi + {\lambda \over 4} \phi^4$$
+Note we are working with Euclidean field theory hence the weird sign.
+If we evaluate the path integral via saddle point, we can show (this requires a few line of math) that:
+$$\boxed{\Gamma[\varphi] = S[\varphi] + \frac{ \hbar}{2} \text{Tr} \ln(S''[\varphi]) + ...}$$
+
+This formula is extremely useful and \textbf{needs to be committed to memory}.  It re-appears often in statistical physics,
+for example when it is used to compute linear responses like the heat capacity (which relates to fluctuations of the order parameter).
+What it shows is that the first order quantum effects ($\hbar$ term)
+ in the effective action has an elegant trace formula.  
+To write this as a perturbation expansion we factor the action into the free and the interacting part:
+\begin{align}
+G^{-1} &\equiv {\frac12 (\Box + m^2)} \\
+\underbrace{S''}_{\text{Hessian Operator}} &\equiv {\delta^2 \over \delta \phi(x) \delta \phi(y)} S(\phi) \\
+ &= (G^{-1}(x-y) + {\lambda \over 2} \underbrace{V(x, y)}_{\text{interaction kernel}}) \\
+ &= {\bf G}^{-1} ( 1 + {\bf G} {\lambda \over 2} {\bf V}  )
+\end{align}
+In the previous expressions, we denote operators in bold for clarity.
+We plug this expression into the trace expansion.
+\begin{align}
+\text{Tr} \ln((S'')) & = \text{Tr} \ln ({\bf G^{-1}}) + \text{Tr} \ln(1 + {\lambda \over 2}{\bf G V})\\
+\end{align}
+It is straightforward to identify the interaction kernel V by seeing how it acts on sample functions $\phi_1, \phi_2$:
+$$ {\bf \phi_1 \cdot  V \cdot \phi_2} = \int dx dy \phi_1(x) V(x, y) \phi_2(y) = \int dx' \phi^2(x') \phi_1(x') \phi_2(x')$$
+$$ \rightarrow V(x, y) = \delta(x -y) \phi^2(y)$$
+Using the operator from of the interaction above, we can carry the first order term expansion:
+\begin{align}
+\text{Tr} \ln(1 + {\bf G} {\lambda \over 2} \phi^2) & = {\lambda \over 2} \int dx \int dy G(x-y) \phi^2(y)  + \\
+& ({\lambda \over 2})^2 \int dx \int dy G(x-y) \phi^2(y) \int dz \int dw G(w - z) \phi^2(w) + ...  \\
+\end{align}
+This expansion can be re-interpreted as a sum over 1-loop 1P-I diagrams (these just look like bigger and bigger loops for higher order of
+the interaction strength $\lambda$).
+\textbf{ The expansion of the effective action at each order of $\hbar$ is just the expansion in the number of loops of the quantum theory}.  A good proof is presented in Zinn Justin's Quantum Field Theory and Critical Phenomena (what isn't proved there!), however we will outline a brief argument.
+
+Consider some diagram contributing to the effective action.  This diagram will have vertices (interactions), internal lines (propagators) and external lines which are \emph{amputated}:
+\begin{itemize}
+\item Each propagator contributes a factor of ${\hbar}$ (L propagator)
+\item Each vertex interaction contributes ${1 \over \hbar}$ (V vertices)
+\item By definition because the $e^{-S \over \hbar}$ has an $\hbar$ in it, to make the effective action dimensionless,
+we give its definition a factor of $\hbar$
+\end{itemize}
+
+The contribution of that diagram will be at order $\hbar^{L - V +1 }$.  This number $L-V+1$ is called the \vocab{Betti Number} of the graph and is a topological invariant denoting the number of loops of the diagram.
+
+\subsection{Renormalization (Peskin 12.1)}
+
+Under rescaling of momenta $k-> bk$ (coarse graining, or looking from far away which increases frequencies), an operator with $N \phi, M \partial$ rescale as follows:
+\begin{align}
+g(b)  = g(1) b^{M + N({d-2 \over 2})-d} = g(1) b^{\alpha} \\
+\alpha \equiv M + N {d-2 \over 2}-d
+\end{align}
+
+The possible cases are:
+\begin{itemize}
+\ii \vocab{$\alpha > 0$}.  This implies that the coefficient grows under RG.  In other words, this coefficient becomes more important to the IR physics.  This is called  \vocab{relevant, or super-renormalizable} etc... 
+\ii \vocab{$ \alpha = 0$}.  This is a \vocab{marginal} case and higher quantum corrections should determine the growth of the operator in the IR physics. 
+\ii \vocab{$\alpha < 0 $}.  This operator grows weaker at low energy under RG. It is called \vocab{irrelevant}, as in does not affect as much the IR physics.  In particle physics, we 
+call it \vocab{non-renormalizable} because we think about it the opposite way.  For a given interaction strength measured for this interaction in the IR, it will blow up in the UV!
+\end{itemize}
+
+\subsection{Renormalization of $\phi^4$ theory}
+Consider a massless $\phi^4$ theory.  We would like to study its renormalization procedure.  We start with a "model" lagrangian with parameters in the UV called \vocab{bare parameters} $A, B, C$ we'd like to fit to create a model of the theory.
+\begin{align}
+\mathcal{L} = \frac{1}{2} A (\partial \phi)^2 + \frac{1}{2} B \phi^2 + {C \over 4!} \phi^4
+\end{align}
+These parameters are a function of the cut off of the theory $\Lambda$.  We would like to fit this theory to a lab scale energy scale $\mu$.
+By that we mean the 2 following experimental fit conditions:
+\begin{itemize}
+\item colliding 2 particles with momentum $\mu^2 = s, t, u$ \vocab{Mandelstam} parameters gives us the measured
+coupling $g_R$
+\item we observe at that scale a massless theory.
+\end{itemize}
+As we will see these 2 input from experiment will allow us to self consistently extrapolate the theory to calculate correlation functions of any momentum input order by order in perturbation theory.  The process of fitting this data is called \vocab{Renormalization} in the high energy context (which we will
+distinguish from \vocab{Wilsonian renormalization})
+
+
+First let's consider the Effective action at first order in $\hbar$, which gives us the radiative correction to the propagator $$\Gamma^{(2)}(p_1, p_2) = \underbrace{p^2}_{p = p_1 \text{or} p_2} + B^2 + \underbrace{T(B)}_{\text{self energy}}$$
+T(B) is called the \vocab{self-energy} and causes mass to increase as we flow to the IR.
+It  consists of 1 particle irreducible diagrams (other texts often use symbe $i \Sigma(p)$ to denote it)
+For $\phi^4$ theory, it's just:
+
+$$T(m) = \int {d^4 k \over (2 \pi)^4} {1 \over k^2 + B^2}$$
+
+This integral is quadratically divergent, and has an expansion in the cutoff $\Lambda$:
+\begin{align}
+T(m) & =  \int_{|k| < \Lambda} {d^4 k \over (2 \pi)^4} {1 \over k^2 + B^2} \\
+& \approx  \int_{|k| < \Lambda} {d^4 k \over (2 \pi)^4 k^2} (1 - {B^2 \over k^2} + ...) \\
+& = {\Lambda^2 \over 8 \pi^2} - {B^2 \over 8 \pi^2} log(\Lambda^2)
+\end{align}
+To fit the theory to a massless theory at some lab scale, we need to make
+$$B = -{\Lambda^2 \over 8 \pi^2}$$
+This is our first bare parameter fix (in general, B could be momentum dependent like in QED).
+
+The renormalization condition for the 4 point function is computed using the 4 point effective action term, which are conveniently expressed
+in terms of mandelstam variables s, t, u:
+\begin{align}
+\Gamma^{(4)}(p_1, p_2, p_3, p_4) & = \Gamma^{(4)}(s, t, u) \\
+& = C - {C^2 \over 2} (\sum_{x = s, t, u} \log({\Lambda^2 \over x}))
+\end{align}
+By imposing the experimental condition that $\Gamma^(4)(\mu, \mu, \mu) = g_R$, we obtain obtain $C(\Lambda)$.
+Now we can compute any 4 point functions to order $\hbar$ and $g_R^2$ based on our 2 parameter fit:
+\begin{align}
+\Gamma(p_1, p_2, p_3, p_4) = g_R - {1 \over 2} {g_R^2 \over (4 \pi)^2} (\sum_{x = s, t, u} \log({\Lambda^2 \over x}))
+\end{align}
+
+\subsection{Lehmann-Kallen representation of the Propagator}
+\begin{theorem}
+The exact propagator in momentum space has the form:
+\begin{align}
+i G(k) = {1 \over k^2 + m^2 + i \epsilon} + \int_{s = 4 m^2}^\infty ds {\rho(s) \over s + m^2 + i \epsilon}
+\end{align}
+\end{theorem}
+
+\begin{proof}
+See Srednicki.
+\end{proof}
+\emph{Comments}:
+This theorem says that the propagator has a pole at the mass of the fundamental excitation and a maybe continuous spectrum starting a a mass scale of $2m$.
+My intuition is basically fundamental quantas have a mass. Interactions can alter the propagator only when 2 quanta interact.
+
+
+
+\section{The Renormalization Group}
+Let's evaluate the scale dependence of the coupling constants.  There are 2 main methods to do so, one i'll call \vocab{counterterm RG} and the other is \vocab{wilsonian/polchinski RG} also called \vocab{exact RG}.
+
+\subsection{Counterterm RG}
+The n-point scattering amplitude $\Gamma^{(n)} (Z_\phi, g_R, \mu^2)$ cannot depend on renormalization scale $\mu^2$.  
+\begin{align}
+	{\partial \over \partial \ln \mu} \Gamma^{(n)} = 0
+	\end{align}
+
+This implies an evolution equation between couplings and scale $\mu$, which is called the \vocab{Callan Symanzik} equation.  The evolution rate is defined by a \vocab{beta} function:
+
+\begin{align}
+	\beta_{g_R} \equiv {\partial \over \partial \ln \mu} g_R
+	\end{align}
+
+Because the only dependence of those amplitudes is in the counterterms, we can take a derivative of the counterterms directly.
+
+\subsection{Wilsonian RG}
+\emph{Peskin and Schroeder ch. 12, or Subir Sachdev Quantum Phase Transitions}.
+The other way to obtain the beta functions is to integrate the high energy theory to a given low energy scale.  As your integrate how each momentum shell, the effective action of the low energy theory changes.  The rate of change is the beta function.  In pratice, counterterm RG is easier to implement.
+\subsubsection{The setup}
+Start with an (euclidean) theory with explicit (UV or bare) cut-off $\Lambda_0$.
+\begin{align}
+	\mathcal{Z} &= \int_{|k| < \Lambda_0} \mathcal{D}[\phi] \exp\left(- S_{\Lambda_0} \right)  \\
+	S_{\Lambda_0} & = \int d^D x \frac12 \partial \phi^2 + \sum_{i} g_i \Lambda^{D-d_i} \mathcal{O}_i
+	\end{align}
+
+Obtain a theory (an \vocab{effective action}) at scale $\Lambda$, which will be our RG sliding energy scale by integrating high energy modes
+\begin{align}
+	\phi = \underbrace{\phis}_{\text{slow}} + \underbrace{\phif}_{\text{fast}}
+	\end{align}
+
+If we integrate out down to some value $\Lambda < \Lambda_0$, we get an correction $S_{int}$ to the effective action:
+\begin{align}
+	S_{int} = \ln \left[ \int_{C^\infty (\Lambda, \Lambda_0]} \mathcal{D} \phif   \exp\left( -S_0[\phif] -S[\phis, \phif ]\right) \right] 
+\end{align}
+
+The wilsonian approach is to integrate 1 slice $[\underbrace{\Lambda - \delta \Lambda}_{\Lambda \over s}, \Lambda]$ at a time, and obtain the change in the couplings.  
+
+\subsubsection{$\phi^4$ wilson style}
+For a $\phi^4$ theory we get:
+\begin{align}
+	S_{int} &= \sum \text{connected diagrams} \\
+	S_{int} &= {-\lambda \over 4!} \braket{\phis \phis \phif \phif}_{\phif}^c + {\lambda^2 \over 4! 4! 2!} \braket{\phis \phis \phis \phis \phif \phif \phif \phif}_{\phif}^c + \mathcal{O} (\lambda^3)
+	\end{align}
+
+where $ \braket{}_{\phif]}^c$ denotes gaussian averaging over $\phif$ modes living in a momentum shell, and "c" denotes connected correlation functions.
+The first term corrects the mass of $\phis$, the second corrects the $\lambda$ for $\phis$:
+\begin{align}
+	\Delta m^2 &= -{\lambda \over 2} {1 \over (2 \pi)^d} \int_{\delta \Lambda} {1 \over k^2 + m^2} k^{d-1} dk \\
+	&\approx -{\lambda \over 2 (2 \pi)^d} {S_{d} \Lambda^{d-1} \over \Lambda^2} \delta \Lambda \\
+	\Delta \lambda &\approx -{3 \lambda^2 \over 2} {1 \over (2 \pi)^d} {S_d \lambda^{d-1} \delta \Lambda \over \Lambda^4} \\
+	&=  -{3 \lambda^2 \over 2} {1 \over (2 \pi)^d} S_d \lambda^{d-4} d \ln \Lambda \\
+	\end{align}
+
+We recover the RG equations:
+\begin{align}
+	{d \over d s} \lambda = - {3 \over 16 \pi^2} \lambda^2
+\end{align}
+Here note the sign inversion.  The flow is towards the IR.
+
+\subsubsection{Wilsonian effective potential, Local Potential Approximation}
+\emph{David Skinner, Timothy Hollywood ch 2, lec10 Francois David }
+We just reproduce the calculation above, but in more generality.  Note that all the couplings $g_{2n}$ are dimensionless (if you make them dimensionfull like francois david, you have to rescale the momentum shell from ${\Lambda \over s} \rightarrow \Lambda$ after integrating out fast modes).  
+\begin{align}
+	S &= S[\phis] + S[\phif] \\
+	 & = S[ {\phis} ] + \int d^d x \frac12 ( \partial \phif )^2 + \sum_{n} {1 \over (2n)!} {d^{2n} \over d {\phis} ^{2n}} V( {\phis} ) ({\phif} )^{2n} \\
+	 V(\phi) &\equiv \sum_n {1 \over (2n)!} \Lambda^{d-n(d-2)}g_{2n} \phi^{2n} \\
+	\end{align}
+
+At {\bf one loop order} (or in the saddle point approximation) we get
+
+\begin{align}
+	S = S[ {\phis} ] + \int d^d x \frac12 ( \partial \phif )^2 + \frac12 V'' \phif^2
+	\end{align}
+
+This is a gaussian integral which gives:
+\begin{align}
+	\ln \braket{e^{-\delta S}}_{\phif} = \frac12 \text{Tr} \left[ \ln( -\Delta + V'') \right]_\phif
+	\end{align}
+
+Note another way to arrive at the same result is to compute the use the trace formula for the 1 loop effective action where we integrate out $\phif$:
+\begin{align}
+	\Gamma(\phi) &= S[\phi] + \frac12 \text{Tr} \left[ \ln( -\Delta + V'') \right] \\
+	\rightarrow \text{ Integrate fast modes : } 
+	\delta \Gamma(\phis) &= \frac12 \text{Tr} \left[ \ln( -\Delta + V'') \right]_{\phif}
+	\end{align}
+
+$V''$ is a functional operator which is not translation invariant.  In the \vocab{local potential} approximation, we assume it's just identity operator times a number which allow the to be summed in k-space.
+
+\begin{align}
+	\underbrace{S(\Lambda-\delta \Lambda) - S(\Lambda)}_{-\delta S} &= \frac12 \int d^d x \ln(-\Delta + \underbrace{V''}_{\text{operator}})_{\phif} \\
+	 &= \frac12 \int d^d x \int_{k \in (\Lambda - \delta \Lambda, \Lambda)} {d^d k \over (2 \pi)^d} \ln (k^2 + \underbrace{V''}_{\text{number}})   \text{ (local potential approx)} \\
+	 & = \delta \Lambda \underbrace{C}_{\equiv {{(4 \pi)^{-{d \over 2}}  \over \Gamma(d/2)}}} \Lambda^{d-1} \int d^d x \ln(\Lambda^2 + V'' ) \label{eq:2}
+	\end{align}
+
+The flow of the dimensionless coupling determines how the theory "looks" at different scales, and gives the beta function.
+\begin{align}
+	{d g_{2n} \over d \ln(\Lambda)} &= (n(d-2)-d) g_{2n} - C \Lambda^{n(d-2)} {d^{2n} \over d \phi^{2n}}|_{\phi=0} \ln (\Lambda^2 + V'') \label{eq:1}
+	\end{align}
+
+\begin{example}
+	To obtain equation  (\ref{eq:1}), expand the LHS and RHS of (\ref{eq:2}) separately
+	\begin{align}
+		\delta S &= \delta \int d^d x \frac12 (\partial \phi^2) + V(\phi, g_{2n}, \Lambda) \\
+		& = \int d^d x \sum_{n} {1 \over (2n)!} g_{2n}(\Lambda^{d-n(d-2)}) (d - n(d-2))  \phi^{2n} \delta \ln \Lambda \\
+		-\text{RHS} &= \delta S =  - C \delta( \ln \Lambda) \Lambda^{d-2}  \int d^d x  \ln(\Lambda^2 + V'')
+		\end{align}
+	
+	A few tricks:
+	\begin{itemize}
+		\item The RHS can be expanded as power series in $\phi$.  To obtain the $\phi^{2n}$ term, we just need the 2nd derivative to the 2n.
+		\item Use$\ln(1 + x) \approx x - {x^2 \over 2} + {x^3 \over 3} -...$ to expand the log.
+		\item Divide all the powers of $\Lambda$ out. (the other way to see this is to set $\Lambda$ arbitrarily to 1 since the beta function is only a function of the dimensionless coupling, not the cutoff)
+	\end{itemize}
+	Expand:
+	\begin{align}
+		\ln(1 + V'') \approx  {V''} - {V''^2 \over 2} + ...
+		\end{align}
+	\end{example}
+
+
+
+\subsubsection{Polchinski's ERGE}
+
+Actionally implementing this calculation is hard, but conceptually it leads to \vocab{ERG} (Exact RG) also called Polchinski's equation.
+
+\subsection{$\phi^4$ RG}
+Tree level action:
+\begin{align}
+	S_{tree} = \int d^D x \frac12  \left( \partial \phi \right)^2 - \frac12 m^2 \phi^2 - {\lambda \over 4!} \phi^4
+\end{align}
+
+1 Loop action (with counter terms):
+\begin{align}
+	S_{1 -loop} = \int d^D x \frac12  \left( \partial \phi \right)^2 - \frac12 \mu^{2 \epsilon} \left(m^2 + {\lambda\over (4 \pi)^2 \epsilon} \right) \phi^2 - {1\over 4!} \underbrace{  \mu^{2-D/2}  \left(\lambda + {3 \lambda^2 \over (4 \pi)^2 } \left({1 \over \epsilon} + ... \right) \right)}_{\lambda_0} \phi^4
+\end{align}
+
+Note that we only explicitly wrote the terms that depend on the renormalization scale $\mu$ in the counterterms.  $\lambda_0$ denote the \vocab{bare} (UV scale) theory that is fixed.
+
+Requiring that the bare parameter is independent of $\mu$ implies the beta function for $\lambda$, the \vocab{renormalized} coupling (we've ignored finite non-divergent contributions):
+\begin{align}
+	{\partial \over \partial \ln(\mu)} \lambda_0 = 0 \\
+	\rightarrow  	\beta_\lambda \equiv {\partial \over \partial \ln(\mu)} \lambda = -\epsilon \lambda + {3 \lambda^2 \over (4 \pi)^2}
+	\end{align}
+
+\begin{itemize}
+	\item for $D = 4$, $\epsilon = 0$ and the coupling grows in the UV.  Quantum correction made the coupling \vocab{marginally irrelevant}.
+	\item For $D < 4$, there is a competing effect in the beta function. There is a new fixed point at 
+	$\lambda^* = {(4 \pi)^2 \over 3} \epsilon$.  This is the \vocab{wilson fisher fixed point}.
+	(one needs to check stability of the fixed point in the $m^2, \lambda$ submanifold)
+	\end{itemize}
+
+Expanding in $D = 4- \epsilon$ is also called the \vocab{$\epsilon$ expansion}
+
+
+
+
+\subsubsection{Momentum Cutoff}
+The divergent integrals for the 2 point and 4 point functions at one loop look as follow:
+\begin{align}
+	\int_0^\Lambda dp p^3 {1 \over p^2 + m^2} = \frac12 \Lambda^2 - {m^2 \over 2} \log \left( 1+{\Lambda^2 \over m^2}\right) \\
+	\approx {\Lambda^2 \over 2} -{m^2 \over 2} \log \left( {\Lambda \over m}\right)
+	\end{align}
+
+\begin{align}
+	\int_0^{\Lambda} dp p^3 {1 \over p^2 + m^2} {1 \over (k-p)^2 + m^2} \approx \log ({\Lambda^2 \over p^2 + m^2})
+	\end{align}
+
+Call the scale at which we measured $\lambda$ to be $\mu^2 \equiv s$ (you scattered some s-wave and obtained $\lambda$ in lab). 
+
+We already obtained this expression when doing the effective potential:
+
+\begin{align}
+	\Gamma(p_1 = p_2 = -p3 = -p_4) = {3 \over 2} {\lambda^2 \over (4 \pi)^2} \log \left({\Lambda^2 \over \mu^2} \right)
+	\end{align}
+
+Since this relation is physical, it implies that there is a fixed relation between $\lambda$ (measured coupling) and $\mu$ (energy scale).
+
+\begin{align}
+	{d \over d \ln (\mu)} \Gamma & = 0 \\
+	\rightarrow \beta_{\lambda} & \equiv {\partial \over \partial \ln \mu} \lambda(\mu)= {3 \over (4 \pi)^2} \lambda^2
+	\end{align}
+This is the same beta function obtaind with dimensional regularization.
+
+\subsection{Anatomy of signs}
+We're the most interested in the sign of the beta function, and that means getting the signs right for the diagrams.
+
+Recall the feynman rules for $\phi^4$:
+\begin{itemize}
+	\item propagator: ${i \over k^2 - m^2}$
+	\item interaction: $ - i \lambda$
+	\end{itemize}
+
+This can be easily seen in the path integral:
+\begin{align}
+	\mathcal{Z} &= \int \Dphi \exp \left(i \int \mathcal{L} d^d x \right) \\
+						 & = \int \Dphi \exp \left( {i \phi M \phi} - i V(\phi) \right)
+	\end{align}
+Propagators come from the inverse of the quadratic operator $ i M$:
+$$G \approx {i \over M} = {i \over k^2 - m^2}$$
+$$ V \approx - i \lambda$$
+
+Using those rules, the loop integral has 2 vertex and 2 propagators giving a 1PI amplitude $\propto + \lambda^2 (\overbrace{...}^{\text{divergent}})$
+This means that the 1PI vertex $\Gamma^{(4)}$ grows with $\mu$, and the interaction is marginally irrelevant.
+
+
+
+\subsection{Nonlinear $\sigma$ model}
+We derive the RG flow for nonlinear $\sigma$ method, the traditional way with callan-symanzik equation, and the wilsonian way.
+\subsubsection{The Setup}
+\begin{example}
+	Notational addendum.  We write short hand 
+	$(\partial_{\mu} \vec{n})^2$.  This is understood to mean:
+	\[\underbrace{\sum_{\mu = 0}^{D}}_{\text{spacetime}} \underbrace{\sum_{i = 1}^{N}}_{\text{spin components}} (\partial_{\mu} n^i)^2 \]
+	\end{example}
+It describes a vector field $\vec{n} = n_i$ in N-dimension constrained to move on a hypersphere.
+The constraint is $\sum_{i} n_i^2 = 1$.  This is the infinite mass limit of O(N) symmetry breaking model.
+
+\[ \LL = {1 \over 2 g^2} (\partial_\mu \vec{n})^2\]
+\[n^i = ( \underbrace{\pi^1, \pi^2, ..., \pi^{N-1}}_{\text{Goldstone bosons}}, \sigma)\]
+
+The spherical constraint implies
+\[\sigma = \sqrt{1 - \pib^2}\]
+
+Expanding the lagrangian gives:
+\[\LL = {1 \over 2 g^2} (\partial_\mu \pib)^2 +  {\pib \cdot \partial_\mu \pib \over 2 g^2 (1 - \pib^2)} \approx {1 \over 2 g^2} (\partial_\mu \pib)^2  + {1 \over 2 g^2} (\pib \cdot \partial_\mu \pib)^2  \]
+
+One obtains progropagator and interactions:
+\[ {ig^2 \over p^2} \delta_{ij} \]
+\[ {-i \over g^2} \left( \sum_{\text{3 pairings}} \delta^{ij} \delta^{kl} \left(p_{1} + p_{2} \right) \left(p_3+ p_4 \right) \right) \]
+\subsubsection{Traditional Way}
+
+Callan Symanzik for n-point function order by order in perturbation theory:
+\[\left(\pder{\ln(M)} + \beta(g) \pder{g} + n \gamma(g) \right) G^{(n)} (M, g, p)  = 0 \]
+
+To get $\gamma$, pick $G^{(1)} = \braket{\sigma(0)}$
+
+\begin{align}
+\sigma(0)  &= 1 - \frac12 \braket{\pi(0)^2}  + ... \\
+&= 1 -\sum_{kl}  \int \dkk {ig^2 \over k^2 - \underbrace{\mu^2}_{\text{IR regulator}}} \delta^{kl} \\
+&=_{d \rightarrow 2} 1 - {g^2} (N-1){\Gamma(1 - {d \over 2} ) \over (8 \pi) \mu^{1 - {d \over 2}}}
+\end{align}
+
+\textbf{Impose} renormalization at scale $M$:
+\begin{align}
+	\braket{\sigma} = 1 - \frac12 {g^2 (N-1) \over 8 \pi} \ln{M^2 \over \mu^2} 
+	\end{align}
+
+Plug into callan symanzik equation to order $g^2$ (note $\beta = \underbrace{0}_{\text{classical}} + \mathcal{O}(g^2)$ so it has no effect for this diagram)
+\[\gamma(g) = {g^2 (N-1) \over 4 \pi} + \MO(g^4)\]
+
+Similarly one can compute the callan symanzik equation
+for the propagator which will give $\beta$:
+\begin{align}
+	\braket{\pi^k(p) \pi^l(-p)} ={i g^2 \delta^{kl} \over p^2}  \left(\underbrace{1}_{\text{tree}} - \underbrace{{g^2 \over 4 \pi} \ln \left({M^2 \over \mu^2} \right)  + \MO(g^4)}_{\text{loops}} \right)
+	\end{align}
+
+Chug the callan symanzik equation again, using $\gamma$ obtained previously:
+
+\[ \left( \pder{\ln(M)} + \beta(g) \pder{g} + 2 \gamma(g) \right) \braket{\pi^k(p) \pi^l(-p)} = 0 \]
+\[= {i \delta^{kl} \over p^2} \left(- {g^4 \over 2 \pi} + 2g \beta(g) + 2 g^2 {g^2 (N-1) \over 4 \pi} \right)\]
+\[\rightarrow \beta(g) = - (N-2) {g^3 \over 4 \pi} + \MO(g^5)\]
+
+\begin{itemize}
+	\item  The model is \textbf{free} with N=2.  This is because for $N=2$ in $d=2$, this is the model of a 2-d angle field, with effective action ${1 \over 2 g^2} (\partial \theta)^2$.  This is a gaussian theory and the beta function does not flow.
+	\item For $N>2$ in 2 dimension, the theory is \vocab{asymptotically free}.
+	\end{itemize}
+
+\subsubsection{Wilson Style}
+\emph{Kardar, Beyond Spin Waves}
+
+\subsubsection{Large N}
+\emph{Peskin, Schroeder ch. 13}
+We will yet analyze this theory using new trick, in the large N limit.  This trick consists of:
+\begin{itemize}
+	\item Use lagrange multipliers to enforce the constraint
+	\item Interpret the lagrange multiplier as a gauge field
+	\end{itemize}
+
+\begin{align}
+	 Z&= \int \D \vec{n} \exp \left[ -{i \over 2 g_0^2} \int \dd^d x (\partial_\mu \vec{n})^2 \prod_{x} \underbrace{\delta(n^2 - 1)}_{\text{constraint}} \right] \\
+	 & =  \int \D \vec{n} \D \alpha \exp \left[ -{i \over 2 g_0^2} \int \dd^d x (\partial_\mu \vec{n})^2 - {i \over 2 g_0^2} \underbrace{\alpha \int \dd^d x (n^2 -1)}_{\text{Lagrange Multiplier  } \alpha(x)} \right]  \\
+	 & = \int \D \alpha  \exp \left[ \underbrace{-i {N \over 2} \ln \mathrm{det} \left(-\partial^2 + i \alpha \right) +{i \over 2 g_0^2} \int \dd^d x \alpha(x)}_{S}  \right]
+	 \end{align}
+
+In the large N limit, the integral can be evaluated via sadde point.  The saddle point is determined by ${\delta \over \delta \alpha} S = 0$, to solve for $\alpha(x)$:
+\[ -{N \over 2} {1 \over -\partial^2 + i \alpha} = {1 \over 2 g_0 ^ 2} \]
+\textbf{key}: because the RHS is a constant we need $\alpha(x) = \alpha$ to be constant.  Because the RHS is real, we write $-i \alpha  = m^2$.  Furthermore, the operator is diagonal in frequency space:
+\[ N \int \dkk {1 \over k^2 + m^2} = {1 \over g_0^2} \]
+
+At this step, we start our renormalization program.  Obviously the integral is UV divergent and one needs to do so matching (ahem, measurement), at scale $M$, with measured coupling $g(M)$, and fixed cut-off $\Lambda$.  Evaluating at d=2:
+
+\[{N \over 2 \pi} \ln \left({\Lambda \over m} \right) = {1 \over g_0^2}\]
+
+\[ {1 \over g_0^2} = {1 \over g^2} + {N \over 2 \pi} \ln \left({\Lambda \over M} \right) \text{ (we measured the mass to be M)} \]
+
+This equation is obviously overdetermined, since $g_0, \Lambda$ is fixed (the bare theory is the full truth!).  This implies the mass parameter depend on the scale:
+\[ \underbrace{m}_{\text{bare mass}} = M \exp \left[-{2 \pi \over g^2 N} \right]\]
+
+Similary, one can plug the bare mass into callan symanzik to get flow:
+\[ \left[\pder{\ln (M)} + \beta(g) \pder{g} \right]m(M, g) = 0 \]
+\[\beta(g) = -{g^3 N \over 4 \pi} \]
+
+\subsection{Covariance of beta function}
+
+
+\emph{Zinn Justin, section 10.11, MIT 8.324 pset 6}.
+For classically scale invariant theories, the beta function only flows at second order
+of the coupling.  This is because only loop diagrams lead to a broken scale invariance. 
+
+\begin{align}
+	\beta(\lambda) = b_2 \lambda^2 + b_3 \lambda^3 + ....
+	\end{align}
+We can show that under smooth change $\lambda' = \lambda + a_2 \lambda^2 + ...$, the 2nd and 3rd order coefficients of the beta function are univeral.
+In general under coupling rescaling:
+\begin{align}
+	\beta'_j(\lambda') &= \beta_i {\partial \lambda_j' \over \partial \lambda_i} \text{  general reparametrization} \\
+	\lambda(\lambda') & \approx \lambda' - a_2 \lambda'^2 + \mathcal{O}(\lambda'^3) \\
+	\beta'(\lambda') &= (b_2 (\lambda' - a_2 \lambda'^2 + ...)^2 + b_3 (\lambda' - a_2 \lambda' + ...)^2 ) (1 + 2 a_2 \lambda' + ... ) \\
+	& = b_2 \lambda'^2 + b_3 \lambda'^3 + \lambda'^3 (- 2 a_2 b_2 - 2 b_3 a_2 + 2 a_2 (b_2 + b_3)) + \mathcal{O}(\lambda'^4) \\
+	&= b_2 \lambda'^2 + b_3 \lambda'^3 + \mathcal{O}(\lambda'^4)
+	\end{align}
+
+For a marginally relevant interaction like QCD, we have
+\begin{align}
+	\beta &= - b_2 g^2 - b_3 g^3  + ... \\
+	\rightarrow \ln \left({\mu \over \Lambda} \right) &= {1 \over g(\mu)} + {c \over b^2} \ln \left({b g(\mu)}\right) + \mathcal{O}(g) \\
+	\end{align}
+
+This is an example of \vocab{dimensional transmutation}, where a new scale $\Lambda$ appears in a classically scale invariant theory.
+For QED, it's the landau pole scale where the theory blows up. For QCD, it's a low energy scale where perturbation theory breaks down in the IR.
+
+\subsubsection{Dimensional Transmutation}
+
+Massless $\phi^4 $ in $d=4$ is a classically scale invariant theory. When we introduce quantum fluctuations, we find out it is no-longer scale invariant because loops cause the $\beta$ function to be non-zero.  One finds there is a \vocab{Landau pole}, in other words, given some fixed lab measurement, one integrates the callan symanzik equation and finds:
+$\lambda(\mu) = {\lambda_R \over 1 - \exp\left({k \mu}\right)}$
+
+$\lambda$ blows up at some finite $\mu^*$.  The statement of dimensional transmutation is this a bijection between $\mu^* \leftrightarrow \lambda_R$ thanks to the reversibility of the flow.  The lab measurement measured a dimensionless coupling, but one can also specify the theory using a scale where the theory blows up.  That's it, really.  The same thing happens in QED, where i can either give you the dimensionless $\alpha = {1 \over 137}$ parameter at so and so lab energy scale, or give you the landau pole energy to fully specify all scattering experiment measurements.
+
+\subsection{Conformal Fixed Points}
+\subsubsection{Critical behavior}
+\emph{(Eduardo Fradkin, Quantum Field Theory an integrated approach)}
+
+We saw that the coupling can run.  We saw that the $\beta$ function could be asymptotically free or slaved (marginal relevance or irrelevance).  Now we will examine the physical consequence near a critical point where the $\beta$ function is 0.
+
+Near an IR fixed point where $t$ is some coupling the beta function can be expanded as:
+$$\beta(t) = \beta' (t - t^*) = \beta' \tilde{t}$$
+We can integrate the callan symanzik equation:
+$$ {\mu_2 \over \mu_1} = \exp  \left(\int_{t_1}^{t_2} {1 \over \beta' \tilde{t} } d \tilde{t} \right) = \left( {t_2 \over t_1} \right)^{\beta'}$$
+Since energy scale is inversely related to distance, we have:
+$$ {x_1 \over x_2} \propto  \left( {t_2 \over t_1} \right)^{\beta'}$$
+
+This slows that the critical exponent for the divergence of the correlation length, related to a coupling (tuning parameter, mass, termperature) is the slope of the beta function at the critical point.
+
+ In general at a fixed point, there could be many relevant operators one has to tune to achieve criticality.
+ In that case, the $\beta$ function can be expanded (linearized) and diagonalized.  The eigenvalues of the linearized $\beta$ matrix gives the critical exponent for each relevant tuning parameter.
+ 
+ One similarly can construct Callan Symanzik equations for macroscopic observables like the Gibbs energy:
+  
+ \subsubsection{Conformal Field Theories}
+ It turns out that scale invariant fixed points are also \vocab{conformal field theories}:  the theory respects invariance with respect to change of coordinates $x \rightarrow f(x)$ that preserve angles.  
+ 
+ Consider an observable $\MO$. Due to conformal invariance:
+ 	\[\braket{\MO(x_1) \MO(x_2)} \propto {1 \over |x_1 - x_2|^{2 \Delta_\MO}} \]
+ 	The value $\Delta_\MO$ is the \vocab{scaling dimension} of operator $\MO$.
+
+In general a conformal field theory has
+ \begin{itemize}
+ 	\item the ground state is conformally invariant.
+ 	\item It has a (minimal) set of observables called \vocab{quasi-primaries} $\phi_{i}$ which transforms irreducibly under conformal transformations:
+ 	\[\phi_i'(x') \rightarrow | \underbrace{\pder[x']{x}}_{\text{jacobian}}|^{\Delta_{i}\over D} \phi_i(x) \]
+ 	$D$ is the space time dimensions while $\Delta_i$ are the scaling dimension of the operators.
+ 	\item All other observables are made of quasi primaries and their derivatives, which are called \vocab{descendents}
+ 	\item The quasi primaries form an orthogonal set in the sense:
+ 	\begin{align*} 
+ 		\braket{\phi_1(x_1) \phi_2(x_2) }  =
+ 		\begin{cases} {C_{12} \over |x_2 - x_1|^{2 \Delta}} \text{ if } \Delta_1 = \Delta_2 \equiv \Delta \\
+ 	0  \text{ else}
+ \end{cases} 
+\end{align*}
+Once can picka  basis of $\{ \phi_i \}$ such that $C_{ij} = \delta_{ij}$.
+	\item Similarly one writes a formula for the 3 point function:
+	\[ \braket{\phi_1(x_1) \phi_2(x_2) \phi_3(x_3)} = {C_{ijk} \over |x_{12}|^{\Delta_{12}} |x_{23}|^{\Delta_{23}} |x_{13}|^{\Delta_{13}}} \]
+	where $x_{ij} \equiv x_i - x_j$ and $\Delta_{ij} = \Delta_{i} + \Delta_j - \Delta_{k}$.
+ 	\end{itemize}
+ 
+ \subsubsection{Operator Product Expansion}
+
+Because the primaries and their descendents form a complete set, they form  closed algebra.  This implies the \vocab{Operator Product Expansian}:
+\begin{theorem}
+	The operator product expansion formula states that for $\phi_i(x)$ being a complete set:
+	\begin{align}
+		\lim_{x \rightarrow y} \phi_i(x) \phi_j(y) = \sum_{i, j, k} \tilde{C}_{ijk} {1 \over |x - y|^{\Delta_i + \Delta_j - \Delta_k}} \phi_k \left({x + y \over 2} \right)
+		\end{align}
+\end{theorem}
+
+Using the OPE, one can show the $\tilde{C}_{ijk}$ are the 3 point functions.
+\[\lim_{y \rightarrow x} \braket{\phi_i(x) \phi_j(y) \phi_l(z)}
+= \lim_{y \rightarrow x} \sum_k \sum_{k} \tilde{C}_{ijk} {1 \over |x - y|^{\Delta_i + \Delta_j - \Delta_k}} \braket{\phi_k \left({x + y \over 2} \right)  \phi_l} \]
+Given that the $\{ \phi_k \}$ form an orthogonal complete set, $\braket{\phi_k \phi_l} = {\delta_{kl} \over |x|^{2 \Delta_l}}$
+
+\[\lim_{y \rightarrow x} \braket{\phi_i(x) \phi_j(y) \phi_l(z)}
+= \tilde{C}_{ij} {1 \over |x - y|^{\Delta_i + \Delta_j - \Delta_y}} {1 \over |x - z|^{2 \Delta_l}} \]
+
+This implies that the $\tilde{C}_{ijk} = C_{ijk}$ the 3 point function.  In the limit the operators coincide in space, they form a \vocab{fusion algebra} of the form:
+\[ [\phi_i][\phi_j] = C_{ijk}[\phi_k]\]
+
+
+\section{Symmetries}
+\subsection{Spontaneous Symmetry Breaking}
+\subsection{Generalities}
+\begin{itemize}
+	\item The usual picture about spontaneous symmetry breaking is \emph{classical}.  You start with a lagrangian with a potential that has a set of minima at $\braket{\phi} \neq 0$:
+	\[\ML = {1 \over 2} (\partial \phi)^2 + \frac12 m^2 \phi^2- {\lambda \over 4!} \phi^4 \rightarrow \phi_{cl} = \pm  \sqrt{6m^2 \over \lambda} \]
+	The correct minima needs to account for quantum fluctuations.  In that case, one minimizes the quantum effective action rather than the classical action.
+	
+	\item The spontaneous symmetry breaking of \vocab{global continuous symmetry} imply the existence of massless particles called \vocab{golstone bosons}.  The proof is quite simple.
+	Classically the Noether charge associated with a continuous symmetry is:
+	\[Q = \int d^d x \sum_m  \pder[\ML]{\dot{\phi}} {\delta \phi_m \over \delta \alpha} \]
+	We identify the canonical momentum $ \pi_m = \pder[\ML]{\dot{\phi}}$ which has commutation relation
+	\[ [\pi_m(x), \phi_n(y)] = -i \delta^d (x-y) \delta_{mn} \]
+	The charge acts as a symmetry generator:
+	\[ [Q, \phi_n(y)]  = \sum_m \int d^d x \sum_m [\pi_m(x), \phi_n(y)] {\delta \phi_m \over \delta \alpha}  = - i {\delta \phi_n \over \delta \alpha} \]
+	Furthermore since the charge is conserved:
+	\[ [Q, H] = 0 \]
+	and the spontaneously broken vacuum is charged: 
+	\[ e^{i \alpha Q} \ket{0} \neq \ket{0} \]
+	This implies that there is a degenerate manifold of vacua generated by $\alpha$.
+	
+	\item \emph{Alternate Proof, xi yin, weinberg}:  We carry the same derivation in the path integral form
+	\end{itemize}
+
+\subsubsection{Coleman Weinberg}
+
+\subsection{Ward Identity}
+\emph{(David Skinner) }
+The Ward identity is the generalization of Noether's theorem in the quantum world.
+
+Recall that noether's theorem said if we had a continuous symmetry parameterized by $\epsilon$ of the form $\phi \rightarrow \phi' = U(\epsilon) \phi$ that preserves the action, then we can derive a conserved current.
+
+In the quantum world there is an additional subtlety that we need to preserve the product $\D \phi e^{- S[\phi]}$.  Usually, we only look for transformations that preserve $e^{-S[\phi]}$, but in cases where one cannot preserve $\D \phi$, this is an \vocab{anomaly} (a classical symmetry that cannot be realized in the quantum world).
+
+The derivation is straightforward:
+\[ \int \D \phi e^{- S[\phi]} = \int \D \phi' e^{- S[\phi']} \]
+\[ = \int \D \phi e^{-S[\phi]} \left( 1 - \int \dd^4 x j_\mu(x) \partial_\mu \epsilon \right) \]
+\[\rightarrow \braket{j_\mu(x)} = 0 \]
+
+This can be used to show that in QED that gauge symmetry implies any amplitude $\mathcal{M}^\mu \underbrace{\epsilon_\mu(p)}_{\text{external photon}}$ satisfies:
+\[ p_\mu M^\mu  = 0 \text{ (no  longitudinal polarization) } \]
+
+This for example constrains vacuum polarization to look like
+\[ \pi^{\mu \nu} \propto e^2 (g^{\mu \nu}p^2 - p^\mu p^\nu ) \]
+
+
+
+\section{Gauge Theories}
+
+\subsection{QED review}
+\begin{align}
+	\sigma^{\mu} &\equiv (\mathbb{I}, \mathbf{\sigma}) \\
+	\gamma^\mu &\equiv 
+	\left( \begin{array}{cc}
+		\mathbf{0}_{2 \times 2} & \sigma^\mu \\
+		\sigma^\mu & \mathbf{0}_{2 \times 2}
+		\end{array} \right)_{4 \times 4} \\
+	\psi &= (\psi_L, \psi_R)_{1 \times 4} \\
+	\psib &= (\psi_R^\dagger, \psi_L^\dagger)_{4 \times 1} \\
+	\D_\mu &\equiv \partial_\mu - i e A^\mu \\
+	\Dslash &= \gamma^\mu \D_\mu \\
+	\ML &= \psib \left(i \Dslash - m \mathbb{I}_{4 \times 4} \right) \psi - \frac14 F_{\mu \nu} F^{\mu \nu} \\
+	\{\hat{\psi}_i(x),  \hat{\psi}_j^\dagger (y) \} & = \delta^3(x -y) \delta_{ij}
+	\end{align}
+
+Feynman rules:
+\begin{itemize}
+\item The photon propagator is 
+\[ {-i \over p^2 + i \epsilon} \left[g_{\mu \nu} - (1 - \xi){p_\mu p_\nu \over p^2} \right] \]
+Contract this with any external photon polarization $ \epsilon^\mu(p)$.  Note per ward identity, $p^\mu$ will kill this (photons don't have longitudinal polarization)
+\item The fermion propagator is
+\[{i (\slashp + m) \over p^2 - m^2 + i \epsilon} \]
+\item For any fermion loop, trace out all internal spin indices and you get a minus sign.
+	\end{itemize}
+\subsection{Schrodinger-Pauli Equation}
+Consider the equation:
+\[ \left(i \gamma^\mu \partial_\mu - e \gamma^\mu A_\mu - m\right) \psi = 0 \]
+We would like to obtain the schrodinger's equation from it.
+Multiply by $\left(i \gamma^\mu \partial_\mu - e \gamma^\mu A_\mu - m\right)$ on the left giving:
+\begin{align}
+\left(i \gamma^\mu \partial_\mu - e \gamma^\mu A_\mu - m\right) \left(i \gamma^\nu \partial_\nu - e \gamma^\nu A_\nu - m\right) \psi = 0 \\
+ = \left((\partial_\mu - e A_\mu) (\partial_\nu - e A_\nu) \gamma^\mu \gamma^\nu - m^2 \right)  \psi \\
+ = \left( \frac14 \underbrace{ \{ i \partial_\mu - e A_\mu, i\partial_\nu - e A_\nu \} }_{2 \D^2} \underbrace{\{\gamma^\mu, \gamma^\nu \}}_{2 g^{\mu \nu}}  + \frac14 \underbrace{[ i\partial_\mu - e A_\mu, i \partial_\nu - e A_\nu]}_{- ei F_{\mu \nu}} \underbrace{[\gamma^\mu, \gamma^\nu]}_{2 \sigma^{\mu \nu}} - m^2\right)  \\
+ (i \partial_\mu - e A_\mu)^2 - {e \over 2} F_{\mu \nu} \sigma^{\mu \nu} - m^2 = 0 \\
+ \left\{ (\partial_\mu + i e A_\mu)^2 + m^2 - e
+ \begin{pmatrix}
+ 	(\mathbf{B + i E}) \cdot \vec{\sigma} & 0 \\
+ 	0 & (\mathbf{B - i E}) \cdot \vec{\sigma}
+ 	\end{pmatrix}  \right\} \psi = 0	
+\end{align}
+
+In short hand, the equation above is a useful identity:
+\[ \cancel{\D}^2 = \D^2 + {e \over 2} F_{\mu \nu} \sigma^{\mu \nu} \]
+
+This equation is the \vocab{Schrodinger-Pauli} equation.  One can extract from it the fact dirac spinors carry magnetic  spin in units of $\frac12$.
+
+
+\subsection{Non-Abelian Gauge Theory}
+\subsubsection{Building the theory}
+\emph{Zee, section IV.5, Srednicki ch. 69}
+Let's construct a non-abelian gauge theory:
+\begin{itemize}
+	\item Promote global gauge invariance of the field vector $\{\phi_i \}$ under $SU(N)$ to local gauge invariance:
+	\[\phi \rightarrow U(x) \phi \]
+	\item The derivative operator is no longer gauge covariant
+	\[ \partial_\mu \phi \rightarrow U( \partial_\mu  + U^\dagger \partial_\mu U) \]
+	\item Introduce the covariant derivative
+	\[ \D_\mu \equiv \partial_\mu - i A_\mu(x) \]
+	where $A_\mu$ is called the \vocab{gauge field}.  It can be matrix valied.  To obtain the transformation of the gauge field,
+	\begin{align}
+		(\partial_\mu + i A_\mu) U \phi & = U( \partial_\mu + \underbrace{U^\dagger \partial_\mu U - i U^{-1} {A_\mu}' U}_{\text{cancel to } -i A}) \phi 
+		\end{align}
+	\item Make $A_\mu$ transform to cancel $U \partial_\mu U^\dagger$:
+	\[A_\mu' = U^\dagger A_\mu U - i (\partial_\mu U) U^\dagger  \]
+	Using $\partial_\mu (U U^\dagger) = 0$
+	\[ \rightarrow
+	\partial_\mu U U^\dagger = - U \partial_\mu U^\dagger\]
+	We can derive the transformation law for $A$:
+	$A_\mu \rightarrow U^{\dagger} A_\mu U + i U \partial_\mu U^{\dagger}$
+	\item Let's pick a  basis of generators $T^a$ for the gauge group. Consider an infinitesimal gauge transformation $U = 1 + i \theta^a T^a$, and decompose $A_\mu =A_\mu^c T^c $ We can use this form to show that the gauge field transforms in the \vocab{adjoint representation} of the gauge group
+	\begin{align*}
+		{A_\mu}' &= 1 + i \theta^a [T^a, A_\mu] + T^a \partial_\mu \theta^a \\
+		\text{recall } [T^a, T^b] &= i f^{abc} T^c \\
+		{A_\mu}'^c &= A_\mu^a - f^{abc} \theta^b A_\mu^c + \partial_\mu \theta
+		\end{align*}
+	\item One can immediately write down gauge invariant kinetic and potential terms and lagrangians:
+	\[ \ML = (\D_\mu \phi) (\D^\mu \phi) - V(\phi^\dagger \phi) \]
+	\end{itemize}
+
+\begin{example}
+	The shorthand notation $\partial_\mu$ on vector valued fields implicitly means
+	$\mathbf{\mathbb{I}} \partial_\mu$
+\end{example}
+
+\subsubsection{Adding kinetic term}
+We will use differential form notation to add a kinetic term, and show it is the curvature of the gauge field.
+
+\begin{itemize}
+	\item To clean the notation, redefine $i A_\mu \rightarrow A dx^{\mu}$ to be a matrix valued 1-form (note we absorbed the i)
+	\item The covariant derivative is just:
+	$d + A$
+	\item There are 2 matrix valued 2 forms we can construct:
+	\[A \wedge A \equiv A^2 \text{ (in spacetime comps) } \rightarrow \frac12 [A_\mu, A_\nu] \dx^\mu \wedge \dx^\nu \]
+	\[ dA \]
+	$A^2$ obviously vanish for abelian gauge groups
+	\item This combination is gauge covariant (transforms homogeneously):
+	\[ F = dA + A^2 \]
+	\[F \rightarrow U F U^\dagger \]
+	F is the \vocab{curvature tensor}
+	\item Another slick derivation
+	\[ D = d + A \]
+	\[D^2 = dA + A^2 \]
+	\item In component form and switching back the i's, we have
+	\[F_{\mu \nu} = \partial_\mu A_\nu - \partial_\nu A_\mu - i[A_\mu, A_\nu] \]
+	\[F^{a}_{\mu \nu}  = \partial_\mu A^a_\nu - \partial_\nu A^a_\mu + f^{abc} A^{b}_\mu A^c_\nu \]
+	\item Since F transforms covariantly, to obtain a gauge invariant scalar, one traces the matrix:
+	\[ - {1 \over 4} \mathrm{Tr} F_{\mu \nu} F^{\mu \nu} \]
+	Another way to write this term elegantly is:
+	\[ -{1 \over 4} \mathrm{Tr} \left( ^\star F \wedge F \right) \]
+	This has interactions!
+	\[f^{abc} A^{b \mu} A^{c \nu} (\partial_\mu A^a_\nu - \partial_\nu A^a_\mu)  \text{ cubic term} \]
+	\[(f^{abc} A^b_\mu A^c_\nu)^2 \text{ quartic term}\]
+	\end{itemize}
+
+\begin{example}
+	Since the structure constants for SU(2) is 
+	$f^{abc} = \epsilon^{abc}$, the field strength is just:
+	\[ \vec{F}_{\mu \nu} = \partial_\mu \vec{A}_{\nu} - \partial_\nu \vec{A}_{\mu} + \vec{A}_\mu \times \vec{A}_\nu \]
+
+	(Note SU(2) has 3 generators, so one can represent it in 3-d space as vectors)
+	\end{example}
+
+\begin{example}{Bianchi's Identity}
+	
+One useful identity is the following:
+\[ \sum_{\text{cylic } \mu, \nu, \lambda} [\D_\mu, [\D_\nu, \D_\lambda]]  = 0 \]
+This is jacobi's identity, and follows from the fact the $\D$'s are associative.
+Also note \[ [\D_{\nu}, \D_{\rho}] =  F_{\nu \rho} \], because:
+	\begin{align*}
+		[\D_{\nu}, \D_{\rho}] \dx^\nu \wedge \dx^\rho &= (d + A) \wedge (d + A) \\
+		& = d A + A^2  \\
+		& = F
+		\end{align*}
+
+It then follows that:
+\[\sum_{\text{cylic}}  [\D_\mu, F_{\nu \lambda}] = 0 \]
+
+We can compute the identity using leibnitz property of $\D$
+\[ [\D_\mu, F_{\nu \lambda}]  \phi = (\D_\mu F_{\nu \lambda}) \phi + F_{\nu \lambda} \D_\mu \phi - F_{\nu \lambda} \D_\mu \phi  \]
+\[ = (\D_\mu F_{\nu \lambda}) \phi  \]
+In short this means that:
+\[ [\D_\mu, F_{\nu \lambda}] = (\D_\mu F_{\nu \lambda}) \]
+
+The result is the so-called \vocab{Bianchi's Identity}:
+\[ \sum_{\text{cyclic}} \D_\mu F_{\nu \lambda} = 0 \]
+
+Another way to show's bianchi's identity is to compute using forms:
+\begin{align*}
+	\D F & \equiv d F + [A, F] \\
+	F &\equiv dA + A^2 \\
+	\rightarrow \D F &  = \cancel{d^2 A} + A dA + (dA)A + A (dA + A^2) - (dA + A^2) A \\
+	&= 0
+	\end{align*}
+
+\end{example}
+
+\subsubsection{Nonlinearity}
+
+As we have seen the theory is self-interacting from cubic and quartic terms.  Another way to see this as follow:
+\begin{itemize}
+	\item The photon is a U(1) gauge field.  It does not transform under U(1) gauge transformation due to its abelian nature:
+	$e^{i \theta(x)} A e^{-i \theta(x)} \rightarrow A$.
+	This means the photon is \textbf{neutral}
+	\item The gluons are SU(3) gauge fields.  They transform non-trivially under gauge transformation:
+	$U(x) A U^{-1} \neq A$. 
+	This means the gluons are \textbf{charged}
+\end{itemize}
+
+One way to think about charged operators is they create states that have non-zero charge.  Here we elaborate a bit on the terminology often used:
+\begin{itemize}
+	\item The generator of global gauge invariance (a real symmetry) is some unitary operator  $e^{i \alpha \hat{Q}}$ where $\hat{Q}$ is hermitian.
+	\item Using Noether's theorem, we know $\braket{\hat{Q}}$ is conserved under time evolution and call it the \vocab{charge} associated with the gauge symmetry.
+	\[ \hat{Q} \underbrace{\ket{q}}_{\text{charged state}} = \underbrace{q}_{\text{charge}} \ket{q}\]
+	\item An operator $\MO$ that doesn't commute with $\hat{Q}$ (alternatively is not gauge invariant) is called a \vocab{charged operator}: it creates charge! 
+	\[ [\hat{Q}, \MO] \neq 0 \rightarrow \MO \ket{q} = \sum_{q' \neq q} \underbrace{C_{q'} \ket{q'}}_{\text{new charge created!}} \]
+\end{itemize}
+
+\subsubsection{Adding Matter}
+To couple a gauge field to matter, replace $\partial_\mu \rightarrow \D_\mu$
+\begin{example}
+	QED.
+	The free electron lagrangian is:
+	\[ \psib (i \pslash_\mu - m \mathbb{I}) \psi = 0\]
+	where $\psi$ is a 4-component spinner:
+	\[ \pslash \equiv i \gamma^\mu \partial_\mu \]
+	Replace $\Dslash \equiv \pslash - i e \gamma^\mu A_\mu$ 
+	and one obtains the QED lagrangian:
+	\[ \ML = \psib (i \Dslash - m) \psi - \frac14 F_{\mu \nu} F^{\mu \nu} \]
+	\end{example}
+
+\begin{example}
+	QCD.  In QCD, one has quarks (fermions) interacting with gluons (gauge bosons), with gauge group SU(3).
+	\begin{itemize}
+		\item The quarks have 3 \vocab{colors} corresponding to the gauge group index in the fundamental representation.
+		\item They furter have 6 \vocab{flavor} indices, with global flavor symmetry.
+		\item One combines both into $\psi_{i J}$ where i= color and J = flavor index
+		\end{itemize}
+	The full lagrangian is then:
+	\[ \ML = \psib_{iI} \left( \Dslash_{ij} - m_I \delta_{ij} \right) \psi_{jI}  - \frac14 \mathrm{Tr} F_{\mu \nu} F^{\mu \nu}  \]
+	\end{example}
+
+\begin{example}
+	One often hear the term the fermions transforms under the \textbf{fundamental} representation while the fields, transform under the \textbf{adjoint} representation of the gauge group.  Let's spell out what it means.
+	Consider some gauge group G with generators $T^a$.
+	The fields $\psi$ in general has dirac indices and color indices (gauge group).
+	The color indices mix under a gauge transformation.  The way they mix is as follow:
+	\[\psi (x) \rightarrow U(x) \psi = \exp \left(i \sum_k \epsilon_k T^{k} \right) \psi \]
+	If we write this infinitesimally and use color indices:
+	\[\psi_b \rightarrow (\mathbb{I} + i \epsilon_a T^{a}_{bc}) \psi_c \]
+	The fermion fields mix via the generators which is the fundamental representation.
+	The gauge fields also transform but differently:
+	\[F(x) \rightarrow U F U^\dagger \]
+	Decompose F using the generator basis.
+	Writing this infinitesimally, we see:
+	\[F(x)_a \rightarrow (\mathbb{I} - f^{abc} \epsilon_b) F_c\]
+	This is called the adjoint representation, since the generators of the transformation is the structure constants themselves.
+	
+	For an SU(N) gauge group, the fermion field has N color indices, while the gauge field will have $N^2-1$ indices, 1 for each generator.
+\end{example}
+
+
+\subsubsection{Theta term}
+Note in the previous discussion we ignored another renormalizable term which is a total derivative
+\begin{align}
+	\ML = \theta \epsilon^{\alpha \beta \mu \nu} F_{\mu \nu} F_{\alpha \beta} = 2 \theta \partial_\mu \left( \epsilon^{\mu \nu \alpha \beta} A_{\nu} F_{\alpha \beta} \right)
+	\end{align}
+
+This can be more compactly written as $\theta F \wedge F$ and is a total derivative:
+\[d(A \wedge F) = F \wedge F \]  
+It is topological in nature (doesn't depend on the metric!).  Since $\epsilon$ exchanges $E \leftrightarrow B$, the theta term is just $\mathbf{E} \cdot \mathbf{B}$ for EM.
+
+\subsubsection{Classical considerations}
+
+From Noether's theorem, compute the conserved charge:
+\[J_\mu^a = - \psib_i \gamma^\mu T^{a}_{ij} \psi_j  + f^{abc} A^{b}_\nu F^c_{\mu \nu}\]
+
+The current is \textbf{not} gauge covariant.  Therefore there's no physical charge one can measure.  
+If you define the matter current as
+\[j^{a}_\mu = - \psib_i \gamma^\mu T^{a}_ij \psi_j\]
+This matter current is not conserved but only covariantly conserved.
+
+\begin{theorem}
+	\vocab{Weinberg Witten} theorem for spin 1: A theory with global non-abelian symmetry under which massless spin-1 particles are charged does not admit a gauge invariant conserved current
+	\end{theorem}
+
+\begin{theorem}
+	\vocab{Weinberg Witten} theorem for spin 2: A theory with a conserved and lorentz-covariant energy momentum tensor can never have a massless particle of spin 2.
+	\end{theorem}
+
+\subsection{Quantization}
+\subsubsection{Fadeev-Popov}
+\emph{(Kaku)}
+Fadeev Popov strategy is to factor out gauge orbit integration from the physical stuff, by fixing the gauge with a deta function and then integrating over gauge orbits.
+
+\[ Z = \int \D A^\mu \underbrace{\Delta_{FP}(A_\Omega)}_{\mathrm{det}[{\delta F \over \delta \Omega}]} \underbrace{\int \D \Omega}_{\text{gauge orbit integral}} \underbrace{\delta(F(A_\Omega))}_{\text{gauge constraint}} \exp \left( i S[A^\mu ]\right) \]
+
+
+$\D \Omega$ is an invariant group measure:
+\begin{align}
+	U &\approx 1 + i \theta_a T^a \rightarrow \D \Omega \propto \prod_{x, a} d \theta_a(x) \\
+	\D \Omega &= \D (\Omega \Omega')
+	\end{align}
+
+Due to the invariance across gauge orbit, the gauge orbit integration factors out:
+\[Z = \underbrace{\int \D \Omega}_{\infty} \times \int \D A^\mu \Delta_{FP}(A) \delta(F(A)) \exp(i S[A])  \]
+
+We now just need to evaluate the fadeev popov determinant.  This will introduce so called \vocab{ghosts}:
+\begin{itemize}
+	\item Use the key identity for fermion (grassman) integration:
+	\[ \mathrm{det} (M) = \int \prod \dd c \dd \bar{c} \exp(-{\bar{c} M c}) \]
+	\[ \Delta_{FP} = \int \D c \D \bar{c} \exp \left( i \int \dd^4 x \int \dd^4 y \bar{c} (x) M(x, y) c(y) \right) \]
+	\item To obtain the kernel M, let's compute an example for U(1) gauge theory in a particular gauge
+	\[F(A) = \partial_\mu A^\mu = 0 \]
+	Under gauge transformation, $A \rightarrow A + \partial_\mu \theta$
+	and $F(A) \rightarrow F(A) + \partial^\mu \partial_\mu \theta$
+	\[M(x, y) = {\delta F \over \delta \Omega} = [\partial^\mu \partial_\mu]_{x, y} \]
+	\item For non-abelian gauge theory, one has additional color indices.
+	\[\Delta_{FP} = M_{x, y, a, b} \]
+	\item Nonabelian FP determinant can also be obtained from the gauge transformation of the field
+	\[A^{a}_\mu \rightarrow A^{a}_\mu + {1 \over g} \left( \partial_\mu \theta^{a}_\mu - g f^{abc}  \theta^{b} A^{c} \right)\] 
+	\[ \rightarrow M_{x, y, a, b} = {1 \over g} \left(\delta^{ab} \partial^\mu \partial_\mu - g f^{abc}  \partial^\mu A^{c}_\mu \right) \delta(x-y) \]
+	\item This contributes an extra term in the action, which are the \vocab{Fadeev Popov Ghosts}
+	\[ \int \dd^4 x \bar{c}_a \left(\delta^{ab} \partial^2 - g f^{abc} \partial^\mu A^c_\mu \right) c_b \]
+	\item Finally we sum over a gaussian weighted version of the constraint
+	giving the gauge fixing term (1 per gauge field)
+	\[ {1 \over 2 \xi} \int d^4 x \sum_a (\partial_\mu A^a_\mu)^2\]
+\end{itemize}
+
+We obtain the full lagrangian below (where we couple to N fermions transforming in the fundamental representation of SU(N)):
+
+\begin{align*}
+\ML = \underbrace{-\frac14 \sum_a (F^a_{\mu \nu})^2}_{\text{gauge kinetic}} - \underbrace{{1 \over 2 \xi} \sum_a (\partial_\mu A_\mu^a)^2}_{\text{gauge constraint}} - \underbrace{\bar{c}^a(\delta^{ac} \partial^2 - g f^{abc} A^{b}_\mu) c^c}_{\text{ghosts}} \\
++ \underbrace{\psib^{i} \left(\delta_{ij} i \pslash  + g \gamma^{\mu} A_{\mu}^a T^{a}_{ij} - m \delta_{ij} \right) \psi_j}_{\text{fermions}} 
+\end{align*}
+
+\subsubsection{BRST}
+
+\subsubsection{Feynman Rules}
+The feynman rules are identical to QED except for a few things:
+\begin{itemize}
+	\item There are bunch of structure factors for the gluons and Trace of gauge group generator for the fermions.  Fermions sit in the fundamental while gluons in the adjoint.
+	\item There's a 3 point gluon and 4 point gluon vertex
+	\item The ghosts do not factor out.  The ghost  interact with the gluon via the structure factor
+	\end{itemize}
+
+\begin{itemize}
+	\item gluon propagator
+	\[\underbrace{i {-g^{\mu \nu} + (1 - \xi {p^\mu p^\nu \over p^2}) \over p^2 + i \epsilon}}_{\text{same as QED photon}} \underbrace{\delta^{ab}}_{\text{gluon type}} \]
+	\item Similar colored fermions have the exact same propagator
+	with just a (fundamental color) fermion index matrix on top:
+	\[{i \over \slashp - m + i \epsilon} \underbrace{\delta^{ij}}_{\text{fermion color index}} \]
+	\item The 3 point gluon interacton is a bit messy but still some structure
+	\[ g f^{abc} \left( g^{\mu \nu} (k - p)^\rho + g^{\nu \rho} (p-q)^\nu + g^{\rho \nu} (q -k)^\nu \right)\]
+	
+	\item The 4 point gluon interaction has a bunch of structure factors (this is where you'll get the casimir of adjoint representation factors from)
+	\item Fermion gluon interaction term:
+	\[i g \gamma^\mu T^{a}_{ij}\]
+	where $a$ is the gluon type, i, j are fermion color indices.
+	\end{itemize}
+
+To give a taste of a calculation, consider the vacuum polarization  (gluon - fermion pair creation bubble - gluon).
+
+\[i \mathcal{M}^{ab \mu \nu} = \underbrace{\mathrm{tr}[T^a T^b]}_{\text{color averaging}} \times \underbrace{\left(-(ig)^2 \int \dkk {i \over k^2 - m^2}{i \over (p-k)^2 - m^2} \mathrm{Tr}[\gamma^\mu (\slashk - \slashp + m) \gamma^\nu (\slashk + m)] \right)}_{\text{same as QED}} \]
+
+The colors just introduce here a factor of $T_F \delta^{ab}$.  Similar as QED, there's no symmetry factor because fermions in the loop can't be interchanged.
+
+\subsubsection{Renormalization}
+
+One then computes the beta function for the fermion coupling vertex in $d = 4 - \epsilon$ dimensions:
+\[\beta(g_R) = - {\epsilon \over 2} g_R - {g_R^3 \over 16 \pi^2} \left[ {11 \over 3} C_A - {4 \over 3} \underbrace{n_f}_{ \text{num fermions}} T_F \right] \]
+
+We see that the theory is \vocab{asymptotically free} for low enough fermion content.  Note that the result only cares about ${T_F \over C_A}$ which does not depend on the normalization scheme.
+
+For QCD, N = 3, $C_A = 3$, $T_F = \frac12$, so if there's fewer than 17 flavors of quarks the theory is free in the UV (there's 6 quark flavors).
+
+The flow of the coupling vs. energy scale gives another example of dimensional transmutation.  The theory has no mass scale, but at some finite energy scale $\Lambda_{QCD}$, $g_R \approx 1$.  $\Lambda_{QCD}$ can then be used to completely parametrize the theory.
+
+\subsubsection{Banks Zaks Fixed Point}
+
+\subsection{Electroweak unification}
+We observe the following process of neutron decay:
+\[n \rightarrow e^- + p + \underbrace{\nu_e}_{neutrino} \]
+Basically, there must be some form of interaction of 4 fermions, which is modelled by Fermi's 4-fermi coupling:
+\[g \psib \psi \psib \psi \equiv g_F {\Lambda^2} (\psib \psi)^2 \]
+Obviously, this theory is non-renormalizable since the coupling has negative mass dimensions (mass dimension -2).
+
+Weinberg-Salam's model called \vocab{Electro-weak} theory provides the UV completion of this model, while unifying both electromagnetism and weak interactions under the gauge group $SU(2) \otimes U(1)$. 
+
+We will describe the theory:
+\begin{itemize}
+	\item  The theory is described by a 2 component complex scalar field called the \vocab{Higgs} "H" transforming with global SU(2) symmetry, coupled to W and B bosons which respectively transform in the adjoint representation of SU(2) and U(1).
+	\[ \ML = - \frac14 (W_{\mu \nu})^2 - \frac14 (B_{\mu \nu})^2 + (\D_\mu H)^\dagger (\D^\mu H)  + m^2 H^\dagger H - \lambda (H^\dagger H)^4  + \underbrace{\sum_{i} \psib_i (\Dslash_{ij}) \psi_j}_{\text{fermion sector}}\]
+	Where \[ \D_\mu = \partial_\mu - i g W_{\mu \nu}^a \underbrace{\tau^a}_{\text{SU(2) generator}} - i {g' \over 2} B_\mu H \]
+	\item Upon spontaneous symmetry breaking to the the mexican hat potential, the Higgs aquires a vacuum expectation value.  Rotate your global gauge phase along the direction of that break: this is called the \vocab{Unitary Gauge}.  A generic direction will leave 1 massless direction and gap all other 3 directions.  The massless direction is the photon: it is a linear combination of the $B$ and the $W$.
+	\item Without loss of generality align your W direction so that $W^1$ and $W^2$ is gapped cleanly. In math, the term $(\D_\mu H)^2$ will have 3 massive modes
+	\[g^2 {v^2 \over 2} \left[ \left(W_\mu^{1} \right)^2 + \left(W_\mu^{1} \right)^2+ \left(\underbrace{{g' \over g} B_\mu - W_\mu^3}_{Z_\mu } \right)^2 \right] \]
+	\item Identify the last term as the massive Z boson.
+	The mode orthogonal to the last term is the photon and massless:
+	\[A^\mu = \left({g' \over g} B_\mu - W_\mu^3 \right)\perp \]
+	 \[ = \sin (\theta_W) W_\mu^3 + \cos(\theta_W) B_\mu \]
+	 with $\theta_W \equiv \arctan({g' \over g})$
+	 \item The electromagnetic strength coupling is identified to be $e = g \sin(\theta_W) = g' \cos(\theta)$.
+	 Furthermore from this model, the mass of the W and the Z are related (and the Z needs to be lighter):
+	 $m_W = {v \over 2 g}$, $ m_Z = {m_W \over \cos(\theta_W)}$.
+	 \item We started with 4 couplings: $m, \lambda, g, g'$.  In the low energy theory, we traded them with 4 differen values:
+	 $e, \theta_w, m_h, m_W$.  $\sin(\theta_W)^2 = 0.223$, $g = {e \over \sin(\theta_W)} = 0.64$, $g' = {e \over \cos(\theta_W)} = 0.34$, $e = 0.303$.
+	\end{itemize}
+
+One interesting thing is that we can use the broken gauge theory to  computing perturbation theory and see unitarity violated in the $W^+ Z W^+ Z$ cross section scattering. This means the higgs must come into the effective theory to fix it, giving a bound on the higgs mass called \vocab{Lee-Quigg-Thacker bound} $m_h \leq \sqrt{16 \over 3} v \approx \mathrm{1 TeV}$
+
+Let's now describe the fermion sector:
+\begin{itemize}
+	\item The fermion sector is chiral (couples differently to left and right handed) and maximally parity violating:
+	$SU(2)$ gauge bosons only couple to left-handed fermions.
+	\item Denote 3 \vocab{generations} of left handed SU(2) doublets or quarks and leptons:
+	\[L^i = (\nu_{eL} / \nu_{\mu L}, \nu_{\tau L}, e_L / \mu_L / \tau_L )\]
+	\[Q^i = (u_L / c_L, t_L, d_L / s_L / b_L) \]
+	\item Denote the remaining right handed fermions:
+	\[e^{i}_R = (e_R, \nu_R, \tau_R)\]
+	\[u^i_R = (u_R, c_R, t_R) \]
+	\[\nu^i_R = (\nu_{eR}, \nu_{\mu R}, \nu_{\tau R}) \]
+	\[d^{i}_R = (d_R, s_R, b_R) \]
+	\item The lagrangian consists of a bunch of terms
+	\begin{align*}
+		\ML &= i \bar{L}_i (\pslash - i g \slashW^a \tau^a - i g' Y_L \slashB) L_i + i \bar{Q}_i (\pslash - ig \slashW^a \tau^a- ig' Y_Q \slashB) Q_i + \\
+		& ...
+		\end{align*}
+	\item The value of the hypercharge couplings are nice rational numbers with very interesting cancellation as required by anomaly cancellation.
+	\item Given those hyper charges, the breaking of the higgs will make flavor and mass basis not identical.  The mixing effect is given by the \vocab{Cabibbo-Kobayashi-Maskawa (CKM) matrix}
+	\item We can also extract from the CKM matrix phase the CP violation.  The weak interaction violate CP by a measured amount.
+	\item Similarly, the strong interaction can also violate CP with a topological term, the \vocab{theta} term:
+	\[{i \theta} \int {g^2 \over 32 \pi^2} \epsilon^{\mu \nu \alpha \beta} F_{\mu \nu}^a F_{\alpha \beta}^b \]
+	or in short hand notation $ \propto F \wedge F$.   The fact the weak sector has such a large CP violating term, but no theta term is measured (neutron has no dipole moment) is called the \vocab{strong CP problem}
+	\end{itemize}
+
+
+\section{Non-perturbative effects}
+
+\subsection{Phases of Gauge Theories}
+\begin{itemize}
+	\item Lattice gauge theory attempts to discretize quantum gauge theories.  Consider a 4-d hypercubic lattice with lattice points $x$ and link $(x, x+ \hat{n})$.  On each link lives a unitary matrix U such that:
+	\[U(x, x+ \hat{n}) = U^{\dagger} (x+ \hat{n}, x) = e^{i \sum_a t^a A_a} \]
+	
+	The non-abelian lattice gauge action is:
+	\[ S = \sum_{p}-{1 \over 2g^2} \mathrm{tr}(U_p) \]
+	 where p denotes plaquettes and $U_p$ is the wilson loop around a plaquette (bounded by 2 unit vectors $\hat{n}, \hat{m}$)
+	 \[U_p (\hat{n}, \hat{m}) = U(x, x+\hat{n}) U(x+\hat{n}, x+\hat{n}+\hat{m}) U(x+ \hat{m}, x+\hat{m} + \hat{n})^\dagger U(x, x+ \hat{m})^\dagger  \]
+	 
+	 Using the BCH formula, one can show this reproduces the usual $F_{\mu \nu}^2$ action in the continuum.
+	 \begin{align}
+	 	S &=_{\text{use BCH}} {-1 \over 2 g^2} \sum_p \mathrm{tr} \exp(i a^2 g^2 F_{\mu \nu}^2) \\
+	 	&= -{1 \over 2 g^2} \sum_p  \left(1 - {a^4 g^2 \over 2} \mathrm{tr} F_{\mu \nu} \ F^{\mu \nu} + ...\right) \\
+	 	&\approx -{1 \over 2g^2} \int d^4 x \mathrm{tr} F_{\mu \nu} F^{\mu \nu}
+	  \end{align}
+	
+	\item  One key step in computing the path integral is to define the measure on which to integrate the $U's$. This is the \vocab{Haar Measure} of the group.  It follows from a few key requirements:
+	\[ \int_{SU(N)} dU = 1 \]
+	\[ d(U' U) = dU \text{ with } U' \in SU(N) \]
+	In particular we will only need a few key formulae:
+	\[ \int U_{ij} dU = 0 \]
+	\[ \int dU U_{ij} {U^{\dagger}_{kl}}= {1 \over N} \delta_{il} \delta_{jk} \]
+	\[\int dU U_{i_1 i_2} U_{j_1 j_2} = {1 \over N}  \epsilon_{i_1 i_2} \epsilon_{j_2, j_2} \]
+	
+	\item The partition function sum
+	\[ Z(g) = \sum_{U} e^{-S(U)} = \sum_U e^{{1 \over 2 g^2} \sum_p \mathrm{tr}U_p} \]
+	is strongly reminiscent of the statistical mechanics partition function with temperature $\beta = {1 \over 2 g^2}$.  In particular, in the high temperature limit, $\beta \rightarrow 0$ and $g \rightarrow \infty$: we have a strong coupling expansion with:
+	\[ Z(g) = \sum_p 1 - \beta ... + ... \]
+	\item Consider computing the expectation of the wilson loop over some spacetime codimension-2 surface bounded by a curve C:
+	\[ \braket{W(C)} \equiv \braket{\mathrm{tr} \underbrace{ \mathcal{P}}_{\text{path ordered}} \exp(i \oint_C A_\mu dx^\mu) } \]
+	In the lattice gauge formulation it is:
+	\[ \braket{W(C)} = \sum_{U}n\left[  \underbrace{\mathrm{tr}  \left(\prod_{C} U_{ij} \right)}_{\text{wilson loop}} \exp(- S) \right] \]
+	
+	\textbf{Key observation}: For every link $U_{ij} \in C$, for the trace to not vanish it needs to pair with a $U^\dagger_{ij}$ in $e^{-S}$.  Furthermore, $e^{-S}$ decomposes in the strong coupling expansion as:
+	\[e^{-S} = \prod_{p} e^{- \beta \mathrm{tr}U_p} \approx_{\text{strong coupling}} \prod_{p} (1 - \beta \mathrm{tr} U_p) \]
+	Therefore in the strong coupling approximation, only the plaquettes that "tile" the curve C contribute to the sum.  The sum of course includes all such tiling surfaces:
+	\[ \braket{W(C)} \propto \sum_{\Sigma = \partial C}(...)^{A(\Sigma)} \] 
+	The leading term comes from the minimal surface.  Picking C to be a R by T rectangle you get the potential $V(R)$ between a quark-anti-quark pair:
+	\[ \braket{W(C)} \propto (...)^A = \exp(i V(R)T) \] 
+	or the so called \vocab{area law} for confined interactions.  Note in this calculation we didn't use anything about the gauge group being non-abelian.  Yet U(1) QED is deconfined.  This is because at strong coupling, QED hits a phase transition and is not analytically continued from the free theory at weak coupling.
+		\item Another example of a gauge theory is $\mathbb{Z}_2$ gauge theory.  Here the link variables are just $\tau = \pm 1$ which are elements of the abelian 2 element group and the action is:
+	\[ S = - {1 \over 2 g^2} \sum_p \mathrm{tr} U_p = - {1 \over 2 g^2} \sum_p \mathrm{tr} \underbrace{\tau_1 \tau_2 \tau_3 \tau_4}_{\text{link 1-4 of plaquette p}} \]
+	We can carry the strong coupling approximation  similar to above:
+	\[ \braket{W(C)} = \braket{ W(C) \exp (-S)} = \braket{W(C) \prod_{p} \left(1 + \tau_1 \tau_2 \tau_3 \tau_4  \tanh{1 \over g} \right)} \]
+	Here once again you need to pair the $\tau$'s in the W(C) computation with the $\tau$'s in the exp, giving the strong coupling tiling and the area law for confinement.
+	\item Similarly, one can consider the \vocab{weak-coupling limit} $g\rightarrow 0$ or the \emph{low temperature} expansion $\beta \rightarrow \infty$.
+	\item A practical way to simulate lattice gauge theories (and equilibrium statistical mechanics) is using the \vocab{metropolis algorithm}.  Basically we would like to compute ensemble averages by generating a bunch of samples from the equilibrium distribution using a markov chain. 
+	Given a current configuration $\Sigma$ and a candidate next configuration $\Sigma'$ (flip one of the link variables for example) we choose to update to $\Sigma'$ with the following probabilities:
+	\[ P(\Sigma \rightarrow \Sigma') = 1 \text{ if } \Delta S \equiv S(\Sigma') - S(\Sigma) < 0 \]
+	\[P(\Sigma \rightarrow \Sigma') = e^{-\beta \Delta S} \text{if } \Delta S > 0 \]
+	
+	The reason why this algorithm equilibrates is because the boltzmann distribution $P(\Sigma_{eq}) \equiv e^{- \beta S(\Sigma)}$ is a right eigenvector of the markov transition matrix:
+	\[M_{ij} \equiv P(\Sigma_j \rightarrow \Sigma_i) \]
+	\[ M P(\Sigma_{eq}) \propto  P(\Sigma_{eq}) \]
+	
+	The long time behavior evolution is dominated by the eigenvectors with largest eigenvalues.
+	
+\end{itemize}
+
+\subsection{Global Field Configuration}
+\subsubsection{Instanton Method in Quantum mechanics}
+
+The instanton subject comes very naturally from a study of saddle point integration.  Essentially in the path integral formulation, we are interested in evaluating an integral of the form:
+\[ Z = \int dx g(x) e^{- {1 \over \hbar} f(x)} \approx \sum_{x_0} \sqrt{2 \pi \over f''(x_0)} g(x_0) \exp({- 1 \over \hbar} f(x_0)) \] 
+where $x_0$ are the saddles in the complex plane satisfying $f'(x_0) = 0$.
+
+So far we have only studied expanding this integral around the ground state.  We will not studying accounting for all the saddles, which are finite action ($f(x_0)$ finite) solutions to the euclidean equations of motion.
+
+To do this we first study the problem of a mexican hat potential in single particle quantum mechanics:
+\[H = \frac12 {p^2 \over m} + {\lambda} (x^2 - a^2)^2 \]
+
+This potential has 2 almost degenerate ground state.  In the limit of $a \rightarrow \infty$, each ground state is just a harmonic oscillator at $\pm a$, with ground state energy $\hbar \omega$.  The presence of instanton solutions will show those 2 ground states split. 
+
+First note that the partition function can be used to compute the ground state energy:
+\begin{align}
+	Z(\beta) &= \mathrm{Tr} e^{-\beta H} \\
+	 & \equiv \sum_{n} \braket{n | e^{-\beta H} | n} \\
+	 &= \sum_{n} e^{-{E_n T \over \hbar}}  \\
+	 \rightarrow E_0 &= \lim_{T \rightarrow \infty} - {\hbar \over T} \ln(Z)
+	\end{align}
+
+
+
+To compute Z we use the saddle point expansion trick.
+
+The saddles with finite euclidean action satisfy the euclidean equation of motion in an inverted potential $V(x) = - (x^2 - a^2)^2$.
+
+The solution can be solved with energy conservation:
+\begin{align}
+	\frac12 \dot{x}^2 + V(x) &= 0 \rightarrow \int {dx \over \sqrt{2 V(x)}} = \int d\tau \\
+	\int {dx \over \sqrt{2} (a^2 - x^2)} &= \tau_f - \tau_i \\
+	x(\tau) & \propto \tanh( {\tau \over 2 \sqrt{a}} )
+\end{align}
+
+
+The explicit form of the solution doesn't matter much.  What matters is that there 2 such solutions, one going forward from a to -a and one going backward: the \vocab{instanton} and \vocab{anti-instanton}.  In the \vocab{dilute gas} limit, one can just superpose such solution without worrying about instanton-anti-instanton interaction.  Furthermore, there is one such solution for each center location, and one has to integrate over them
+
+The partition function is the sum over all instanton combos with periodic boundary conditions:
+\[Z = \sum_{n = \text{even}} \int_{-{T \over 2}}^{T \over 2} d \tau_1 
+\int_{-{T \over 2}}^{\tau_1} d \tau_2
+\int_{-{T \over 2}}^{\tau_2} d \tau_3 ... d \tau_n \underbrace{C}_{\text{Normalization}} \underbrace{K^n}_{K \equiv \sqrt{1 \over \mathrm{det} S''}} e^{- {nS_0 \over \hbar}} \]
+\[Z = \sum_{n \text{ even}} {1 \over n!} C {KT}^n \exp(- {n S_0 \over \hbar}) = {C \over 2} \left(\exp(KT e^{-S_0 \over \hbar} ) - \exp(-KT e^{-S_0 \over \hbar} ) \right) \]
+
+We know from nonrelativistic QM that K is just ${\hbar \omega \over 2}$, so this gives:
+\[E_0 = \lim_{T \rightarrow \infty} {-\hbar \over T} \ln(Z) = {\hbar \omega \over 2} \left( 1 - \exp(-{S_0 \over \hbar}) \right) \]
+
+The quantity $\exp(- {S_0 \over \hbar})$ is \vocab{non-pertubative}: all its derivative vanish at $\hbar \rightarrow 0$, so you will not be able to obtain this contribution from perturbation theory.
+
+There are of course more examples of potentials that have instanton solutions.  One example is the \vocab{Sine-Gordon} potential:
+$V(x) = (1- \cos(x)) $.  This potential has many false vacua labelled by n which sits at $x = 2 \pi n$.  The instanton sum from a transition from $k \rightarrow l$ is:
+\[ Z = \braket{k | U | l}  = \sum_{n, n'} \delta_{n-l' = k-l} e^{- (n+n')S_0 \over \hbar} C K^{n+n'} \]
+where $n$ labels instanton and $n'$ anti-instanton respectively.  Unlike the $x^4$ an-harmonic oscillator, the ground state energy splits into a continuum due to the infinite number of vacua.
+
+\subsection{Tunneling in Quantum Mechanics}
+\emph{Semiclassical vacua (coleman 1980)}
+
+Besides allowing a calculation of grounds state energy, instanton solutions can be used to calculate tunneling amplitudes.
+
+Consider a classical particle in a potential V(x) with 2 minima at location $x_{\pm}$ where $x_-$ is the true global minimum while $x_+$ is a local minimum with $V(x_+) \geq V(x_-)$.  Without loss of generality one can shift $V(x_+) = 0$.   Classically, a particle that starts at $x_+$ with 0 velocity could stay stuck there.  Quantum mechanically, it can tunnel to the global minimum.  
+In the semiclassical limit, the tunneling amplitude $\Gamma$ is:
+\[ \Gamma = A e^{-B \over \hbar} \left(1 + \mathcal{O} (\hbar) \right) \]
+
+The particle emerges at the other side of the barrier where $V(x)$ crosses 0, at $x^*$, with 0 velocity, and continues to classically move towards the global minimum.
+
+Suppose one wants to compute A and B.  In the WKB approximation, for 1 dimensional motion:
+\begin{align}
+	B = \int_{x_+}^{x^*} \sqrt{2 V(x)} dx
+	\end{align}
+
+Suppose the particle is moving in $N$ dimensions, the lagrangian would be:
+\begin{align}
+	\mathcal{L} = \frac12 \mathbf{\cdot{q}}^2 - V(\mathbf{q})
+	\end{align}
+
+In this case, the intersection of the potential $V(\vec{q}) = 0$ forms a hyper surface $ \Sigma$.  The particle emerges at the point $\sigma \in \Sigma$ such that the value $\int_{x_+}^{\sigma} \sqrt{2 V(\vec{q})} ds$ is minimized.  The value of B is computed via the variational problem:
+\begin{align}
+	B = \int_{\gamma} \sqrt{2 V(\mathbf{q})} ds \\
+	\delta \int_{\gamma} \sqrt{2 V} ds = \int_{\gamma} \mathbf{p} \cdot \mathbf{dq} = 0
+	\end{align}
+
+The trajectory $\gamma$ to this variational problem is the classical trajectory of a particle moving in an inverted potential:
+\begin{align}
+	{d^2 \over dt^2} \bf{q} - \partial_{\bf{q}} V(\bf{q}) = 0
+	\end{align}
+Intuitively, in the path integral language, these paths are the saddle point contributions to the integrals.  In general, you must sum over all saddle contributions.
+
+Computing the tunneling amplitude has been reduced to an exercise in classical mechanics!  In particular, one is interested in finite action solutions to the classical equations of motion with boundary condition:
+\begin{align}
+	{d \over dt} \bf{q}|_{\bf{q} = \bf{q_+}} &= 0 \text{  The particle is at rest when it emerges out of the barrier } \\
+\end{align}
+
+Such a solution looks like a classical "bounce" off the inverted potential and is an instanton solution.  This underlies statements like "instantons mediate tunneling from a metastable vacuum to the true vacuum."
+
+\subsection{Tunneling in Quantum Field Theory}
+In Quantum field theory, the tunneling amplitude proceeds similarly with minor modifications.  Consider a classical field $\phi(x)$ with lagrangian:
+\begin{align}
+	\mathcal{L} = \frac12 \partial_\mu \phi \partial^\mu \phi - V(\phi)
+	\end{align}
+where $V(\phi)$ has 2 local minimum, $V(\phi_{\pm}) = 0, -\epsilon$.
+
+We replace $\bf{q} \rightarrow \phi(x)$, and one is interested in finite action solutions to the euclidean equations of motion ($\tau \equiv it$):
+\begin{align}
+	\partial_\tau^2 \phi - \nabla^2 \phi - \nabla V(\phi) = 0
+	\end{align}
+
+with boundary condition $\partial_t \phi |_{\phi_{+}} = 0$.  This involves solving a partial differential equations, however one can exploit symmetries to simplify.  In particular, it makes sense that the stationary $\phi(x)$ is O(4) symmetric, so that one can write it as $\phi(\rho)$ with $\phi \equiv \sqrt{\tau^2 + |\bf{x}|^2}$.  Furthermore, since the motion is time translation invariant, one can always shift the boundary condition where the particle starts at $\rho = 0$ for simplicity.
+
+Using the euclidean radial coordinate, the equations of motion is just an ordinary differential equation:
+\begin{align}
+	{d^2 \over d \rho^2} \phi(\rho) + {3 \over \rho} {d \over d \rho} \phi  &= V'(\phi) \\
+	{d \over d \rho} \phi|_{\rho = 0} & = 0 \text{  (boundary condition)} \\
+	\end{align}
+This equation looks like 1-D motion of a classical particle with time dependent damping ${3 \over \rho}$.
+
+Coleman makes beautiful observations about the existence of the bounce:
+\begin{itemize}
+	\item  If the particle starts at $\phi = \phi^*$ it will not reach $\phi = \phi_+$ since $V(\phi^*) = V(\phi_+) = 0$ and the damping term will cause energy loss.
+	\item If the particle starts close to (but not exactly) $\phi = \phi^-$ it will overshoot the point $\phi_+$ because it can stay an exponentially long time before rolling towards $\phi_+$ by which time the damping force is gone and the frictionless motion ensures it overshoots.
+	\item Therefore, there is some $\phi \in [\phi^*, \phi_-]$ which satisfies the bounce solution where ${d \over d \rho} \phi_{\rho = 0} = 0$ and $\phi(t=0) = \phi_+$.
+	\end{itemize}
+
+Furthermore, one can solve this problem exactly in the \vocab{thin wall limit} where $\epsilon = V(\phi_+)- V(\phi_-)$ is small.   In that limit, the classical equation that ends with a stationary field at $\phi_+$ stays a long time close to $\phi_-$ before quickly moving to $\phi_+$.  This quick transition forms a domain wall of high action, hence the "thin wall".  Most of the time, the field sits at $\phi_+$, with $\epsilon$ action.  Parametrize such solution by $R_0$ which is the value of $\rho$ at which the transition from $\phi^- \rightarrow \phi_+$ happens.  The total action of this instanton is:
+
+\begin{align}
+	S & = \int_{\rho < R_0} \mathcal{L}_E (\phi) + \int_{S_d} \underbrace{\sigma}_{\text{surface tension of domain wall}} \\
+	S &= {\frac12 \pi^2 R_0^4  \epsilon}  - 2 \pi^2 R_0^3 \sigma
+	\end{align}
+
+There exist a optimal radius $R_0^*$ that minimizes this action:
+\begin{align}
+	{d \over d R_0} S(R_0) = 0 \rightarrow R_0^* = {3 \sigma \over \epsilon^3} \\
+	S^* \equiv S(R_0^*) = -{27 \pi^2 \sigma^4 \over 2 \epsilon^3}
+	\end{align}
+
+The instanton solution is then:
+\begin{align}
+	\phi(\rho) = \phi_- \theta(R_0^* - \rho) + \phi_+ \theta(\rho - R_0^*)
+	\end{align}
+Let's now discuss what happens after the bubble of real vacuum has formed at time t = 0.  Because the instanton solution solves the euclidean equation of motion, we just need to analytically continue it to obtain the time evolution for $t > 0$:
+\begin{align}
+	\tau \rightarrow it \\
+	\phi(t) = \phi(\sqrt{|\mathbf{x}|^2 - t^2}) \\
+	\end{align}
+
+The domain wall at $\sqrt{|\mathbf{x}|^2 - t^2} = R_0^*$ then traces a hyperboloid through spacetime.  Because we expect $R_0^*$ to be a microphysical quantity on the order of a few fermi, the bubble expands almost instantaneously at the speed of light.
+
+\subsection{Yang Mills Instanton}
+
+Discovering Yang Mills Instanton comes from asking a question: what are the classical vacuua of Non-Abelian Gauge Theory.
+
+In general, $A_\mu = 0$ is one vacuum.  However you can always add a \vocab{pure gauge} transformation on it to obtain any vacuum:
+\[A_\mu + i U \partial_\mu U^{-1} \]
+
+Suppose 2 gauge field configurations that are pure gauge are not deformable into one another: then there is an energy barrier to tunnel from one to the other! (one has to physically break pure gauge into some field strength configuration to go from one to another).
+
+Consider a time independent pure gauge field configuration.  This is a map from $S_{d-1} \rightarrow SU(N)$.  For d = 4 there's a math theorem that say such maps are labelled by integers, or their \vocab{homotopy group} $\pi_3(SU(N)) = Z_n$
+\begin{theorem}
+	All maps $S^3 \rightarrow G$ where G is a simple non-abelian group, can be deformed to $S^3 \rightarrow SU(2)$ or $S^3 \rightarrow S^3$.
+\end{theorem}
+
+This implies that pure gauge configurations are labelled by n. \vocab{Yang Mills Instantons} are finite action configurations that mediate this tunnelling between 2 different pure gauge configurations at different times, with different n.
+
+
+One property of these instanton solutions is that they are \vocab{self dual}:
+$F_{\mu \nu} = \tilde{F}_{\mu \nu}$.  To show this one first shows that self dual solutions set a lower bound on the action of a gauge field configuration. 
+
+\begin{align}
+	\mathrm{Tr} (F_{\mu \nu} - \tilde{F}_{\mu \nu} )^2  & \geq 0 \\
+	\epsilon_{\mu \nu \alpha \beta} \epsilon_{\mu \nu \sigma \rho} &= 2 \left( \delta_{\alpha \sigma} \delta_{\beta \rho} - \delta_{\alpha \rho } \delta_{\beta \sigma} \right)   \\
+	\rightarrow \mathrm{Tr} F_{\mu \nu}^2 & \geq \mathrm{Tr} F_{\mu \nu} \tilde{F}^{\mu \nu}
+\end{align}
+
+This shows that a self dual solution where $F = \tilde{F}$ necessarily minimizes the classical action.  Furthermore, the integral of $F \wedge F$ is a topological invariant.  The easiest way to see this is to use form notation, recall:
+\begin{align}
+	\underbrace{J_{CS}}_{\text{Chern Simons Form}} &\equiv \mathrm{Tr}AdA + \frac23 \mathrm{Tr}A^3  \\
+ 	d J_{CS} &= \mathrm{Tr} d(A dA + \frac23 A^3) = \mathrm{Tr}dA \wedge dA + 2 \mathrm{Tr} A^2dA \\
+ 	F \wedge F & = (dA + A^2) \wedge (dA + A^2) = \mathrm{Tr} dA \wedge dA + 2 \mathrm{Tr} A ^2 dA + \underbrace{\mathrm{Tr} A^4}_{= 0} \\
+ 	\rightarrow F \wedge F & = d J_{CS}
+	\end{align}
+
+Since the RHS is a differential form, its integral over a manifold is a topological invariant (doesn't depend on smooth deformation of the metric).
+We can also show this explicitly in index notation.  In general, consider a compact gauge group $U(\theta_i)$ defined on a manifold $S_d$ parametrized by $d$ coordinates $( \theta_1, ... \theta_d)$.  The topological invariant called the \vocab{winding number} is given by a the integral of the \vocab{Cartan-Maurer Form}:
+\begin{align}
+	n & = {- 1 \over 24 \pi^2} \int d \theta_1 d \theta_2 ... d \theta_d \epsilon^{i_1...i_d} \mathrm{Tr} (U \partial_{i_1} U^\dagger) (U \partial_{i_2} U^\dagger) ... (U \partial_{i_d} U^\dagger) 
+	\end{align}
+
+We can express this as a surface integral over a d dimensional surface.
+For the case of d = 3 it reduces to:
+\begin{align}
+	n & = {1 \over 24 \pi^2} \int d S^\mu \epsilon^{\mu \nu \lambda \rho} \mathrm{Tr} (U \partial_\mu U^\dagger) (U \partial_\lambda U^\dagger) (U \partial_\rho U^\dagger) 
+	\end{align}
+
+Note that at infinity, the gauge field configuration for an instanton is pure gauge, so $A_\mu = U \partial_\mu U^{\dagger}$.  This implies that the winding number can be written as:
+\begin{align}
+	n & = {1 \over 24 \pi^2} \int d S^\mu \epsilon^{\mu \nu \lambda \rho}  \mathrm{Tr} A_\nu A_\lambda A_\rho  \\
+	\end{align} 
+
+We would like to express this surface integral as a volume integral.   This current is the \vocab{Chern Simons current}:
+\begin{align}
+	n &= {1 \over 24 \pi^2} \int d^4 x \partial_\mu J_{CS}^\mu \\
+	J_{CS}^\mu & = \epsilon^{\mu \nu \lambda \rho} \mathrm{Tr} \left(A_\nu \partial_\lambda A_\rho - {2 ig  \over 3} A_\nu A_\lambda A_\rho \right) 
+	\end{align} 
+
+To show this we explicitly compute $F \wedge F$:
+\begin{align}
+		F_{\mu \nu} &= \partial_\mu A_\nu - \partial_\nu A_\mu - {i g} [A_\mu, A_\nu]  = \epsilon_{\mu \nu \alpha \beta} \left(\partial_\alpha A_\beta + ig A_\alpha A_\beta \right) \\
+	\epsilon^{\mu \nu \alpha \beta} \mathrm{Tr} F_{\alpha \beta} F_{\mu \nu} & = \epsilon^{\mu \nu \alpha \beta} \mathrm{Tr} \left(\partial_\mu A_\nu  + A_\mu A_\nu \right)  \left(\partial_\alpha A_\beta  + A_\alpha A_\beta \right) \\
+   &= \epsilon^{\mu \nu \alpha \beta} \left[ \partial_\mu \mathrm{Tr} \left( A_\nu \partial_\alpha A_\beta + A_\nu A_\alpha A_\beta  \right)  + \mathrm{Tr} A_\mu A_\nu A_\alpha A_\beta \right]
+	\end{align}
+
+The last term is 0 because the trace is cyclic and it is an even number of permutations contracted with the epsilon tensor.  This gives:
+
+\begin{align}
+	\partial_\mu J_{CS}^\mu = F_{\mu \nu} \tilde{F}^{\mu \nu}
+	\end{align}
+
+We thus have established in 2 different notations how the winding number of a gauge field configuration can be computed as a local integral over the 4-dimensional spacetime of a local quantity $F \wedge F$.
+
+
+From this information alone, one can extract lots of information about the vacuum structure without even solving the instanton configuration.  Denote the vacuua $\ket{n}$ for winding number n.   Suppose an (self dual) instanton that mediates between $n \rightarrow n+1$ has finite action $S_1$.  By superposing instantons, one can mediate between and n and m, with tunelling amplitude:
+\[ \braket{n | H | m} \approx A e^{-|n-m| S_1} \]
+
+The translation invariance of the hamiltonian with respect to winding numbers implies it can be diagonalized in fourier modes:
+\[ \underbrace{\ket{ \theta }}_{\text{energy eigenstate}} = \sum_{n} e^{i n \theta} \ket{n} \]
+
+We see we have a continuous set of energy eigenstates labelled by the angle $\theta \in [0, 2 \pi]$ also called the \vocab{vacuum angle}.   Let us now compute the amplitude from one theta eigenstate and another, from $\theta \rightarrow \theta'$:
+\begin{align}
+	\braket{\theta' |e^{-iHt}| \theta} & = \sum_{n, m} e^{-im \theta'} e^{i n \theta} \braket{n | e^{-i H t}| m} \\
+	& = \sum_{n, m} e^{i (n \theta - m \theta')} \underbrace{\int \D A_{\nu = n-m}}_{\text{instanton configurations}} e^{i S} \\
+	& = \delta(\theta - \theta') \sum_{\nu} e^{-i \nu \theta} \int \D A_\nu e^{i S}
+\end{align}
+
+Note that the amplitude $\braket{n|e^{-iHt}|m}$ is expressed on the RHS as a path integral over field configurations with boundary conditions being in different instanton sectors.  Those field configurations are labelled by $\nu$ the topological charge difference, which can be expressed as the winding number:
+\begin{align}
+	\nu & = {1 \over 32 \pi^2} \int d^4 x F_{\mu \nu} \tilde{F}^{\mu \nu} \\
+	\braket{ \theta' |e^{-iHt} | \theta}  & = \delta(\theta  - \theta') \int \D A
+	\exp \left( -{i} \int d^4 x  \left[ \mathcal{L} + \underbrace{\color{red} {\theta \over 16 g^2 \pi^2} \mathrm{Tr} F_{\mu \nu} \tilde{F}^{\mu \nu}}_{\text{topological term}}\right] \right)
+\end{align}
+
+The $\delta(\theta - \theta')$ show that the different theta vacua are \vocab{superselection sectors}, which means that no local operator can mix them: they are in effect isolated.  However one further can see that for a given $\theta$ vacuum, the instanton contribution to the path integral gives a topological correction that violates parity and time reversal (it has an $\epsilon$ symbol).  The fact this correction is so small for the strong force $\theta << \mathcal{O}(1)$ is called the \vocab{strong CP} problem (CPT = 1 implies that CP must violate, but it's observed to not violate).
+\subsection{Anomaly}
+An anomaly is when a symmetry of the classical lagrangian is not respected at quantum level.  When a global symmetry is broken by quantum fluctuations, this is OK: it just means the quantum theory of real life we won't see that symmetry.  However, when a gauge symmetry is broken in the quantum theory, this is a problem.  Recall that gauge symmetry is not a symmetry but a redundancy (another way to view it is that a gauge theory is like a constrained physical theory).  It means the gauged theory has no quantum counterpart: the constrained theory is not consistent at the quantum level.
+
+\section{Q and A}
+\subsection{Nomenclature}
+
+
+\begin{myquestion}
+	What is a phase transition?  What is an order parameter?
+\end{myquestion}
+Unfortunately, the definition of phase transition is not extremely clear. The original definition of a phase transition is when a system's thermodynamic function undergoes a non-analytic change as a function of a smooth tuning parameter changing.  The reason why this is a surprising phenomenon is because the boltzmann weights are analytic in the tuning parameters (temperature, etc...) \footnote{See Goldenfeld for more discussion}:
+\[Z = \sum_{n=1}^N e^{-{\beta E_n}} \]
+
+In fact, phase transitions are only possible in the $N \rightarrow  \infty$ or the \emph{thermodynamic limit.}
+
+For a \vocab{2nd order phase transition} (continuous) in particular, there is no discontinuity in the free energy.  What landau showed is that phenomologically, it can be modelled by a free energy functional that is similar to functional integrals of the quantum field theory:
+\[ Z = \int \D \phi e^{- \int \dd^d x \ML [\phi]} \]
+where $\ML$ is a local function of the \vocab{order parameter} $\phi$. The non-analytic behavior is explained by \vocab{symmetry breaking} of the order parameter $\phi$ which acquires a non-zero value in the ground state in the thermodynamic limit (this requires assumption about ergodicity breaking, or called "cluster decomposition" in high energy).  From this tradition, one then \emph{defines} an order parameter to be any mesoscopic function of the system that acquires a non-zero expectation value across a phase transition.  By extension, however, some authors do not require this to be a symmetry breaking phase transition (since landau's paradigm is only a subset of phase transitions).  This is why it is confusing.  For example, one sometimes talks about wilson loop expectations as order parameters (not a local parameter), or chern numbers (not even a continuous variable!).
+\newline
+For gapped systems, a definition of 0 temperature phases are equivalence classes of hamiltonians which are separate by level crosses between the ground state(s) and excited state(s).  2 hamiltonians are in the same "phase" if one can deform smoothly one to the other with local operators without closing the energy gap ("adiabatically" connect the ground state).
+
+\begin{myquestion}
+	What is a \vocab{super selection sector}?
+\end{myquestion}
+
+Super selection sectors are sectors of the hilbert space that are completely separate due to special symmetries of the dynamic.  Either there's an infinite energy barrier preventing a state starting from one sector to evolve into another sector, or there is some symmetry/conserved charge that prevent them from changing into each other.
+
+Some examples
+
+\begin{itemize}
+	\item Vacuum states of infinite volume  related by a continuous global symmetry are super selection sector.  No local operator $\hat{O} \ket{\text{vac}}$ can change them into each other.
+	\item Vacua with different charge values: dynamics conserve charge!
+\end{itemize}
+
+\subsection{Fundamentals}
+
+\begin{myquestion}
+	Where does time-ordering come into the picture in the path integral?
+	\end{myquestion}
+
+\begin{myquestion}
+	In the path integral formulation, how is $\braket{x(t_1) x(t_2)}$ equivalent to fixing the boundary condition on the path integral sum?
+	\end{myquestion}
+
+\begin{myquestion}
+	What is the equivalent of the wavefunction in quantum field theories?
+	\end{myquestion}
+
+\begin{myquestion}
+	What is the relation between wavefunction renormalization and perturbation theory in non-relativistic QM?
+	\end{myquestion}
+
+\begin{myquestion}
+	When a gauge theory is spontaneously broken, what is broken specifically?  
+\end{myquestion}
+
+\begin{myquestion}
+	Why can there be no local order parameter in gauge theories to describe confining transition? 
+\end{myquestion}
+
+The reason is because non-abelian gauge theories are asymptotically free.  This implies that local observables which probe the deep UV all look similar in the confining or coulomb phase.
+
+
+\begin{myquestion}
+	What is spontaneous symmetry breaking in a quantum system?  What is the relationship between Coleman-Mermin-Wagner theorem and cluster decomposition?
+	\end{myquestion}
+
+
+
+
+\subsection{Gauge Theories}
+\begin{myquestion}
+	Does all observables need to be gauge-invariant?  If so, how can an observable be "charged" under a gauge field.
+\end{myquestion}
+
+Indeed, local gauge transformations (gauge transformations that go to 0 at the boundary) are redundancies in the description of a physical state.  Therefore, no observable can change under such gauge transformations.
+\newline
+In contrast, \emph{global} gauge transformations are physical transformations.  The charge is the Noether current associated with this global symmetry, and is conserved.  Therefore observables can be "charged" under a global gauge symmetry.
+
+\begin{example}
+	Consider a wilson line operator $W_{g, \mathcal{P}}(x_1, x_2) = \mathcal{P} \exp( i g \int_{x_1}^{x_2} A_\mu dx^\mu)$, and a locally charged operator $\MO$ with charge $g$.
+	The transformation rules under a gauge transformation $g(x) = e^{i \alpha(x)}$ are:
+	\[ \MO(x) \rightarrow e^{i g \alpha(x)} \MO(x) \]
+	and 
+	\[ W_{g}(x_1, x_2) \rightarrow e^{i g \alpha(x_1)} W(x_1, x_2) e^{- i g \alpha(x_2)}\]
+	The object $\MO$ is not an observable, however the object
+	$ W(-\infty, x) \MO(x)$ is.  It is charged under the global gauge symmetry but gauge invariant with respect to local redundant gauge transformations.
+	\end{example}
+
+\begin{myquestion}
+	What is the link between the $\mathbb{CP}^n$ model with $n=1$ and the non-linear sigma model in 2 dimensions (2-d XY model) and $U(1)$ gauge theory?
+	\end{myquestion}
+
+
+\begin{myquestion}
+	What's the relationship between $\phi^4$ theory and magnetic transitions which are technically $O(N)$ models?
+\end{myquestion}
+
+
+\begin{myquestion}
+	What is the relation between \[ \D F = dF + A \wedge F \] and \[ \D F = dF - i [A, F] \]
+	\end{myquestion}
+	The $F$'s in the 2 equations are in \textbf{different representations} of the gauge group.  Therefore the 2 equations are saying the same thing but about different representations of the object.
+	\newline
+	In the first equation, $F$ is a column vector whose components are the projected weight onto the lie-algebra generator basis.  In the 2nd equation, F is a matrix representation.
+	\newline
+	We define the \vocab{covariant derivative} to be the operator $\D_\mu$.  This operator does different things depending on what is the representation of the thing it acts on.  For example, in gravity, the covariant derivative on a scalar field $\phi$ is just:
+	\[ \nabla_\mu \phi = \partial_\mu \phi \]
+	However, on a vector field $V^\nu$, it is:
+	\[ \nabla_\mu V_\nu = \partial_\mu V_\nu - \Gamma^{\lambda}_{\mu \nu} V_\lambda \]
+	\newline
+	Consider a vector $F^a$ (you can think of as some vector) which transforms under some representation $R_{k}$ of the gauge group.  The covariant derivative is defined as:
+	\[ \D_\mu F^i = \partial_\mu F^i - i A_\mu^a(t_k^a)_{ij} F^j \]
+	
+	where $(t^a)_{ij}$ are the lie algebra generators in the representation k.
+	\newline
+	It turns out that the gauge fields live in the \vocab{adjoint} representation of the gauge group.
+	This equation is then for gauge field vectors F:
+	\[ \D_\mu F^a = \partial_\mu F^a - i A_\mu^b(t_{\mathrm{adj}}^b)_{ac} F^c \]
+	
+	The generators in the adjoint representation are the structure constants $(t^b_{\mathrm{adj}})_{ac} = - i f^{bac}$
+	
+	Therefore the equation becomes:
+	\[ \D_\mu F^a = \partial_\mu F^a - f^{bac} A_\mu^b F^c =  \partial_\mu F^a + f^{bca} A_\mu^b F^c \]
+	
+	The equation above computes the covariant derivate in the basis of generators.  However, we can also write it in matrix form
+	
+	\[ (\D_\mu F^a)_{ij} =  \partial_\mu (F^a)_{ij} + f^{bca} A_\mu^b F_c (t^{a})_{ij} \]
+	
+	Using the fact $-i [t^b, t^c] = f^{bca} t^a$, we therefore have:
+	\[ (\D_\mu F^a)_{ij} =  \partial_\mu (F^a)_{ij} + [t^b A_\mu^b, t^c F^c]_{ij} \]
+	
+	This implies the equation in the matrix representation:
+	\[ \D F = dF - i [A, F] \]
+	
+
+\section{Unclassified Equations}
+Find me a home
+
+\textbf{Gauge theory}
+\[ [D_\mu, D_\nu] = i g F_{\mu \nu} \]
+\[ \sum_{\text{cylic} \mu \nu \lambda} D_{\mu} F_{\nu \lambda} = 0 \rightarrow \epsilon^{\alpha \beta \mu \nu} D_{\beta} F_{\mu \nu} = 0 \text{  Bianchi's identity} \]
+\[ \sum_a T^a_{ij} T^a_{kl} = \frac12 \left(\delta_{il} \delta_{jk} - {1 \over N} \delta_{ij} \delta{kl} \right)  \text{  Fierz identity for SU(N)} \]
+
+\[ \mathrm{tr} \left( \underbrace{ A \wedge A \wedge ... }_{\text{even}} \right) = 0 \]
+where $ A =  t^a A^a_\mu \dx^\mu$
+\[A^g \rightarrow g A g^{-1} - dg g^{-1} \]
+\[ \D X = d X + A X - (-1)^n X A \]
+
+
+\section{Appendix}
+\subsection{Useful QFT Integrals}
+The subject of renormalization gets hairy because we often get tangled in the math (big ugly integrals) and lose track of the physics.  We collect those integrals trick in 1 section for reference
+
+\[	\underbrace{S_d}_{\text{surface of d-sphere}}  = {2 \pi^{d \over 2} \over \Gamma({d \over 2})}  \]
+
+\[	\int_0^\infty dx e^{-b x^2} x^n  = { \Gamma ({n+1 \over 2}) \over (2 b)^{n+1 \over 2}} \]
+
+
+\textbf{Bessel function}:
+\url{https://mathworld.wolfram.com/BesselFunctionoftheFirstKind.html}
+\textbf{Jacobi-Anger Expansion}
+\[ e^{iz \cos(\theta)} = \sum_{n = -\infty}^\infty (i)^n J_n(z) \cos(n \theta) \]
+This implies
+\[J_n(z) = {1 \over 2 \pi i^n} \int_{0}^{2 \pi} d \theta e^{i(z \cos(\theta) + n \theta)}\]
+\url{https://www.researchgate.net/publication/333159155_Integral_Involving_Bessel_Functions_Arising_in_Propagation_Phenomena/fulltext/5cde147792851c4eaba6923d/Integral-Involving-Bessel-Functions-Arising-in-Propagation-Phenomena.pdf}
+
+\[K_n(x) = \int_{0}^\infty e^{-ix \cos(t) -int} dt\]
+
+\[\int {d^d k \over (2 \pi)^d } {e^{i \bf{k} \cdot \bf{x}} \over k^2 + m^2} = {(m)^{d - 2} \over (2 \pi)^{d \over 2}} (m | \bf{x} |^{1 - {d \over 2}}) K_{1- {d \over 2}} (m |\bf{x}|) \]
+
+note $K_{-1} = K_1$
+
+For example in d=4:
+\[G_4(x) = {1 \over 4 \pi } ({m \over |x|}) K_1(m|x|)\]
+\subsubsection{Schwinger's trick}
+\begin{problem}
+	Evaluate $$I(m^2) = \int {d^D l \over (2 \pi)^D} {1 \over l^2 + m^2}$$
+\end{problem}
+(trick in Zinn Justin)
+\begin{align}
+	I(m^2) & = {S_D \over (2 \pi)^D} \int_0^\infty dl \int_{0}^\infty ds  l^{D-1}  e^{- s(l^2 + m^2)} \\
+	& = {1 \over (4 \pi)^{D \over 2}} \mu^{4-D} m^{D-2}  \Gamma(1 - D/2)
+\end{align}
+
+\subsubsection{Feynman's trick}
+\begin{problem}
+	Evaluate $$I(m^2, p^2) = \int {d^D l \over (2 \pi)^D} {1 \over l^2 + m^2} {1 \over (p-l)^2 + m^2}$$
+\end{problem}
+
+\begin{lemma}
+	Feynman's trick:
+	$${1 \over AB} = \int_0^1 dx {1 \over x A + (1-x) B}$$
+\end{lemma}
+
+\begin{align}
+I &= {1 \over (2 \pi)^D} \int_0^1 dx \int l^{D-1} dl {1 \over \underbrace{(1 - x)(l^2 + m^2) + x ((p-l)^2 + m^2)}_{\equiv \mathcal{A}}}
+\end{align}
+
+Complete the square of $\mathcal{A}$:
+\begin{align}
+	\mathcal{A} &= l^2 + m^2 - 2 p \cdot l x + x p^2 \\
+	 &= (l- xp)^2 + m^2 + x (1-x) p^2
+	 \end{align}
+
+Since we integrating over all momenta, we can shift the integration variable
+$l \rightarrow l - xp$
+With this, the integral I is of the form $$u \equiv l^2   \rightarrow I = \int du {u^{{D \over 2} - 1}  \over u + m^2}$$
+which once again gives a bunch of gamma functions (using schwinger's trick.)
+
+\begin{align}
+	I = {\mu^{4 -D} \over (4 \pi)^{D \over 2}} \Gamma(2 - D/2) \int_0^1 {1 \over m^2 - x(1 -x) p^2}
+\end{align}
+
+Note that this integral is logarithmically divergence so the poles are exactly at $D = 4$ while for the quadratically divergent integral, the poles were at $D = 2$ and $D=4$.
+
+
+
+\subsubsection{More integration}
+\begin{align}
+	\int dk_E {k_E^a \over (k_E^2 + m^2)^b} = {\left(m^2 \right)^{{a + b \over 2} - b} { \Gamma \left({a + 1 \over 2} \right)} \Gamma \left( {b - {a + 1 \over 2}} \right) \over 2 \Gamma(b)}
+\end{align}
+
+\subsection{Bessel Functions}
+
+\subsubsection{Gamma Function}
+
+For positive integers n, $\Gamma(n+1) = n!$.
+The gamma function is an analytica function with simple poles at 0, -1, -2, ... with residues 
+$$\text{Res}[ \Gamma(-m)] = {(-1)^m \over m!}$$
+
+Using this, we get:
+\begin{align}
+	\Gamma(\epsilon) = {1 \over \epsilon} - \gamma_E
+\end{align}
+
+
+Good to remember (srednicki section 14)
+\begin{align}
+	\Gamma(n+1) &= n! \\
+	\Gamma(n+\frac12) &= {(2n)! \over n! 2^{2n}} \sqrt{\pi} \\
+	\Gamma(-n + x) & = {\left( -1 \right)^n \over n!}  \left[ {1 \over x} - \gamma_E + \sum_{k=1}^n {1 \over k} + \mathcal{O}(x) \right]
+\end{align}
+
+$\gamma_E \approx 0.5772...$ is the \vocab{Euler Macheroni constant}
+
+\subsubsection{Dimensional Regularization}
+\emph{Minahan lecture notes }
+Given information of the previous section, dimensional regularization just does an expansion of the gamma function of the integrals around the poles.
+Here there are 2 conventions, expanding with $D = 4 - 2 \epsilon$ and 
+$D = 4 - \epsilon$.  That's where some factors of 2 can be missed!
+
+We show the $\phi^4$ quadratic divergen mass renormalization:
+\begin{align}
+	\mu^{4 - D}\int {d^D l \over (2 \pi)^D} {1 \over l^2 + m^2} & = {1 \over (4 \pi)^{D \over 2}} \mu^{4-D} m^{D-2}  \Gamma(1 - D/2) \\
+	& \approx {m^2 \over (4 \pi)^2} \left({1 \over \epsilon} + 1 - \gamma_E - \log \left({m^2 \over \mu^2} \right)  \right)
+\end{align}
+
+Here's the $\phi^4$ divergent interaction vertex correction:
+
+\begin{align}
+	I & = {\mu^{4 -D} \over (4 \pi)^{D \over 2}} \Gamma(2 - D/2) \int_0^1 {1 \over \Delta - x(1 -x) p^2} \\
+	& \approx {1 \over (4 \pi)^2} \left({1 \over \epsilon} - \gamma_E + \log(4 \pi) - \log \left({\mu^2 \over m^2} \right) + Q\left({p^2 \over m^2}\right)  \right) \\
+	Q(p^2) & \equiv - \int_0^1 dx \log \left(1 - x(1-x) p^2 \right) \\
+\end{align}
+
+\end{document}
+
+
