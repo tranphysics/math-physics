@@ -1,0 +1,412 @@
+\documentclass[9pt]{scrartcl}
+\usepackage[sexy]{evan}
+\usepackage{braket}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage[compat=1.1.0]{tikz-feynman}
+\usepackage[makeroom]{cancel}
+
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+
+\hypersetup{
+    colorlinks=true, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=blue,  %choose some color if you want links to stand out
+}
+\usepackage{geometry}
+    %\usepackage{showframe} %This line can be used to clearly show the new margins
+
+
+\newgeometry{vmargin={30mm}, hmargin={20mm,30mm}}   % set the margins
+\begin{document}
+\title{Physics problems, Part I} % Beginner
+\date{November 2021}
+\maketitle
+
+\begin{abstract}
+	\sffamily\small
+	Here is a collected notes on physics readings.
+\end{abstract}
+
+\vspace{1em}
+%%fakesection Notations + Acknow
+\setlength{\belowdisplayskip}{0pt} \setlength{\belowdisplayshortskip}{1pt}
+\setlength{\abovedisplayskip}{0pt} \setlength{\abovedisplayshortskip}{1pt}
+
+\tableofcontents
+\newpage
+
+
+
+\section{Basic Calculations}
+\subsubsection{How to compute the effective action (Zee, Peskin)}
+
+We'll compute $\Gamma$ in 2 step, first compute W(J).  For this calculation, we will do it in minkowski time and re-introduce $\hbar$ to make clear expansion around a classical solution.
+From the definition, 
+\begin{align}
+e^{{i \over \hbar}W(J) } =  \int d \phi \exp( S[\phi]] + \int dx J \phi) 
+\end{align}
+We first expand via the saddle point (classical solution) called $\phi_0$, which satisfies the classical equations of motion ${\delta S \over \delta \phi}|_{\phi_0} = -J$.  Shifting the field variables as a fluctuation around the classical solution, we define $\tilde{\phi} = \phi- \phi_0$:
+\begin{align}
+e^{{i \over \hbar} W(J)} \approx e^{{i \over \hbar} \left(S[\phi_0] + \int dx J \phi_0 \right)}   \int d \tilde{\phi} e^{\tilde{\phi} D^{-1} \tilde{\phi} } \\
+\end{align}
+Taking the log of both sides:
+\begin{align}
+W(J)  \approx S[\phi_0] + \int dx J \phi_0 + {\hbar \over 2 i} \text{Tr} \ln(D^{-1})
+\end{align}
+$\Gamma$ just removes the extraneous current (tadpoles!), giving
+
+\begin{align}
+\Gamma = \underbrace{S[\phi_0]}_{\text{Classical Action}} + { \hbar \over 2 i} \underbrace{\text{Tr} \ln(D^{-1})}_{\text{Quantum correction}} + ...
+\end{align}
+
+We expect the quantum action to be extensive.  For the case of translation invariant arguments, we expect:
+\begin{align}
+\Gamma[\phi] \equiv VT \times V_{eff}(\phi)
+\end{align}
+
+\begin{example}
+\emph{Compute to first order the correction to the $V_{eff}$ for the following lagrangian (Zee section IV.3)}
+$$ \mathcal{L} = \frac12 (\partial \phi)^2 + \frac12 m^2 \phi^2 - {g \over 4!} \phi^4$$
+To 0th order, the quantum action is just the classical action.  For constant field, the effective potential is just the classical potential:
+$$V_{eff} =  -\frac12 m^2 \phi^2 + {g \over 4!} \phi^4$$
+
+To first order in, we need to compute the quantum correction.  First, the potential energy density can be rewritten as:
+$$ \int dx \mathcal{L} = \int dx dy \phi(x) \underbrace{[-\partial^2 - V''(\phi)] \delta(x-y)}_{D^{-1}} \phi(y)$$ 
+
+The operator D is just the propagator for a free theory with a different mass, and is diagonal in k space:
+\begin{align}
+\text{Tr} \ln(D^{-1}) = \int d^4 x \int \dkk \log({-k^2 + m'^2})  
+= V T I(d) 
+\end{align}
+This integral is divergent, but we can evaluate up to a cutoff $\Lambda$:
+\begin{align}
+I(d) = {\Lambda^2 \over 32 \pi^2} V''(\phi) - {V''(\phi)^2 \over 64 \pi^2} \log \left({e^{\frac12} \Lambda^2 \over V''(\phi)} \right)
+\end{align}
+The cutoff dependent terms will be absorbed by renormalization conditions.  However, the part that is not cutoff dependent, shows
+as a log correction to the potential:
+\begin{align}
+V_{eff} (\phi) = A \phi^2 + B \phi^4 (D + E \log({\phi^2 \over \Lambda^2}))
+\end{align}
+\end{example}
+\emph{Comments:}
+We see the effective potential will be deeper near the classical minima (see Peskin 378).  Note peskin does the higher dimensional
+version of this problem, which is why it looks a bit obscure.  
+
+The way the coefficients A, B, D, E are set are via renormalization conditions (lab measurements).
+There are 2 renormalization conditions (2 coupling constants in the bare lagrangian, the mass $m$ and the interaction $g$)
+\begin{itemize}
+\item We measure in lab the mass of the particle to be $m_P$ where P stands for physical.  This sets: $${d^2 V_{eff} \over d \phi^2}_{\phi=0} = m_P^2$$
+\item We measure the strength of the interaction at a given scale $M$ to be some coupling $g_P$.  This sets:
+$$ {d^4 V_{eff} \over d \phi^4}_{\phi = M} = g_P$$
+Question: Why can't we measure it at $\phi = 0$?  What is the meaning of this scale $M$ we picked?
+\end{itemize}
+
+
+\section{The Renormalization Group}
+
+\subsection{Emergent symmetry (Peskin 12.3)}
+
+\begin{problem}
+	Consider a lagrangian with 2 massless scalar fields $\phi_1$, $\phi_2$:
+		$$\mathcal{L} = \frac12 \left(\partial \phi_1 \right)^2 + \left(\partial \phi_2 \right)^2 + {\lambda \over 4!} \left(\phi_1^2 + \phi_2^2 \right) + 
+		{\lambda \over 4!} 2 \rho \phi_1^2 \phi_2^2$$
+	
+	a) Compute $\beta_{\lambda}, \beta_\rho$
+	b) How does the ratio ${\rho \over \lambda}$ flow under RG?
+	c) Investigate the stability of the flow in $4 - \epsilon$ dimensions.
+\end{problem}
+
+First let's recall some feynman diagram combinatoric.  The fundamental rules comes from wick contracting an expression of the form:
+
+$$	\braket{... \phi \phi \phi \phi ...}$$
+Naively, we'd say each $\phi^n$ interaction vertex has $n!$ permutation that are indistinguishable, hence we associate a ${1 \over n!} \phi^n$ term to cancel this combinatorial factor.  However some feynman diagrams with symmetry represent fewer permutations by a \vocab{symmetry} factor.  The symmetry factor is the order of the group of automorphisms of the feynman graph.
+
+
+Note when $\lambda = \rho$, this lagrangian has $O(2)$ symmetry
+Rewrite the lagrangian with the correct combinatorial factor:
+\begin{align}
+	\mathcal{L} & = \frac12 \left(\partial \phi_1 \right)^2 + \left(\partial \phi_2 \right)^2 + {\lambda \over 4!} \left(\phi_1^2 + \phi_2^2 \right) + 
+	{\lambda \over 2! 2!} { \rho \over 3} \phi_1^2 \phi_2^2
+	\end{align}
+We can therefore see the vertex are $-i \Lambda$ and $-i {\rho \over 3} $.
+The wavefunction renormalization is 0 for both $\phi_1$ and $\phi_2$ (by symmetry).
+The interaction renormalizes via the 4 point 1PI.  
+\begin{itemize}
+	\item divergent part of $\Gamma_\lambda^{(4)}$:
+$$ {i \over (4 \pi)^2} \underbrace{\frac12}_{\text{symmetry factor}} \times \underbrace{3}_{s, t, u \text{channels}} \times
+ \left( \lambda^2 + ({\rho \over 3})^2 \right)  \times
+ \underbrace{2 \over \epsilon}_{d = 4- \epsilon}$$ 
+$$ \rightarrow \delta_\lambda = {3\lambda^2 + {\rho^2 \over 3} \over (4 \pi)^1} {2 \over \epsilon}$$
+   \item divergent part of $\Gamma_\rho^{(4)}$:
+   first diagram:
+   $${i \over (4 \pi)^2} \underbrace{ \frac12}_{\text{symmetry}}  \times \underbrace{2}_{\text{diagrams}} \times
+   {\rho \lambda \over 3} \times {2 \over \epsilon}$$
+   2nd diagram:
+   $${i \over (4 \pi)^2} \underbrace{ 1}_{\text{symmetry}} \times
+   \underbrace{2}_{\text{diagrams}} \times
+   {\rho^2 \over 9} \times {2 \over \epsilon}$$ 
+   
+   Because the $\delta_\rho$ counter term is divided by 3, we need to multiply these amplitudes by 3X to obtain the counterterm value.
+   
+   $$ \rightarrow \delta_\rho = { 2 \lambda \rho + {4 \over 3} \rho^2 \over (4 \pi)^2} {2 \over \epsilon} $$
+\end{itemize}
+
+This gives
+\begin{align}
+	\beta_{\lambda} & = {3 \lambda^2  + {\rho^2} \over (4 \pi)^2} \\
+	\beta_{\rho} & = {2 \lambda \rho + {4 \over 3} \rho^2 \over (4 \pi)^2}
+	\end{align}
+
+Define $x \equiv {\rho \over \lambda}$, denote ${d \over d \ln\mu} x \equiv x'$
+\begin{align}
+	x' &= {\rho \lambda' - \lambda \rho' \over \lambda^2} \\
+	    &= \rho (3 + {1 \over 3 } x^2) - \lambda (2 x + {4 \over 3} x^2) \\
+	    & = {\lambda x \over 3} (x - 3) (x - 1)
+	\end{align}
+
+The flow is stable at $x=1$ ($\beta_x$ has a negative crossing) which means that there is an \vocab{emergent} $O(2)$ symmetry with flowing towards $\lambda = \rho$.
+
+If we use $d = 4-\epsilon$, the beta functions just take a $(d-D) \text{coupling}$ term in dim-reg from $\mu^{4 -\epsilon}$.
+
+\begin{align}
+	\beta_\lambda  &= -\epsilon \lambda + {3 \lambda^2  + {\rho^2} \over (4 \pi)^2} \\
+	\beta_\rho & = - \epsilon \rho + {2 \lambda \rho + {4 \over 3} \rho^2 \over (4 \pi)^2}
+	\end{align}
+
+We plot below the RG flow 4 dimensions and slightly less.  Note that the flow direction vector is $- (\beta_\lambda, \beta_\rho)$ since we are interested in flowing towards the IR ($\mu \rightarrow 0$)!
+
+\includegraphics[width=1.0\textwidth]{peskin12p3.png}
+
+Solving for $\beta_\lambda = \beta_\rho = 0$ shows there are now 4 solutions, but only the $\rho = \lambda$ solution is an attractive fixed point.
+
+\subsection{Covariance of beta function}
+\emph{Zinn Justin, section 10.11, MIT 8.324 pset 6}.
+For classically scale invariant theories, the beta function only flows at second order
+of the coupling.  This is because only loop diagrams lead to a broken scale invariance. 
+
+\begin{align}
+	\beta(\lambda) = b_2 \lambda^2 + b_3 \lambda^3 + ....
+	\end{align}
+We can show that under smooth change $\lambda' = \lambda + a_2 \lambda^2 + ...$, the 2nd and 3rd order coefficients of the beta function are univeral.
+In general under coupling rescaling:
+\begin{align}
+	\beta'_j(\lambda') &= \beta_i {\partial \lambda_j' \over \partial \lambda_i} \text{  general reparametrization} \\
+	\lambda(\lambda') & \approx \lambda' - a_2 \lambda'^2 + \mathcal{O}(\lambda'^3) \\
+	\beta'(\lambda') &= (b_2 (\lambda' - a_2 \lambda'^2 + ...)^2 + b_3 (\lambda' - a_2 \lambda' + ...)^2 ) (1 + 2 a_2 \lambda' + ... ) \\
+	& = b_2 \lambda'^2 + b_3 \lambda'^3 + \lambda'^3 (- 2 a_2 b_2 - 2 b_3 a_2 + 2 a_2 (b_2 + b_3)) + \mathcal{O}(\lambda'^4) \\
+	&= b_2 \lambda'^2 + b_3 \lambda'^3 + \mathcal{O}(\lambda'^4)
+	\end{align}
+
+For a marginally relevant interaction like QCD, we have
+\begin{align}
+	\beta &= - b_2 g^2 - b_3 g^3  + ... \\
+	\rightarrow \ln \left({\mu \over \Lambda} \right) &= {1 \over g(\mu)} + {c \over b^2} \ln \left({b g(\mu)}\right) + \mathcal{O}(g) \\
+	\end{align}
+
+This is an example of \vocab{dimensional transmutation}, where a new scale $\Lambda$ appears in a classically scale invariant theory.
+For QED, it's the landau pole scale where the theory blows up. For QCD, it's a low energy scale where perturbation theory breaks down in the IR.
+
+\subsection{$\phi^3$ RG, D=6}
+\begin{problem} (MIT 8.324, pset 4 problem 2)
+	Compute the vertex correction to $\phi^3$  theory at 1 loop using dimensional regularization.  Evaluate it in the limit $p_3^2 >> m^2, p_1^2, p_2^2$
+	\end{problem}
+
+One question is why is $\phi^4$ marginally irrelevant in 4d while $\phi^3$ in 6d is marginally relevant?
+
+The key to this is to recognize the key quantum correction to the vertex at 1 loop.  $\phi^4$ at 1 loop has 2 propagators and 2 vertices, giving a net positive sign.  This makes the coupling grow stronger due to quantum correction.  $\phi^3$ has 3 propagators and 3 vertices, giving a net negative sign.  This makes the quantum correction grow weaker.
+
+To illustrate this let's compute the vertex correctionu of $\phi^3$:
+
+\begin{align}
+	\Gamma^{3}(p_1, p_2, p_3) = \underbrace{- i g}_{\text{tree level}}  \underbrace{ - i \mathcal{C}}_{\text{counterterm}} + \underbrace{(-ig)^3}_{\text{vertices}} \underbrace{(i)^3}_{\text{propagators}} \mu^{6-d} \int {d^d k \over (2 \pi)^d} {1 \over (k-p_1)^2 - m^2} {1 \over (k + p_2)^2 - m^2} {1 \over k^2 + m^2}
+\end{align}
+
+Wick rotate $k_0 \rightarrow i k_0$ and we get (keep track of the factors of i's and signs!)
+
+\begin{align}
+	\Gamma^{3}(p_1, p_2, p_3) = -ig -i \mathcal{C} - i \mu^{6-d} g^3 \underbrace{{\int \dkk} {1 \over (k-p_1)^2 + m^2} {1 \over (k + p_2)^2 + m^2} {1 \over k^2 + m^2}}_{\mathcal{A}}
+\end{align}
+
+
+\begin{itemize}
+	\item Then do feynman parameter
+	\begin{align}
+		{1 \over ABC} &= 2 \int dx dy dz \delta(x + y + z -1) {1 \over x (A + yB + zC)^3} \\
+		\mathcal{A} & = \int dxdydz \delta(...) \times 2 \int \dkk {1 \over (x A + yB + zC)^3 }
+	\end{align}
+	\item Simplify the denominator by completing square:
+	\begin{align}
+		xA + yB + zC &= l^2 + \Delta \\
+		l & \equiv k + p_2 z - p_1 y  \text{ (shift integration variable)}\\
+		\Delta & \equiv m^2 + y p_1^2 + z p_2^2 - (p_2 z - p_1 y)^2 \\
+		&= m^2 + y(1-y) p_1^2 + z(1-z) p_2^2 + 2 \underbrace{p_{12}}_{p_1 \cdot p_2} yz \\
+		 \Delta & = m^2 + xy p_1^2 + xz p_2^2 + yz p_3^3 
+		  \text{ (use momentum conservation): } 2 p_{12} & = p_3^2 - p_2^2 - p_1^2  \\
+	\end{align}
+
+
+	\item Integrate the momenta, giving you divergent term (the physical stuff) in terms of gamma functions
+	\begin{align}
+		\mathcal{A} &= 2 \int_0^1 dx dy dz \delta(x + y + z -1) {1 \over 2 (4 \pi)^{d \over 2}} {1 \over \Delta^{(3 - {d \over 2})}} \Gamma \left( {6 - d \over 2}\right) \\
+		\rightarrow d &= 6 - \epsilon \\
+		\Gamma^{(3)}(p_1, p_2, p_3) &= - ig - i \mathcal{C} - i g^3 {1 \over (4 \pi)^3} \underbrace{ \left(1 + {\epsilon \over 2} \ln \mu^2 \right)}_{\mu^{\epsilon}} \int dxdydz \delta(..) \underbrace{\left(1 - {\epsilon \over 2} \ln \Delta \right)}_{\Delta^{-\epsilon \over 2}}  \underbrace{\left({2 \over \epsilon} - \gamma_E + \ln (4 \pi) \right)}_{\Gamma({\epsilon \over 2})} \\
+		& \text{Collect terms of order } {1 \over \epsilon} \text{ and order } 1 \\  
+		& =  ... - i g^3 {1 \over (4 \pi)^3} \int dxdydz \delta(...)  \left({2 \over \epsilon} + \ln \left({4 \pi \mu^2 e^{- \gamma_E} \over \Delta} \right) \right)
+	\end{align}
+\end{itemize}
+We can already see several important physics things.  Quantum corrections give $- \ln(\Delta)$ to the coupling, which means the theory is marginally irrelevant.
+
+This is clearer by imposing lab measurement of $\Gamma(0, 0, 0) = - i g$.  This fixes the counter term and gives a vertex of:
+\begin{align}
+	\Gamma^{(3)}(p_1, p_2, p_3) = - ig \left[1 \underbrace{-}_{\text{asymptotic freedom}} g^2 {1 \over (4 \pi)^3} \int_{0}^1 dxdydz \delta(x+y+z-1) \ln \left({\Delta \over m^2} \right) \right]
+\end{align}
+
+In the large momentum limit where $p_3^2 >> m^2, p_1^2, p_2^2$ we can make some simplifications to  $\Delta \approx yz p_3^2$:
+
+\begin{align}
+	\Gamma^{(3)}(p_3^2) \approx -ig \left[1 - {g^2 \over 2 (4 \pi)^3}  \left(\ln \left({p_3^2 \over m^2} + O(1) \right)\right) \right]
+	\end{align}
+
+\subsection{Asymptotic Freedom, $\phi^3$}
+\begin{problem}
+	(MIT 8.324, pset 7 prob 2)
+	Using previous result, compute the beta function for the coupling for $\phi^3$ theory in $d = 6 - \epsilon$
+	\end{problem}
+
+
+
+\subsection{Srednicki Problem 29.2}
+The propagator at different scales must agree with each other.
+\begin{align}
+	{1 \over Z(\Lambda_0) - \underbrace{ \Sigma(p^2, \Lambda_0, \Lambda)}_{\text{self energy integrated over} \delta \Lambda}} = {1 \over Z(\Lambda)}
+	\end{align}
+Simplifying this gives:
+\begin{align}
+	{Z(\Lambda)} = Z(\Lambda_0) (1 - {\Sigma(p^2) \over Z(\Lambda_0)})
+	\end{align}
+
+$\Sigma(p^2)$ is the 1 loop correction to the propagator from fast modes between $\Lambda \rightarrow \Lambda_0$.  It admits an expansion in the momentum
+\begin{align}
+	{\Sigma(p^2) \over Z(\Lambda_0)} &= \frac12 {(ig)^2} \int_{\Lambda, \Lambda_0} \dkk {i \over k^2} {i \over (k-p)^2}  \\
+	&\equiv {g^2  \over 2} F(p^2, \Lambda, \Lambda_0) \\
+	F(p^2) & \approx \cancel{A} +  {d \over d(p^2)} F(p^2) p^2 + O(p^4)
+	\end{align}
+
+The constant value A is a mass shift and cancelled by counterterms (since the theory is renormalized to be massless).  The remaining terms give a series expansion in $p^2$ to $Z(\Lambda)$
+\begin{align}
+Z(\Lambda) = Z(\Lambda_0) \left( 1 - {g^2 \over 2} F'(p^2, \Lambda, \Lambda_0) \right) \label{eq:1}
+\end{align}
+
+
+The correction to the vertex includes both the wavefunction renormalization and the 3 point vertex loop.
+\begin{align}
+	Z(\Lambda)^{3 \over 2} g(\Lambda) &= Z(\Lambda_0)^{3 \over 2} g(\Lambda_0) \left( 1 + {(-i g(\Lambda))^3} i^3 \int_{\delta \Lambda} \dkk {1 \over k^2 (k - p_1)^2 (k+p_2)^2} \right) \\
+	g(\Lambda)& \approx \left({Z(\Lambda_0) \over Z(\Lambda)} \right)^{3 \over 2} g(\Lambda_0) \left(1 + g(\Lambda_0)^2  \int_{\Lambda}^{\Lambda_0} \dkk {1 \over k^6} + ... \right) \label{eq:2}
+	\end{align}
+
+b)  To compute the beta function, we can evaluation equation \eqref{eq:1} directly:
+
+\begin{align}
+	F(p^2, \Lambda, \Lambda_0) & = \int \dkk \int_0^1 dx {1 \over (x (k+p)^2 + (1-x)k^2)^2} \\
+	& = \int {d^d q \over (2 \pi)^d} \int dx {1 \over (q^2 + x(1-x) p^2)^2 } \\
+	{d \over d(p)^2} F (p^2 = 0) &= -2 \int  {d^d q \over (2 \pi)^d} {1 \over q^6} \int_0^1 dx x(1-x) \\
+	&=-\frac13 {\Omega_{d} \over (2 \pi)^d} \int_{\Lambda}^{\Lambda_0} dq  q^{d-7} \\
+	& =_{d = 6} -\frac 13 {1 \over (4 \pi)^3} \ln {\Lambda_0 \over \Lambda} \\
+	Z(\Lambda) &= Z(\Lambda_0) \left(1 + \frac16 {g^2 \over (4 \pi)^3} \ln {\Lambda_0 \over \Lambda} \right)  \\
+    \rightarrow  -2 \gamma_{\phi} \equiv {d \over d \ln(\Lambda)} Z(\Lambda) &=  -\frac16 {g^2 \over (4 \pi)^3}
+	\end{align}
+
+The second equation \eqref{eq:2} can also be evaluated directly:
+\begin{align}
+	g(\Lambda)& \approx_{d =6} \left({Z(\Lambda_0) \over Z(\Lambda)} \right)^{3 \over 2} g(\Lambda_0) \left(1 + g(\Lambda_0)^2  {\Omega_d \over (2 \pi)^d} \ln {\Lambda_0 \over \Lambda} \right) \\
+	{d \over d \ln \Lambda} g( \Lambda) &= g \left( \underbrace{- \frac32 {dZ \over d \ln \Lambda}}_{= 3 \gamma_{\phi}} - g^2 {\Omega_d \over (2 \pi)^d} \right) \\
+	\beta_{g} &= - {3 \over 4} {g^3 \over (4 \pi)^3}
+	\end{align}
+
+Note how in $\phi^3$, quantum correction to the anomalous dimension $\gamma_\phi$ and the vertex interaction compete to give asymptotic freedom.  This cancellation is highly non-trivial so it doesn't seem like one can easily see the asymptotic freedom behavior.  This is unlike $\phi^4$ where at one loop the anomalous dimension is 0 so one can directly see the main contributor to the vertex is the 1 loop 4 point vertex 1PI diagram (which increases the coupling).
+
+\subsection{CPN model (Peskin 13.3)}
+
+The \vocab{complex projective space} $\mathbb{C} \mathbb{P}^N$ is basically the space of complex N-dimensional rays.
+
+By that it means that:
+\begin{itemize}
+	\item The space is made of vectors $z = (z_1, ..., z_N, z_{N+1})$
+	with constraint $\sum_k |z_k|^2 = 1$.
+	\item gauge equivalence: $e^{i \alpha} z  \rightarrow z$ 
+\end{itemize}
+
+a) We are asked to show the lagrangian proposed is invariant under gauge transformation $e^{i \alpha}$.
+
+Note under gauge transformation, $\partial_\mu \rightarrow \partial_\mu + i \partial_\mu \alpha$
+\begin{align}
+	\tilde{z}_j &= z_j e^{i \alpha} \\
+	\LL  &= {1 \over g^2} \left[ |\partial_\mu \tilde{z}_j|^2 - |z_j^* \partial_\mu \tilde{z}_j|^2  \right] \\
+	& = {1 \over g^2} \left[ e^{i \alpha} \left(|\partial_\mu z_j + i \partial_\mu \alpha \right)|^2 - |z_j^* e^{-i \alpha} e^{i \alpha} \left(\partial_\mu z_j + i \partial_\mu \alpha   \right)|^2  \right] \\
+	& = {1 \over g^2} \left[ |\partial_\mu z|^2 + |\alpha'|^2 \cancelto{1}{ |z|^2} + 2 \mathrm{Re} (i \alpha' z^* \partial_\mu z) - |\alpha'|^2 \cancelto{1}{|z|^2} - |z^* \partial_\mu z|^2 - 2 \mathrm{Re} ( i \alpha' z^* \partial_\mu z) \right]  \\
+	& = {1 \over g^2} \left[ |\partial_\mu \tilde{z}_j|^2 - |z_j^* \partial_\mu \tilde{z}_j|^2  \right]
+\end{align}
+
+We are asked to show that in N = 1 (2-d complex space), we can map to the O(3) nonlinear sigma model with $n^i = z^* \sigma^i z$
+First note that $n^i$ is real because $\sigma_i$ is hermitian.
+
+To do so, expand the O(3) nonlinear sigma model:
+\begin{align}
+	\LL &= {1 \over 2 g^2} (\partial_\mu  (z^* \sigma^i z))^2 \\
+	& = {1 \over 2 g^2} |{z^*}' \sigma_i z + z^* \sigma_i z'|^2
+\end{align}
+
+Furthermore, we'll need an identity about SU(N) generators:
+\[ \sigma^{i}_{\alpha \beta} \sigma^{i}_{\mu \nu} = 2 (\delta_{\alpha \mu} \delta_{\beta \nu}) - \delta_{\alpha \beta} \delta_{\mu \nu}\]
+
+Horrible index math ensues...
+
+b) We want to show that we can map this problem to one with gauge field $A_\mu$ and lagrange constraint field $\lambda$.
+
+\begin{align}
+	Z & = \int \D z \D z^* \D A \D \lambda \exp \left[{1 \over g^2} \int \dd^d x \left(|\partial_\mu z + i A_\mu z|^2 -  \lambda \left(|z|^2 - 1 \right) \right) \right] \\
+	& \underbrace{=}_{\text{integrate out } \lambda}  \int \D z \D z^* \D A \prod_x \delta(|z|^2 -1) \exp \left[{1 \over g^2} \int \dd^d x \left(|\partial_\mu z|^2 + A_\mu A^{\mu} |z|^2 + 2 i A_\mu z \partial^{\mu} z^* \right) \right] 
+\end{align}
+Integrate $A^\mu$ out gives a gaussian integral with the form $J^\mu = 2 i z \partial^\mu z^*$ and kernel $|z|^2$.  Integrating out this gives:
+
+
+\begin{align}
+	\int dx e^{- x M x - J x} &= \exp(\frac12 \mathrm{tr} \ln(M) - \frac12 J M^{-1} J) \\
+	\rightarrow Z &=  \int \D z \D z^* \prod_x \delta(|z|^2 -1) \exp \left[ -{1 \over 2 g^2} \int \dd^d x \cancelto{0}{\ln{ 1 \over |z|^2}} - 2 i z \partial_\mu z \cancelto{1}{1 \over |z|^2} 2 i z \partial_\mu z^* \right] \\
+	&=  \int \D z \D z^* \exp \left[{1 \over g^2} \int \dd^d x (\partial z)^2 \right] \prod_x \delta(|z|^2 -1) \exp \left[-{1 \over g^2} \int \dd^d x |z \partial_\mu z^*|^2 \right]
+\end{align}
+
+d)  The operator that affect $z$ is $-\D^2 - \lambda$  integrating out the field z is just a gaussian integral.  Note because $z$ is a complex field, the factor is $N+1$ and not ${N+1 \over 2}$ (also note in the large N limit $N \approx N+1$)
+
+We get
+\begin{align}
+	Z = \int \D A^\mu \D \lambda \exp \left[ - {N} \underbrace{\int \dd^d x \braket{x| \ln {D^2 - i \lambda}|x}}_{\mathrm{Tr} \ln (D^2 - i\lambda)}  + {1 \over g^2} \int \dd^d x \lambda \right] \equiv e^{-S}
+	\end{align}
+
+In the large N limit on evaluates the integral via saddle point. The saddle point is when both functional derivates with respec to $\lambda, A^\mu$ vanish:
+\begin{align}
+	{\delta \over \delta \lambda} S = 0 \\
+	\rightarrow  N \braket{x|{1 \over -D^2 - i\lambda}|x} = {i \over g^2} \\
+	\end{align}
+The LHS of the equation must be constant and complex.  This implies that $A, \lambda$ must be constant.  Using this ansatz, let's find the minimum for A:
+\begin{align}
+	{\delta \over \delta A} S = 0 \\
+	\rightarrow {1 \over -D^2 - i \lambda} {\delta \over \delta A} (\partial^2 + A^2) = 0
+	\end{align}
+The operator over the top is a positive definite operator that is quadratic in A.  It is therefore minimized at A = 0.
+
+With that assumption $D^2 = k^2 + A^2$.  We can evaluate the RHS with a cutoff $\Lambda$:
+\begin{align}
+	{N \over 2 \pi} \ln {\Lambda \over \sqrt{ -  \lambda}} &= {i \over g_0^2} \\
+	\text{Impose renormalization condition} \rightarrow
+	{1 \over g_0^2} & = {1 \over g^2} + {N \over 2 \pi} \ln {\Lambda \over M} \\
+	\text{define: }\lambda = m^2 \\
+	\rightarrow m = M \exp(-{2 \pi \over g^2 N})
+	\end{align}
+
+
+\end{document}
+
+
