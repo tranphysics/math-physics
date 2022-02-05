@@ -1,0 +1,159 @@
+
+\documentclass[11pt]{scrartcl}
+\usepackage[sexy]{evan}
+\usepackage{braket}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage[compat=1.1.0]{tikz-feynman}
+\usepackage{comment}
+
+
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+
+\hypersetup{
+	colorlinks=true, %set true if you want colored links
+	linktoc=all,     %set to all if you want both sections and subsections linked
+	linkcolor=blue,  %choose some color if you want links to stand out
+}
+\usepackage{geometry}
+%\usepackage{showframe} %This line can be used to clearly show the new margins
+
+
+\newgeometry{vmargin={30mm}, hmargin={20mm,20mm}}   % set the margins
+\begin{document}
+	\title{Digital Communication Theory} % Beginner
+	\date{December 2021}
+	\maketitle
+	
+	\begin{abstract}
+		\sffamily\small
+		Here is a collected notes on Digital Communications.
+	\end{abstract}
+	
+	\vspace{1em}
+	
+	\tableofcontents
+	\newpage
+
+
+\section{Resources}
+\begin{itemize}
+	\item \emph{Thomas Cover, Elements of Information Theory}: Anything entropy, shannon capacity, refer to this.
+	
+	\item \emph{Cioffi notes}:   Each chapter covers the equivalent of a small book.  However lots of practical information nowhere else to be found (especially on equalization).
+	\item \emph{Bane, Vasic}: Surprisingly good chapters on partial response channel capacity, coding (both RS and LDPC), and timing  recovery.
+	\end{itemize}
+
+\section{Foundations}
+
+\subsection{Information Theory}
+
+\textbf{Entropy, facts and definitions}:
+\begin{itemize}
+	\item Denote the \vocab{entropy} of random variable X with probability distribution $p(x)$ to be:
+	\[ H(X) = - \braket{ \log (p(x)) } \]
+	\item For a continuous random variable $X$ with density $f(x)$, the \vocab{differential entropy} $h(X)$ is denoted to be:
+	\[h(X) = - \int_S f(x) \log f(x) dx \]
+	where S is the support of X.
+	\item Similarly denote the \vocab{joint entropy} for 2 random variables X, Y with distributions $p(x, y)$ to be:
+    \[ H(X, Y) = -\sum_{x, y} p(x, y) \log(p(x, y)) = - \braket{ \log(p(x, y)) } \]
+	\item  Denote the \vocab{conditional entropy} of $H(Y | X)$ to be:
+	\[ H(Y| X) = \braket{ \log( p(y|x)) } \]
+	\[ \sum_{x \in \mathcal{X}} p(x) \sum_{y \in \mathcal{Y}} p(y|x) \log(p(y | x)) \]
+	\[ \sum_{x, y} p(x, y) \log(p(y|x)) \]
+	\item \vocab{Chain rule}:
+	\[H(X, Y) = H(X) + H(Y|X) \]
+	\item The \vocab{kullback leibler} distance or \emph{relative entropy} between 2 probability mass distributions p(x) and q(x) is defined as:
+	\[D(p || q) = \sum_x p(x) \log {p(x) \over q(x)} = \braket{\log {p(x) \over q(x)}} \]
+	It is always non-negative, but it is not symmetric.
+	\item  The \vocab{mutual information } I(X, Y) is the relative entropy between the joint and product distribution:
+	\[ I(X, Y) = \sum_{x, y} p(x, y) \log {p(x, y) \over p(x) p(y)} \]
+	\end{itemize}
+
+\begin{example}
+	\begin{itemize}
+		\item The differential entropy for uniform $x \in [0, a]$ is:
+		\[h(X) - \int_0^a  dx {1 \over a} \log({1 \over a}) = \log(a) \]
+		\item The differential entropy for gaussian variable with 
+		$f(x) = {1 \over \sqrt{2 \pi \sigma^2}} \exp \left( -{x^2 \over 2 \sigma^2}\right)$ is:
+		\[h(X) = \frac12 \log (2 \pi e \sigma^2)\]
+		\end{itemize}
+	\end{example}
+\begin{lemma}
+	The gaussian distribution between 2 random variable x, y maximizes the differential entropy for any given positive semi-definite autocorrelation $R_{x,y}$:
+	\[ p_{x, y} = {1 \over \sqrt{\pi \det(R_{xy})} } \exp \left(- {\mathbf{u}}^T R_{xy}^{-1} \underbrace{\mathbf{u}}_{\equiv (x, y)} \right) \]
+	\end{lemma}
+\includegraphics{entropy1.png}
+
+\begin{definition}
+	A statistic t(X) of some random variable $X$ is \vocab{sufficient} \emph{for underlying parameter $\theta$}  if the conditional probability distribution of the data $X$ given t(X) does not depend on $\theta$.  
+	It means $I(X, \theta) = I(t(X), \theta)$
+\end{definition}
+
+\begin{definition}
+	\end{definition}
+
+\begin{theorem}
+	Consider a signal $Y(t) = X(t) + N(t)$ where $X \subseteq \mathcal{L}_2$ with an orthonormal basis $ \mathcal{S} \{  \phi_k \}$.  Denote N(t) to be a white gaussian noise process with respect to $\mathcal{S}$.  Then the set of measurements $\braket{ \phi_k | X}$ form a set of sufficient statistics for detection of X(t) from Y(t).
+	\end{theorem}
+
+\begin{proof} See 6.451 notes, section 2.4
+	\end{proof}
+
+
+\subsection{Channel Capacity}
+cioffic ch. 2
+
+\begin{itemize}
+	\item The \vocab{channel capacity} in bits/subsymbol for a channel described by $p(y|x)$ is defined by
+	\[  \mathcal{C} = \mathrm{max}_{p(x)} I(x, y) \text{ } bits/subsymbol \]
+	\item A slightly more fancy way to describe capacity is to describe the maximum mutual information with respect to a transmit and receive sequence of subsymbols: $\bf{x}^n \equiv (x_1, x_2, ..., x_{n})$ and $\bf{y}^n = (y_1, ..., y_n)$.
+	\[ C = \lim_{n \rightarrow \infty} {1 \over n} \mathrm{max}_{p(\bf{x}^n)} I(\bf{x}^n, \bf{y}^n) \]
+	The maximization $p(\bf{x}^n)$ is taken over all probability density functions $p(\bf{x}^n)$ which satisfy the symbol energy constraint given by 
+	\[ \braket{x_k^2} \leq E_s \]
+	\item An \vocab{Additive White Gaussian Noise} channel is a channel where 
+	\[y(t) = x(t) + n(t) \]
+	where $n(t)$ is white.
+\end{itemize}
+
+\begin{theorem} 
+	Given a channel with capacity $\mathcal{C}$, then there exists a code with bitrate $b < \mathcal{C}$ such that 
+	$P_e \leq \delta$ for any $ \delta > 0$.  Furthermore, if $b > \mathcal{C}$, then $P_e  \geq \text{positive constant}$, which is typically large even for b slightly greater than $\mathcal{C}$.
+	\end{theorem}
+
+\begin{theorem}
+	Given an AWGN channel, the channel capacity is
+	\[C = {W \over 2} \log_2 \left(1 + {SNR} \right)\]
+	\end{theorem}
+
+It's important to notice a few things about this formula:
+\begin{itemize}
+	\item  The channel capacity obviously depends on the constraint on the transmit probability distribution.  The probability $p(x)$ distribution that maximizes capacity and gives the formula ${W \over 2}  \log_2 \left(1 + {SNR} \right)$ is gaussian.  The capacity when constrained to be different (PAM-2 symbols etc...) is in general a difficult optimization problem with no closed form solution.
+	\end{itemize}
+
+
+\section{Detection and Estimation}
+\newpage
+\subsection{Biased SNR}
+
+Consider a signal processing system where we would like to slice an output
+\[ y =  \underbrace{\alpha}_{\text{adaptive gain}} (\underbrace{x}_{\text{symbol}} + \underbrace{n}_{\text{uncorrelated noise}})\]
+
+Maximizing the SNR, or minimizing the MSE will lead to a \vocab{biased} gain factor $\alpha$ which is slightly less than 1.  To show this, we just need to minimize the error, defined as:
+\[ \text{MSE} = \braket{(y - x)^2} = (\alpha - 1)^2 \epsilon_x + \alpha^2 \epsilon_n \]
+\[ \pder{\alpha}{\text{MSE}} = 0 \rightarrow \alpha = {\epsilon_x \over \epsilon_x + \epsilon_n} = {SNR \over 1 + SNR} \]
+
+It is straightforward to make the decisions unbiased by scaling $\alpha$ by ${SNR + 1 \over SNR}$, which leads to a relation between \vocab{biased} and \vocab{unbiased} SNR.
+\[ SNR = SNR_{U} + 1 \]
+The reason why one would care is that a biased decision rule, while maximizing SNR, may not optimize BER.  We will further make rather trivial comments
+
+\begin{itemize}
+\item The distinction between biased and unbiased decreases as the SNR improves.  This is why for SERDES links, people rarely care about the distinction.
+\item  While the analysis was done for a simple gain adaptation loop, all the conclusion remains for FFE adaptation.  In that case, if one uses a MMSE algorithm for adaptation, one will end up with a \vocab{biased} decision rule, while if one uses a ZF algorithm, one will end up with a \vocab{unbiased} adaptation.
+	\end{itemize}
+\section{Math}
+
+
+
+\end{document}
