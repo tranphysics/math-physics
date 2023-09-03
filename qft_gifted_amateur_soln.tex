@@ -1,0 +1,217 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}	% Para caracteres en español
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{multirow,booktabs}
+\usepackage[table]{xcolor}
+\usepackage{fullpage}
+\usepackage{lastpage}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{mathrsfs}
+\usepackage{wrapfig}
+\usepackage{setspace}
+\usepackage{calc}
+\usepackage{multicol}
+\usepackage{cancel}
+\usepackage[retainorgcmds]{IEEEtrantools}
+\usepackage[margin=3cm]{geometry}
+\usepackage{amsmath}
+\newlength{\tabcont}
+\setlength{\parindent}{0.0in}
+\setlength{\parskip}{0.05in}
+\usepackage{empheq}
+\usepackage{framed}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\colorlet{shadecolor}{orange!15}
+\parindent 0in
+\parskip 12pt
+\geometry{margin=1in, headsep=0.25in}
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{reg}{Rule}
+\newtheorem{exer}{Exercise}
+\newtheorem{note}{Note}
+\begin{document}
+\setcounter{section}{8}
+\title{QFT Gifted amateur}
+
+\thispagestyle{empty}
+
+\begin{center}
+{\LARGE \bf QFT for gifted amateur probelms}\\
+2023
+\end{center}
+
+
+\section{Problems}
+\subsection{Problem 2.3}
+
+\begin{align}
+x_j & \equiv {1 \over \sqrt{N}} \sum_k e^{i j k a} \tilde{x}_k \\
+&= {1 \over \sqrt{N}} \sum_k  \sqrt{\hbar \over 2 m \omega_k} e^{i j k a} \left(a_k + a^{\dagger}_k \right) \\
+&= {1 \over \sqrt{N}} \sum_k \sqrt{\hbar \over 2 m \omega_k} \left( a_k e^{ijka} + \underbrace{a^{\dagger}_{-k} e^{-ijka}}_{\text{swap k $\rightarrow$ -k}} \right)
+\end{align}
+
+\subsection{Problem 3.3}
+
+First we will calculate $\frac12 m \omega^2 x_1^2 + {1 \over 2 m} p_1^2$:
+
+\begin{align}
+x_1 &\equiv \sqrt{\hbar \over 2 m \omega} (a_1 + a_1^\dagger) \\
+p_1 &\equiv -i \sqrt{m \omega \hbar \over 2} (a_1 - a_1^\dagger) \\
+\frac12 m \omega^2 x_1^2 + {1 \over 2 m} p_1^2 &=  \hbar \omega (\frac12 (a_1 a_1^\dagger + a_1^\dagger a_1)) \\
+& = \hbar \omega \left(a_1^\dagger a_1 + \frac12 \right)
+\end{align}
+
+Since the "1" above is just label, it follows this must be true for "2" and "3" as well so that:
+\begin{align}
+\hat{H} = \hbar \omega \sum_{n=1}^3 \left(a_n^\dagger a_n + \frac12 \right)
+\end{align}
+
+To prove the next step, first note that $[b_0, b_{\text{anything else}}] = 0$ because $a_3$ commutes with $a_2, a_1$.  
+Also note $[b_0, b_0^\dagger] = 1$.
+
+Therefore, $[b_i, b_j^\dagger] = \delta_{ij}$ holds for i = 0.
+
+For $i=-1, +1$, we only have to check, the following 3 calculations:
+
+\emph{Calculation 1:}
+\begin{align}
+[b_{-1}, b_{+1}^\dagger] & = -\frac12 [a_1 +  i a_2, a_1^\dagger + i a_2^\dagger] \\
+& = \frac12 \left( [a_1, a_1^\dagger] - [a_2, a_2^\dagger] \right) = 0
+\end{align}
+
+\emph{Calculation 2:}
+\begin{align}
+[b_{-1}, b_{-1}^\dagger] & = \frac12 [a_1 +  i a_2, a_1^\dagger - i a_2^\dagger] \\
+& = \frac12 \left( [a_1, a_1^\dagger] + [a_2, a_2^\dagger] \right) = 1
+\end{align}
+
+\emph{Calculation 3:}
+\begin{align}
+[b_{+1}, b_{+1}^\dagger] & = \frac12 [a_1 -  i a_2, a_1^\dagger + i a_2^\dagger] \\
+& = \frac12 \left( [a_1, a_1^\dagger] + [a_2, a_2^\dagger] \right) = 1
+\end{align}
+
+We now calculate the claimed hamiltonian:
+
+\begin{align}
+\hbar \omega \sum_m \left(b_m^\dagger b_m + \frac 12 \right) & = \hbar \omega (a_3^\dagger a_3 ) + \frac32 
+\hbar \omega \times \frac12 (a_1^\dagger a_1 + a_2^\dagger a_2 + \text{cross terms}) + 
+\hbar \omega \times \frac12 (a_1^\dagger a_1 + a_2^\dagger a_2 + \text{cross terms}) \\
+& = \hbar \omega \sum_n (a_n^\dagger a_n + \frac12)
+\end{align}
+
+To check the 2nd claim, we note that the $m=0$ term goes away, while the $m=1$ and $m=-1$ term subtract.  This means we keep the cross terms from the previous calculation:
+
+\begin{align}
+\hbar \sum_{m=-1}^{+1} m b_m^\dagger b_m &= \hbar ( b_{+1}^\dagger b_{+1} - b_{-1}^\dagger b_{-1}) \\
+& = -i \hbar \left(a_1^\dagger a_2 - a_2^\dagger a_1 \right) = \hat{L}^3
+\end{align}
+
+\emph{Commentary}
+
+This problem illustrates a special case of the more general symmetry of the 3-d harmonic oscillator hamiltonian under U(3) group:
+\begin{align}
+\mathbf{a} \equiv (a_1, a_2, a_3)  \\
+\rightarrow \mathbf{U} \mathbf{a} \rightarrow \hat{H} \rightarrow \hat{H}
+\end{align}
+
+
+\newpage
+\subsection{Problem 5.4}
+
+\begin{align}
+L =-mc^2 \sqrt{1 - {v^2 \over c^2}} \approx -mc^2 \left(1 - {v^2 \over 2 c^2} \right) \approx -mc^2 + \frac12 m v^2 
+\end{align}
+
+
+\begin{align}
+p & \equiv {\partial L \over \partial \dot{q}} \\
+&= mv
+\end{align}
+
+\begin{align}
+H &\equiv p \dot{q} - L \\
+&= mv^2 - (-mc^2 + \frac12 mv^2) = mc^2 + \frac12 m v^2
+\end{align}
+
+\subsection{Problem 5.8}
+
+Note that the electromagnetic field tensor, doing $\epsilon^{\alpha \beta \gamma \delta} F_{\gamma \delta}$ basically swaps $ E \rightarrow -B$ and $B \rightarrow -E$.
+
+Then we are asked to compute $F_{\alpha \beta} \left(\epsilon^{\alpha \beta \gamma \delta } F_{\gamma \delta} \right)$ which is just the sum of all the matrix entries element wise multiplied, which gives:
+$\propto \sum_{i=1}^3 E_i (-B_i) \propto E \cdot B$
+
+This $E \cdot B$ term is topological in nature. The way to see it is in form notation, it can be written as $F \wedge F$.  Its integral over the manifold gives the winding number of the gauge field configuration and is a topological invariant.  It's integral over a closed manifold gives an integer (up to factors of pi and 2).
+
+Another comment: this term obviously violates parity (by nature of having the $\epsilon$ tensor). 
+
+\subsection{Problem 5.9}
+
+Consider the equation:
+$ \partial_{\mu} F^{\mu \nu} = J^{\nu}$ for $\nu = 0$
+
+This gives:
+
+\begin{align}
+\partial_{x} E_x + \partial_y E_y + \partial_z E_z = \rho \text{ (Gauss's Law)}
+\end{align}
+
+Let's work out the same equation for $\nu = 1$ (x) component:
+
+\begin{align}
+ \partial_t E_x + \partial_y B_z - \partial_z B_y = J_x \\
+\partial_t E_y - \partial_x B_z + \partial_z B_x = J_y \\
+\text{et cetera} \\
+\rightarrow \nabla \times \mathbf{B} + \partial_t \mathbf{E}  = \mathbf{J}
+\end{align}
+
+The bianchi's identity below:
+
+\begin{align}
+\partial_{[\mu}F_{\nu \lambda]} = 0
+\end{align}
+
+follows straight from the definition of F:
+
+\begin{align}
+F_{\nu \lambda} = \partial_{\nu} A_{\lambda} - \partial_{\lambda} A_{\nu}
+\end{align}
+
+A way to see it is that an exact form is necessarily closed:
+$F = d A \rightarrow dF = 0$.
+
+In particular for the spatial components $\mu, \nu, \lambda = 1, 2, 3$ it implies:
+\begin{align}
+\nabla \cdot \mathbf{B} = 0
+\end{align}
+which is one of maxwell's equations (no magnetic monopoles).
+
+For the combination $\mu, \nu, \lambda = 0, (1 \rightarrow 3), (1 \rightarrow 3)$ where $\nu \neq \lambda$, we can for example use the case $0, 1, 3$ to get the following equation:
+
+\begin{align}
+\partial_0 F_{13} + \partial_{1} F_{30} + \partial_3 F_{01} &= 0 \\
+\partial_t B_y - \partial_x E_z + \partial_z E_x = 0 \\
+\end{align}
+
+We can work out the 2 other cases for $B_x, B_z$ to get Faraday's law:
+
+\begin{align}
+\partial_t \mathbf{B} + \nabla \times \mathbf{E} = 0.
+\end{align}
+
+\subsection{Problem 5.10}
+
+F is a anti-symmetric object.  It is contracted with symmetric tensor $\partial_\alpha \partial_\beta$ which implies that the result is 0
+(this is because for every term, there is a term of opposite sign).
+
+The continuity equation is a statement about conservation of charge:
+
+\begin{align}
+\partial_t \rho = - \nabla \cdot \mathbf{J} \rightarrow {d  \over dt} \underbrace{\int_{M} \rho dV}_{\text{charge in region "M"}} = - \underbrace{\int_{\partial M} \mathbf{J} \cdot d \mathbf{A}}_{\text{current flowing out of the boundary of }M}
+\end{align}
+
+
+\end{document}
