@@ -1,0 +1,612 @@
+\documentclass[12pt]{scrartcl}
+\usepackage[sexy]{evan}
+\usepackage{braket}
+\usepackage{color}   %May be necessary if you want to color links
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage[compat=1.1.0]{tikz-feynman}
+\usepackage{comment}
+
+
+
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+
+\hypersetup{
+    colorlinks=true, %set true if you want colored links
+    linktoc=all,     %set to all if you want both sections and subsections linked
+    linkcolor=blue,  %choose some color if you want links to stand out
+}
+\usepackage{geometry}
+    %\usepackage{showframe} %This line can be used to clearly show the new margins
+
+
+\newgeometry{vmargin={30mm}, hmargin={20mm,20mm}}   % set the margins
+\begin{document}
+\title{QFT basics} % Beginner
+\date{September 2023}
+\maketitle
+
+\begin{abstract}
+	\sffamily\small
+	Here is a collected notes on physics readings.
+\end{abstract}
+
+\vspace{1em}
+
+\tableofcontents
+\newpage
+
+
+\section{Resources}
+\begin{itemize}
+	\item Weingberg, Quantum Theory of Fields, Vol. I:  Chapter 2 in particular has detailed dicussion reproduced here.
+	
+	\item This problem is what we want \url{https://web2.ph.utexas.edu/~vadim/Classes/2020f/hw06.pdf}
+	\item More abstract representation deriving spin and momentum \url{https://en.wikipedia.org/wiki/Pauli%E2%80%93Lubanski_pseudovector}
+	
+	\item Angular momentum of light: \url{https://en.wikipedia.org/wiki/Angular_momentum_of_light}
+	\item Detailed answer or relation between Casimir and representation of Poincare group \url{https://physics.stackexchange.com/questions/387481/casimir-operators-and-the-poincare-group}
+\end{itemize}
+
+
+\section{Quantum Field Theory and Representation Theory}
+To understand all these things about why quantum fields are quantum fields, why representation theory matters, we have to go to the basics of what it means to write a self-consistent physical theory.  A relativistic quantum theory has to satisfy properties of quantum mechanics and relativity at the same time.
+
+Here's the requirement of Quantum theory implies on any theory we write:
+\begin{itemize}
+\item Physical states are codified in as a ray in Hilbert space, which we can denote as $\mathcal{R}$.
+\item The norm of the inner product between physical states correspond to probabilities and observable measurements $|\braket{\mathcal{R}' | \mathcal{R}}|^2$.
+\end{itemize}
+
+Another almost trivial requirement that physical theory to make sense is that all inertial frames should agree on the probabilities (measurements).  In more lay language, physics should not depend on the physicists!  This implies the so called concept of \vocab{symmetry} transformation, which formalizes this statement:
+\begin{itemize}
+\item 2 physicists measuring the same thing will have different Ray representation for the device under test (DUT).  Consider 2 possible configuration of the dut, codified as $\mathcal{R}_1, \mathcal{R}_2$ which is what one physicists use to describe things in his frame, and ${\mathcal{R}_1'}, \mathcal{R}_2' $ which is what the other physicist use to describe in his frame.
+\item The fact physical results cannot depend on the physicist implies that $|\braket{\mathcal{R}_1 | \mathcal{R}_2}|^2 = |\braket{\mathcal{R}_1' | \mathcal{R}_2'}|^2$
+\item It is an experimental fact that the equality above  holds for all physicists as long as they are in "inertial" frames.  The set of inertial frames can map states isomorphically between each other (for consistency) and therefore are related by \vocab{group} transformations (self consistency forces them to form a group).  This is the so called \vocab{principle of relativity}
+\end{itemize}
+
+In mathematical speak, we can convert the 2 above statements into equations:
+\begin{itemize}
+\item Consider a transformation U that relates rays from physicist's 1 to physicist's 2 frame:
+$$ U \ket{\mathcal{R}_1} = \ket{\mathcal{R}_2}$$
+\item  \vocab{Wigner's theorem} can show that U must be unitary or anti-unitary.
+\end{itemize}
+
+Now we introduce the notion of experimental relativity into the constraints of the theory.  It is an experimental fact that our universe, the symmetry group relating inertial frames (frames where physicists agree on the physics) is the \vocab{poincare group}.  This group can be represented by transformations of spacetime coordinates $(t, x, y, z) \rightarrow (t', x', y', z')$, which satisfy (for intervals in each coordinate):
+
+\begin{align}
+\Delta t^2 - |\Delta \mathbf{x}|^2 = \Delta t'^2 - |\Delta \mathbf{x'}|^2 
+\end{align}
+
+Notation wise we will denote such spacetime coordinate transformation by the matrix $\Lambda$, which is a 4 by 4 matrix.  This transformation is \vocab{represented} by a unitary transformation U on the space of states which relates what the 2 physicists can use to describe a given physical state from different perspective.  The \textbf{kinematic consistency requirement} for a theory is that U satisfies consistency relations of the underlying coordinate transformation:
+\begin{itemize}
+\item The problem of writing a consistent relativistic quantum theory is constrained by the problem of relating consistently the mathematical objects we use to describe things in different frames (kinematic consistency)
+\item This translates to the problem of \vocab{group representation}: we are trying to find unitary representations of the poincare group, which can then be used to relate physical states in different inertial frames.  In mathematical speak, we are trying to map $\Lambda \rightarrow U(\Lambda)$ such that $U^\dagger U = I$.
+\end{itemize}
+
+The reason why these results seem abstract is because they are very general.  In fact the whole conclusion about spin and momentum follows from symmetry requirement alone.  The whole document is just a discussion of roughly kinematics of the theory, not even any dynamics (interaction etc...)!
+
+\subsection{Summary of results}
+Because it is easy to get bogged down in the technicalities of actually finding the representation itself, we will state below the key results we will show:
+\begin{itemize}
+\item It is a math theorem that there is no (non-trivial) finite dimensional representation of the \vocab{Poincare Group} that is Unitary.   The key result comes from the fact the Poincare group is a non-compact Lie Group.
+\item The representation of the homogenous Lorentz group for massive particles is captured by the equation below
+\begin{align}
+\hat{U}(\Lambda ) \ket{\Psi_{p, \sigma}} = \sqrt{(\Lambda p)^0 \over p^0} \sum_{\sigma'} D_{\sigma \sigma'}^{(j)} (\underbrace{W(\Lambda, p)}_{\text{Wigner rotation}}) \ket{ \Psi_{\Lambda p, \sigma}}  
+\end{align}
+A \vocab{Wigner rotation} is a rotation induced by a series of boost that return back to identity.  The rotation effect happens because the commutator of boost generators is a rotation.  In the case above, the wigner rotation is defined as:
+\begin{align}
+W(\Lambda, p) \equiv L^{-1} (\Lambda p) \Lambda L(p)
+\end{align}
+where $L$ is defined as a lorentz transformation that relates a "\vocab{standard momentum}" k to p:
+\begin{align}
+p^\mu \equiv L(p)^{\mu}_\rho k^\rho
+\end{align}
+
+Note diagrammatically, the wigner rotation is a series of boosts that takes
+$$ k \rightarrow p \rightarrow \Lambda p \rightarrow k$$ 
+
+When $\mathbf{p}$ and the boost direction of $\Lambda$ are not collinear, this is a set of lorentz boosts
+that are not collinear.  The complete set of boosts create a net rotation (hence the term "Wigner Rotation")
+
+For $$k^\mu \equiv(M, 0, 0, 0) \text{ (particle with mass M at rest)}$$
+we obtain L to be:
+\begin{align}
+L^{i}_k(p) &= \delta_{ik} + (\gamma - 1) \hat{p}_i \hat{p}_k \\
+L^{i}_0(p) &= L^{0}_i(p) = \hat{p}_i \sqrt{\gamma^2 - 1} \\
+L^{0}_0 &= \gamma \\
+\hat{p}_i & \equiv {p_i \over |\mathbf{p}|} \\
+\gamma & \equiv \sqrt{\mathbf{p}^2 + M^2 \over m^2}
+\end{align}
+
+\item For the massless case, the transformation law is much simpler
+\begin{align}
+U(\Lambda) \Psi_{p, \sigma} = \exp(i \sigma \theta(\Lambda)) \Psi_{\Lambda p, \sigma}
+\end{align}
+where  $\Psi_{p, \sigma}$ is a massless particle with Energy momentum $p$ and helicity $\sigma$.  Helicity,
+the component of angular momentum in the direction of momentum, is a lorentz invariant (hence $\sigma$ is the same on both sides of the equation.
+The angle $\theta$
+\end{itemize}
+
+\subsection{Method of Induced Representation}
+
+\subsubsection{Poincare Algebra}
+Before we try to find representations of the Lorentz group, let's first establish them in the fundamental representation (acting on 4 vectors) to obtain their lie algebras
+
+Consider a general Poincare transformation $U(\Lambda, a)$ where $\Lambda, a$ denote boost/rotation and translation (in time and space). For an infinitesimal transformation, we have (from explicit lorentz matrices):
+\begin{align}
+\Lambda^\mu_\nu = \delta^\mu_\nu + \omega^\mu_\nu \\
+a^\mu = \epsilon^\mu
+\end{align}
+
+By doing an infinitesimal poincare transformation, we can try to derive the \vocab{Poincare Algebra}.
+
+\begin{align}
+U(\Lambda, a) &= U(1 + \omega, \epsilon) \\
+& = 1 + {i \over 2} \omega_{\mu \nu} J^{\mu \nu} + i \epsilon_\alpha P^{\alpha}
+\end{align}
+
+There are many consistency conditions we can apply to constraint the lie algebra of those generators:
+
+\begin{itemize}
+\item $\omega_{\mu \nu}$ is anti-symmetric from the Lorentz matrix itself.  We can therefore constrain $J^{\mu \nu}$ to be antisymmetric (any symmetric part will get killed anyways).
+\item Lorentz transformations have the property that we can boost back to the identity by doing:
+$$U(\Lambda^-1, -\Lambda a) U(\Lambda, a) = U(1, 0)$$
+\end{itemize}
+
+These imply from cranking lorentz transformation on the infinitesimal $\omega, \epsilon$ transformation:
+
+\begin{align}
+U(\Lambda, a) J^{\rho \sigma} U^{-1} (\Lambda, a) &= \Lambda_\mu^\rho \Lambda_\nu^\sigma (J^{\mu \nu} - a^\mu P^\nu + a^\nu P^\mu) \\
+U(\Lambda, a) P^{\rho} U^{-1} (\Lambda, a)&= \Lambda_\mu^\rho P^\mu
+\end{align}
+This just means $J$ transforms as a tensor and $P$ transforms as a vector. The reason why the angular momentum vector changes with space component a just means when you do a translation, the origin shifts and the angular momentum vector changes based on that.
+
+If we apply infinitesimal transformations $\Lambda^\mu_\nu = \delta^\mu_\nu + \omega^\mu_\nu$ and $a^\mu = \epsilon^\mu$ on to the transformation equations for $J, P$ above, we obtain the \vocab{Poincare algebra}:
+
+\begin{align}
+i [J^{\mu \nu}, J^{\rho \sigma}] &= \eta^{\nu \rho} J^{\nu \sigma} - \eta^{\mu \rho} J^{\nu \sigma} - \eta^{\sigma \mu} J^{\rho \nu} + \eta^{\sigma \nu} J^{\rho \mu} \\
+i [P^\mu, J^{\rho \sigma}] &= \eta^{\mu \rho} P^\sigma - \eta^{\mu \sigma} P^\rho \\
+[P^\mu, P^\rho] &= 0
+\end{align} 
+
+We can obviously "guess" what the lorentz generators (operators) when acting on functions.  "Guessing"
+$$P_\mu = i \partial_\mu$$
+
+we make the analogy that $L = x \times p$ so that:
+\begin{align}
+J^{\mu \nu} &= \epsilon^{\mu \nu \alpha \beta} X_{\alpha} P_{\beta} \\
+&= -i (x^{\mu} \partial^\nu - x^\nu \partial^\mu)
+\end{align}
+
+Using this guess, 
+$$ \exp({i \over 2} \omega_{\mu \nu} J^{\mu \nu} + i a_\alpha P^\alpha) f(x) = f(\Lambda x, x + a)$$
+correctly rotates/boosts and translate the function f(x).
+
+\subsubsection{Little group: massive case}
+
+The little group for massive particles is defined as a the group of transformations such that:
+\begin{align}
+W^{\mu}_{\nu} \underbrace{k^{\nu} }_{(m, 0, 0, 0)} = k^{\mu} 
+\end{align}
+
+Any boost would create a non-zero $|\mathbf{p}|$ momentum component.  Therefore the little group is SO(3), the rotation group in 3 dimensions.  The representation of the rotation group must have generators that satisfy the commutation relations ($\hbar = 1$):
+\begin{align}
+[J_k, J_l] = i \epsilon_{k l m} J_m \text{ (k, l, m = x, y, z)}
+\end{align}
+
+We briefly reproduce here how those representations are derived, as part of any non-relativistic Quantum Mechanics class.  The rough outline of the program is to:
+\begin{itemize}
+\item Find the CSCO ("complete set of commuting observables") to characterize the system, aka find all the 
+relevant quantum numbers that can be used to label basis states of the space.
+\item Find ladder operators to generate more states of existing states with different eigenvalues.
+\item Find conditions for the ladder to terminate (requirement for the vector space the representation to act upon to be finite dimensional)
+\item Find explicit matrix representation for $\mathbf{J}^2, J_z, J_{\pm}$ and therefore
+$\mathbf{J}^2, J_z, J_x, J_y$ 
+\end{itemize}
+
+First we find the CSCO below:
+\begin{align}
+\mathbf{J}^2 \equiv J_x^2 + J_y^2 + J_z^2, J_z
+\end{align}
+
+Denote a state $\ket{a, b}$ to be a simultaneous eigenstate of $\mathbf{J}^2, J_z$ with eigenvalues $l, m$.  We then find the ladder operators defined below:
+\begin{align}
+J_{\pm} \equiv J_{x} \pm i J_y
+\end{align}
+which has properties that they raise/lower the $J_z$ eigenvalue "m" without changing the $\mathbf{J}^2$ eigenvalue "l".
+
+This can be seen from the commutation relations:
+\begin{align}
+[J_z, J_{\pm}] &= \pm J_\pm  \\
+\rightarrow J_z (J_\pm \ket{l, m} ) &= J_{\pm} J_z \ket{l, m} +  [J_z, J_{\pm}]  \ket{l, m} \\
+&= (m \pm 1) J_{\pm} \ket{l, m} \\
+\rightarrow J_{\pm} \ket{l, m}  &\propto \ket{l, m \pm 1}
+\end{align}
+
+Naively, using $J_{\pm}$, we could generate an infinite set of states with unbounded $z$ component angular momentum.  It turns out this is not possible because we can bound the maximum $m_{max}$ and $m_{min}$ for a given $l$.  
+
+First note that the operator $\mathbf{J}^2 - J_z^2$ must be positive definite:
+\begin{align}
+\mathbf{J}^2 - J_z^2 = \frac12 \left(J_+ J_- + J_- J_+ \right) =  \frac12 \left(J_+ J_+^\dagger + J_+^\dagger J_+ \right)
+\end{align}
+
+This implies of course that $J_z$ eigenvalues cannot be unbounded relative to $\mathbf{J}^2$ eigenvalues.
+
+For there to be a maximum $m_{max}$ and $m_{min}$ they must be annihilated by $J_{\pm}$ respectively:\begin{align}
+J_+ \ket{l, m_{max}} &= 0
+\end{align}
+
+We can rewrite this condition in a nice way in terms of $\mathbf{J}^2, J_z$ to relate $m_{max}$ to l
+
+\begin{align}
+J_+ \ket{l, m_{max}} &= 0 \\
+\rightarrow J_- J_+ \ket{l, m_{max}} &= 0 \\
+\rightarrow \left(\mathbf{J}^2 - J_z^2 - J_z \right) \ket{l, m_{max}} &= 0 \\
+\rightarrow l^2 &= m_{max} (m_{max} +1) 
+\end{align}
+
+Same trick applies for the $\ket{l, m_{min}}$ state:
+\begin{align}
+J_- \ket{l, m_{min}} &= 0 \\
+\rightarrow J_+ J_- \ket{l, m_{min}} &= 0 \\
+\rightarrow \left(\mathbf{J}^2 - J_z^2 + J_z \right) \ket{l, m_{max}} &= 0 \\
+\rightarrow l^2 &= m_{min} (m_{min} - 1) 
+\end{align}
+
+This implies also that $m_{min} = m_{max}$ from the 2 equalities to $l^2$.  Denote $m_{max} = j$. The only way for the 2 equations to make sense is if there's a ladder of states as below:
+\begin{align}
+m = \underbrace{-j, -(j-1), ... 0, 1, .., j}_{2j + 1 \text{states}}
+\end{align}
+for j half integer
+
+\begin{align}
+m = \underbrace{-j, -(j-1), ... 0, 1, .., j}_{2j + 1 \text{states}}
+\end{align}
+
+for j integer.
+
+Getting the matrix elements (representation of the lie algebra) for the operators is a bunch of algebra from using the equations we had previously.
+
+$\mathbf{J}^2$ and $J_z$ are both diagonal in the basis $\ket{j, m}$ we picked:
+
+\begin{align}
+\braket{j', m' | \mathbf{J}^2 |j, m} = j(j+1) \delta_{j', j} \delta_{m', m} \\
+\braket{j', m' | J_{z} |j, m} = m \delta_{j', j} \delta_{m', m}
+\end{align}
+
+Next we find matrix representation for $J_\pm$.  To do so , we note that:
+\begin{align}
+J_+ \ket{j, m} = c^+_{j, m} \ket{j, m+1}
+\end{align}
+
+We already know how to express $J_- J_+$  which is diagonal in this basis, so we can determine the magnitude of $c$ trivially: 
+\begin{align}
+\braket{j', m' | J_+^\dagger J_+ |j, m} &= \braket{j', m' |(\mathbf{J}^2 - J_z^2 - J_z)  |j, m}  \\
+|c|^2 &= j(j+1) - m(m+1) = (j-m) (j+ m + 1)
+\end{align}
+
+We conventionally choose $c$ to be positive and real so that:
+
+\begin{align}
+J_{+} \ket{j, m} &= \sqrt{(j-m) (j+ m + 1)} \ket{j, m+1} \\
+J_{-} \ket{j, m} &= \sqrt{(j-m) (j - m + 1)} \ket{j, m-1} 
+\end{align}
+
+So that the representation of the ladder operators in this basis is:
+
+\begin{align}
+\braket{j', m' | J_{\pm}  |j, m} =  \sqrt{(j \mp m) (j \pm m + 1)} \delta_{j', j} \delta_{m', m \pm 1}
+\end{align}
+
+$J_x, J_y$ matrix elements can be derived trivially from $J_{\pm}$ matrix elements:
+\begin{align}
+J_x &= {J_+ + J_- \over 2} \\
+J_y &= {J_+ - J_- \over 2 i}
+\end{align}
+
+To obtain the explicity representation matrices for any rotation, we can just exponentiate the generators by the \vocab{Euler Angles} $\alpha, \beta, \gamma$ which parametrizes the rotation:
+
+\begin{align}
+\braket{j', m' | U(R(\alpha, \beta, \gamma) |j, m} = \braket{j', m' | \exp \left(i J_x \alpha + i J_y \beta + i J_z \gamma \right) |j, m} 
+\end{align}
+
+
+\subsubsection{Little group: massless case (brute force)}
+
+The goal of this section is to show the the little group for the massless case is $ISO(2)$ (group of euclidean isometries in 2 dimensions).  We work this out in a slightly more prosaic manner for lesser minds.
+
+Consider a standard momentum $k^\mu = (1, 0, 0, 1)$ of a photon pointing in the z direction.  The little group is the group of (lorentz) transformation that satisfy:
+\begin{align}
+Wk = k
+\end{align}
+
+Consider basis vectors $t^\mu = (1, 0, 0, 0), x^\mu = (0, 1, 0, 0), etc...$.  We can cleverly try to constrain the form of W, by constraining what $Wt, Wz, Wx, Wy$ look like.  The motivation for the ordering is that the momentum k has components in t, and z so considering the first 2 values maximally constraints it.  It turns out that the only remaining degree of freedom becomes a rotation.  We will work this out explicitly to build character!
+
+Here are the constraints for $Wt$:
+\begin{align}
+(Wt)^\mu (Wt)_\mu &= -1 \\
+t \perp k \rightarrow (Wt)^\mu (Wk)_{\mu} & = 0 \rightarrow (Wt)^\mu k_\mu = 0
+\end{align}
+
+These 2 constraint means Wt has only 2 free parameters (4 components with 2 equations).  The 2nd constraint is easiest and constrain the form of Wt to be in terms of 3 parameters $\alpha, \beta, \xi$:
+
+$$(Wt)^\mu k_\mu = 0 \rightarrow (Wt) = (1 + \xi, \alpha, \beta, \xi)$$
+The 1st equation constraints:
+$\xi = {\alpha^2 + \beta^2 \over 2}$ (so only $\alpha, \beta$ are the 2 free parameters.
+
+Now consider the form of Wz. Because z is not linearly independent of k and t, Wz is completely determined by Wt and k!
+\begin{align}
+z = k - t \rightarrow Wz = W(k-t) = Wk - Wt = k - Wt \\
+\rightarrow Wz = (-\xi, -\alpha, \beta, 1- \xi)
+\end{align}
+
+So far, W had 2 free parameters, $\alpha, \beta$.  It turns out it only has 1 remaining free parameter. The total group of transformation of $W$ must have 3 parameters (similar to SO(3) for the massive case) and we already isolated 2 of them.  It turns out the final free parameter is rotation in the x-y plane (a single angle), and this is done by constraining the form of $Wx$, and $Wy$.
+
+Consider $Wx \equiv (a, b, c, d)$ generically.  This is highly constrained by the fact W is a lorentz transformation and perserves lorentz inner product:
+\begin{align}
+(Wx)^\mu (Wx)_\mu = 1 \\
+x \perp k \rightarrow (Wx)^\mu k_\mu = 0 \\
+x \perp t \rightarrow (Wx)^\mu (Wt)_\mu = 0
+\end{align}
+
+(Note we didn't consider the 4th constraint $(Wx)^\mu (Wz)_\mu = 0$ because $z$ is not linearity independent from t and k so it adds no information).
+
+The 2nd constraint implies $d = a$ so
+$$Wx = (a, b, c, a)$$
+The 1st constraint implies $b^2 + c^2 = 1$ so b and c form a single free parameter and can be parametrized by an angle $\theta$ as $(b, c) = (\cos \theta, -\sin \theta)$, so
+$$Wx = (a, \cos \theta, - \sin \theta, a) \text{(getting better!)}$$
+
+The 3rd constraint implies:
+\begin{align}
+(Wx)^\mu (Wt)_\mu &= 0 \rightarrow -(1 + \xi) a + (\alpha, \beta) \cdot (\cos \theta, -\sin \theta) + \xi a = 0 \\
+\rightarrow a & = \alpha \cos \theta - \beta \sin \theta
+\end{align}
+
+This finally constrains $Wx$ as:
+\begin{align}
+Wx = (\alpha \cos \theta - \beta \sin \theta, \cos \theta, - \sin \theta, \alpha \cos \theta - \beta \sin \theta)
+\end{align}
+
+Supposed we started with $Wy$ rather than $Wx$:  the constraints would have been similar but with a different angle (let's call it $\lambda$.  So generically,
+\begin{align}
+Wy = (\alpha \cos \lambda - \beta \sin \lambda, \cos \lambda, - \sin \lambda, \alpha \cos \lambda - \beta \sin \lambda)
+\end{align}
+The final constraint we haven't used is:
+\begin{align}
+x \perp y \rightarrow (Wx)^\mu (Wy)_\mu = 0 
+\end{align}
+
+This implies $\cos \lambda = \sin \theta$ and $\sin \lambda = -\cos \theta$ (in other words, Wx is perpendicular to Wy in the x-y plane and has no free degrees of freedom:
+\begin{align}
+Wy =  (\alpha \sin \theta + \beta \cos \theta, \sin \theta,  \cos \theta, \alpha \sin \theta + \beta \cos \theta)
+\end{align}
+
+We summarize here the full little group transformation for massless particles:
+
+\begin{align}
+W(\alpha, \beta, \theta) &= 
+\begin{bmatrix}
+1 + \xi & \alpha \cos \theta - \beta \sin \theta & \alpha \sin \theta + \beta \cos \theta & \xi \\
+\alpha & \cos \theta & \sin \theta & \alpha \\
+\beta & - \sin \theta & \cos \theta & \beta \\
+\xi & \alpha \cos \theta - \beta \sin \theta & \alpha \sin \theta + \beta \cos \theta & 1- \xi 
+\end{bmatrix}  \\
+\text{ where } \xi &\equiv {\alpha^2 + \beta^2 \over 2}
+\end{align}
+
+The way the general transformation is written, it is highly suggestive that one can decompose it into a boost
+and a rotation in the x-y plane.  This is especially obvious considering that the (Wx, Wy) transformation just added a single parameter rotation. The subset of W transformations that leave t invariant have $\xi = 0$ in particular which implies $\alpha, \beta$ are also 0 and is a simple x-y plane rotation:
+\begin{align}
+W(\alpha=0, \beta=0, \theta) &= 
+\begin{bmatrix}
+1  & 0& 0 &0\\
+0 & \cos \theta & \sin \theta & 0 \\
+0 & - \sin \theta & \cos \theta & 0 \\
+0 & 0 & 0 & 1 
+\end{bmatrix}
+\end{align}
+
+One can show that a general transformation W factors into of a x-y plane rotation, and then a 2 parameter boost (parametrized by $\alpha, \beta$):
+
+\begin{align}
+W(\alpha, \beta, \theta) &= W(\alpha, \beta, \theta = 0) \times R(\theta)
+\end{align}
+
+This calculation then explicity shows W is isomorphic to a rotation by an angle $\theta \in (0, 2 \pi)$ and a linear translation by $\alpha, \beta \in R^2$
+
+\subsubsection{Lie Algebra and Physics input}
+
+Now that we obtained the general explicit transformation of the little group for massless particle, we are ready to discuss its representation.
+
+Note that a general transformation infinitesimal transformation can be written as:
+\begin{align}
+U(W(\alpha, \beta, \theta)) = 1 + i \alpha A + i \beta B + i \theta J_3
+\end{align}
+
+where $A, B$ for the analog of the $p_x, p_y$ generator of translations, and $J_3$  is analog of the angular momentum operator generating rotations around the Z axis.  $A, B, J_3$ for the lie algebra of ISO(2) with the following commutation relations (which follows for the geometry of ISO(2)):
+
+\begin{align}
+[A, B] &= 0 \\
+[J_3, A] &= i B \\
+[J_3, B] &=-iA
+\end{align}
+
+In particular, that implies that A and B are simultaneously diagonalizable.  Label the quantum numbers of A and B, a, b:
+\begin{align}
+A \Psi_{k, a, b} &= a \Psi_{k, a, b}  \\
+B \Psi_{k, a, b} &= b \Psi_{k, a, b} 
+\end{align}
+
+Furthermore, if we find such a state with non-zero a, b, the operator $J_3$ will rotate them into a continuous set of eigenstates of A and B.  This can be seen by the BCH formula:
+
+\begin{align}
+U(R(\theta)) &= \exp(i J_3 \theta) \\
+  U A U^{-1} &= A \cos \theta - B \sin \theta \\
+ U B U^{-1} &= A \sin \theta + B \cos \theta 
+\end{align}
+
+So for the eigenstate of A, B above:
+\begin{align}
+U \Psi_{k, a, b} = \left(a \cos \theta - b \sin \theta \right) \Psi_{k, a, b} 
+\end{align}
+
+We have generated a continuous set of eigenstates just by rotating around the z axis! Because in nature, we do not find a continuous set of degrees of freedom for massless particle, we have to declare all physical states have $a, b = 0$.  States therefore are labelled by the complete set of quantum numbers k, $\sigma$ with:
+\begin{align}
+A \Psi_{k, \sigma} = B \Psi_{k, \sigma} = 0 \\
+J_3 \Psi_{k, \sigma} = \sigma \Psi_{k, \sigma}
+\end{align}
+
+Remember that $J_3$ was the angular momentum operator in the direction of $\vec{k}$ in the z direction, the momentum vector spatial direction the particle was travelling.  We define that angular momentum component in the direction motion the
+\vocab{helicity}. 
+
+The general unitary transformation by exponentiating the generators is:
+
+\begin{align}
+U(W) = U(S(\alpha, \beta) R(\theta)) = \exp (i \alpha A + i \beta B) \exp(i J_3 \theta)
+\end{align}
+
+Because we restrict ourselves to states with $a, b = 0$, the first part of the transformation just acts trivially and
+\begin{align}
+U(W) = \exp(i J_3 \theta)
+\end{align}
+
+This implies that 
+\begin{align}
+U(\Lambda) \Psi_{k, \sigma} = \sqrt{(\Lambda p)^0 \over p^0} \exp \left(i \sigma \theta(\Lambda, p) \right) \Psi_{\Lambda p, \sigma}
+\end{align}
+
+Note how the helicity value $\sigma$ is a lorentz invariant (this comes directly from the fact $J_3$ just acts via a phase to the state vector).  In some sense we could label particles via their helicity.  However, because helicity flips under Parity $L \rightarrow -L$, $ p \rightarrow p$.  This means that particles that couple via parity symmetric interactions, we call them the same particles (all photons).  Weak interaction couple differently to neutrinos (massless) with different helicity.  Therefore, we call the different helicity type of neutrinos, and anti-neutrinos.
+
+
+\paragraph{What is relation between helicity and Polarization?}
+
+A generic state can be the super position of different helicity states:
+
+\begin{align}
+\Psi_{k, \alpha} = \alpha_+ \Psi_{k, +1} + \alpha_- \Psi_{k, -1} \\
+|\alpha_+|^2 + |\alpha_-|^2 = 1
+\end{align}
+
+Note that under lorentz transformation, the $+1$ and $-1$ helicity states transform \emph{differently} (they acquire conjugate phases).  It turns out that each helicity component correspond to the circular polarization magnitude of the photon.  
+
+One way to see this is \emph{classically} is to realize the circularly polarized light carries angular momentum.  Recall that $\mathbf{E} \times \mathbf{B}$ denotes the Poynting vector of linear momentum density for light.  The Angular momentum for an electromagnetic field is then:
+
+\begin{align}
+\mathbf{J} \propto \int dV \mathbf{x} \times \mathbf{E} \times \mathbf{B}
+\end{align}
+Plug E and B for a circular polarized wave and you shall see that it has angular momentum pointing in the direction of motion.
+
+\paragraph{Why must helicity be integer or half integer?}
+The reason is the topology of the inhomogeneous Lorentz group which allows projective representations because it is not simply connected.
+
+In short: 
+
+\begin{align}
+SO(3, 1 ) & = {SL(2, C) \over Z_2} \\
+SL(2, C)  &= R^3 \times \underbrace{S^3}_{\text{surface of a 3 sphere}}
+\end{align}
+
+$SL(2, C) = R^3 \times S^3$  is a simply connected group, but identifying the 2 antipodal points of $S_3$ to be the same which via the mod operation causes it to be not simply connected.  Furthermore, the projective representation must map $4 \pi$ rotation to the identity, so $2 \pi$ rotation at most must map to $+/- 1$.  This means that $\sigma = 0, \frac12, 1, \frac32, ...$ in other words, the representations must have integer or half integer spin.
+
+\subsection{Paul Lublanski Vector}
+
+If we were \emph{smart}, we could have derived this whole sheninigan quicker by realizing that the litle group W for a given momentum $p^\mu$  is generated by the \vocab{Paul Lublanski} 4-vector (all terms are operators):
+\begin{align}
+W^{\alpha}(P^\mu) = \frac12 \epsilon^{\alpha \beta \mu \nu} P_\beta M_{\mu \nu}
+\end{align}
+
+In particular, note that the paul lublanski vectors squared, and momentum squared commutes with all elements of the lorentz group:
+
+\begin{align}
+P^{\mu}P_\mu, W^\mu W_\mu
+\end{align}
+
+They are so called \vocab{Casimir} operators, the same way the $\mathbf{J}^2$ is a casimir operator for the rotation group.
+
+This implies that irreducible representations of the poincare group can be labelled by the eigenvalues of those casimirs, in analogy with the rotation group being labelled by the spin value (the eigenvalue of $\mathbf{J}^2$).  There's a whole math machinery behind this stuff (Schur's lemma etc...) but the analog with spin in non-relativistic QM is sufficient to see this.
+
+
+\subsection{Some Representation Theory}
+
+We mentioned before that the existence of spin half representations is related to the topology of the lorentz group (rotation group).  This is related to the existence of projective representations and central charges.
+
+We will discuss this below:
+
+\begin{itemize}
+\item A \vocab{projective representation} is a representation up to a phase factor $\alpha$
+$$T_1 T_2 = T_3$$
+$$U(T_1, T_2) = U(T_3) \exp(i \alpha(T_1, T_2))$$
+\item It is easy to create projective representations by just setting 
+$\alpha = \alpha(T)$
+\item A representation is \vocab{intrinsically projective}, if a simple redifinition $U(T) \rightarrow \exp (i \alpha(T)) U(T)$ cannot remove the phase factor.
+\item The effect of the phase factor is to introduce a \vocab{Central Charge} in the Lie algrebra:
+$$[t_a, t_b] = i C^{a}_{b c} t_c + i C_{bc} \mathbf{I} $$
+\item A representation is not intrinsically projective (phase factor can be removed) if both of the following is true:
+a) We can redefine the generators to remove the central charge.
+b) The group is simply connected.
+\item Another theorem: semi-simple algebras  Central charges can be removed.  A \vocab{semi-simple} Algebra is an algebra that has no invariant Abelian sub-algebras.  For example, the lorentz algebra is semi-simple but the poincare algebra is not.  This is because the momenta $P^\mu$ in the poincare algebra form a subspace of $P's$ that just commute.
+\end{itemize}
+
+
+
+
+
+
+\section{Appendix}
+\subsection{Q and A}
+\paragraph{What is the ground state wavefunction for a "solvable" QFT like the klein gordon free field?}
+We will start to answer this question with the analogy. In 0+1 dimension QM (single particle QM), the wave function is a projection of the state vector onto a basis which relate to the probability of measuring a value in that state:
+\begin{align}
+\hat{x} \ket{x} &= \underbrace{x}_{\text{number}} \ket{x}  \text{ Definition of the state labelled by x} \\
+\psi_{gs}(x) &= \braket{x|0} \\
+|\psi(x)|^2 &= P(x) \text{ (probability density of measuring location of particle to be x)} 
+\end{align} 
+
+Going to quantum field theory means we promote the $\hat{x}$ operator to a field operator $\phi(\mathbf{x})$ (Note $\mathbf{x} \in R^3$).  This is just a lot of operators, each one labelled by the coordinate $\mathbf{x}$. Therefore, the wavefunction in QFT is the projection of the state onto the basis of field configuration $\phi$.  The QFT analog of a wavefunction is really a \vocab{functional}.  It maps each field configuration $\phi(x)$ to a complex number whose norm is the probability density we "measure" the field configuration $\phi(x)$:
+
+\begin{align}
+\braket{\phi(\mathbf{x}) | 0} &= \Psi_{gs}(\phi(\mathbf{x})) \\
+|\Psi_{gs}(\phi(\mathbf{x}))|^2  &= 
+\text{ Probability density of measuring field configuration to be } \phi(x) 
+\end{align}
+Obviously, trying to normalize this probability measure is tricky.  This is because we'd have to define a measure over the space of functions $\phi$.
+
+
+In the case of the klein gordon, we can obtain the wave function explicitly.  Remember that the klein gordon equation is solved in fourier space:
+
+\begin{align}
+(k^2 - m^2) \phi(k) = 0 \rightarrow k_0^2 = |\mathbf{k}|^2 + m^2
+\end{align}
+
+What this means is that there is an (infinite) set of harmonic oscillators, one for each $\mathbf{k}$ mode.  The frequency of oscillation for a given $\mathbf{k}$ mode is:
+\begin{align}
+\omega_k = \sqrt{|\mathbf{k}|^2 + m^2}
+\end{align}
+
+Recall that the ground state wavefunction for a harmonic oscillator is a gaussian with variance ${1 \over \omega}$ where $\omega$ scale with the spring constant.  Using the same analogy, the wavefunction
+for a given $\vec{k}$ mode is which express the probability to have location A for that mode is:
+\begin{align}
+\psi(A) \propto \exp(-  \frac12 \omega |A|^2)
+\end{align}
+
+The total wavefunction is just the product for the wavefunction of each oscillator when there a set of N of them:
+
+\begin{align}
+\psi(\{ A_{\mathbf{k_i}} \}) \propto \prod_{\mathbf{i=1}}^N \exp(- \frac12 \omega_{\mathbf{k_i}} A_{\mathbf{k_i}}
+A_{-\mathbf{k_i}} ) \end{align} 
+
+Generalizing to a continuum of oscillator modes:
+
+\begin{align}
+\tilde{\phi}(\mathbf{k}) &= \int d^3 x e^{-i \mathbf{k} \cdot \mathbf{x}} \phi(\mathbf{x}) \\
+\Psi(\phi(\mathbf{k}))  & \propto \exp(- \frac12 \int {d^3 k \over (2 \pi)^3} \omega_k  \tilde{\phi}(\mathbf{k}) \tilde{\phi}(-\mathbf{k}) )
+\end{align}
+
+
+
+
+
+\end{document}
+
+
