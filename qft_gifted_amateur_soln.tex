@@ -213,5 +213,86 @@ The continuity equation is a statement about conservation of charge:
 \partial_t \rho = - \nabla \cdot \mathbf{J} \rightarrow {d  \over dt} \underbrace{\int_{M} \rho dV}_{\text{charge in region "M"}} = - \underbrace{\int_{\partial M} \mathbf{J} \cdot d \mathbf{A}}_{\text{current flowing out of the boundary of }M}
 \end{align}
 
+\subsection{Problem 8.2}
+Set $\hbar = 1$ for simplicity.
+\begin{align}
+a_k^{\dagger}(t) &= U^{-1} a_k^{\dagger}(0) U \\
+& = \exp(i H t) a_k^{\dagger} \exp(-i Ht)\\
+& = \exp(i \sum_{k'} E_{k'}\hat{N}_{k'} t ) a^{\dagger}\exp(-i \sum_{k'} E_{k'} \hat{N}_{k'} t )
+\end{align}
+
+Since the operators commute for $k' \neq k$, we only need to consider the term where k' = k.
+
+We invoke the BCH formula to evaluate:
+
+\begin{align}
+a^{\dagger}_k(t) &= a_k^{\dagger}(0) + [i t E_k N_k, a_k(0)] + \frac12  [i t E_k N_k, [i t E_k N_k, a_k(0)]] + ... \\
+& = a_k^{\dagger}(0) \times \left(\sum_{n = 0}^{\infty} {(it E_k)^n \over n!} \right) \\
+& = a_k^{\dagger}(0) \times \exp(i E_k t)
+\end{align}
+
+It follows
+
+\begin{align}
+a_k(t) = a_k(0) \exp(-i E_k t)
+\end{align}
+
+\subsection{Problem 9.1}
+
+\begin{align}
+\hat{U} = e^{-i \hat{p}a} \rightarrow {\partial \over \partial a} \hat{U}|_{a= 0} = {i \hat{p}} \underbrace{U(0)}_{1} \rightarrow \hat{p } = {-1 \over i} {\partial \hat{U} \over \partial a}
+\end{align}
+
+\subsection{Problem 9.2}
+
+\begin{equation*}
+\Lambda(\phi_1) = 
+\begin{pmatrix}
+\cosh(\phi) & \sinh(\phi) & 0 & 0 \\
+\sinh(\phi) & \cosh(\phi) & 0  & 0\\
+0 & 0 & 0  & 0 \\
+0 & 0 & 0 & 0
+\end{pmatrix}
+\end{equation*}
+
+\begin{align}
+{\partial \over \partial \phi_1}|_{\phi_1 = 0} = 
+\begin{pmatrix}
+0 & 1& 0 & 0 \\
+1 & 0 & 0  & 0\\
+0 & 0 & 0  & 0 \\
+0 & 0 & 0 & 0
+\end{pmatrix}
+\end{align}
+
+The other generators are obtained trivially by plugging "1" into the location $\Lambda^{0}_{j}$ and $\Lambda^{j}_{0}$ with $j = 1,2,3$.   Add the ${1 \over i}$ to get the answer.  Note how the generator are anti-hermitian (which makes the lie group non-compact).
+
+\subsection{Problem 9.4}
+
+\begin{align}
+\omega^{\mu}_\nu x^\nu \partial_\mu & = \omega_{\mu \nu} x^\nu \partial^\mu \\
+& = \underbrace{\frac12 \omega_{\mu \nu} x^\nu \partial^\mu + \frac12 \omega_{\mu \nu} x^\nu \partial^\mu}_{\text{split in 2}} \\
+& = \frac12 \omega_{\mu \nu} x^\nu \partial^\mu \underbrace{- \frac12 \omega_{\nu \mu}}_{\text{anti-symmetry}} x^\nu \partial^\mu \\
+& = \frac12 \omega_{\mu \nu} \left(x^\nu \partial^\mu - \underbrace{x^\mu \partial^\nu}_{\text{swap index}} \right)
+\end{align}
+
+\begin{align}
+f(x') &= 1 + a^\mu \partial_\mu f(x) + \frac12 \omega_{\mu \nu}  \left(x^\nu \partial^\mu - x^\mu \partial^\nu \right) \\
+& = 1 + i a^\mu \underbrace{(i \partial_\mu)}_{p_\mu} f(x) + {i \over 2 } \omega_{\mu \nu} \times \underbrace{ -i \left(x^\nu \partial^\mu - x^\mu \partial^\nu \right)}_{M^{\mu \nu}} f(x)
+\end{align}
+
+Because $\frac12 M^{\mu \nu}$ is the generator of lorentz transformation, the equation follows:
+
+\begin{align}
+\Lambda = \exp(-{i \over 2} \omega_{\mu \nu} M^{\mu \nu} )
+\end{align}
+
+
+\subsection{10.1}
+
+
+
+
+
 
 \end{document}
