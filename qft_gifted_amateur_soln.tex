@@ -398,7 +398,7 @@ Equation 66 is actually a fourier decomposition formula (with $E = - \omega$).  
 
 \begin{align}
 G^+(x, x', t) \equiv \int dE e^{-i E t} \tilde{G}(x, x', E) \\
-\tilde{G}(x, x', E) = \sum_n {\phi_n(x) \phi_n^*(x') \over E - E_n + i \epsilon}
+\tilde{G}(x, x', E) = \sum_n {i \phi_n(x) \phi_n^*(x') \over E - E_n + i \epsilon}
 \end{align}
 
 Furthermore, note that $\tilde{G}(x, x', E)$ in the expression above is the coordinate representation of some abstract operator $\mathbf{\tilde{G}}$
@@ -407,17 +407,17 @@ G(x, x', E) \equiv \braket{x| \mathbf{\tilde{G}}(E)| x'} \text{ (for some operat
 \end{align}
 This abstract operator $\mathbf{\tilde{G}}$ is actually diagonal in the eigenfunction basis of the hamiltonian:
 \begin{align}
-\mathbf{\tilde{G}}(E) = \sum_{n} {\ket{n} \braket{n} \over E - E_n + i \epsilon}
+\mathbf{\tilde{G}}(E) = \sum_{n} {i \ket{n} \bra{n} \over E - E_n + i \epsilon}
 \end{align}
 
 In particular, in this basis, it is obvious that the following equation holds:
 \begin{align}
-(E - \mathbf{H}) \mathbf{\tilde{G}}(E) = \mathbf{I}
+(E - \mathbf{H}) \mathbf{\tilde{G}}(E) =-i \mathbf{I}
 \end{align}
 
 The coordinate representation of the equation above is:
 \begin{align}
-(E - \mathbf{H}) \tilde{G}(x, x', E) = \delta(x - x')
+(E - \mathbf{H}) \tilde{G}(x, x', E) = -i \delta(x - x')
 \end{align}
 (it is understood $\mathbf{H}$ operator applies on the coordinate x, leaving x' intact).  This means that the operator equation for $\mathbf{\tilde{G}}$ actually implies that the function $\tilde{G}(x, x', E)$ is some sort of impulse response function (green function), but for a different equation.  This equation is:
 $$\mathbf{H} G = E G$$
