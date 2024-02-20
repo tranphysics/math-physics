@@ -423,6 +423,24 @@ The coordinate representation of the equation above is:
 $$\mathbf{H} G = E G$$
 
 Lo and behold, this equation is the \emph{time-independent} Schrodinger's equation!  So the fourier transform with respect to time of propagator for the time-independent hamiltonian gives the green function for the time-independent schrodinger's equation.
+This is not surprising at all.  The time-independent schrodinger's equation is a separable PDE and we solve it via exponentials. 
+\begin{align}
+\mathbf{H} \psi(x, t) &= i \partial_t \psi(x, t) \\
+\rightarrow \psi(x, t) &= \phi(x) e^{-i E t} \\
+\rightarrow \mathbf{H} \phi(x) & = E \phi(x)
+\end{align}
+
+The general time evolution of the wavefunction for time-independent Hamiltonian is known to be from intro QM:
+\begin{align}
+\psi(x, t) = \sum_n \phi_n(x) \braket{n|\psi(0)} e^{-i E_n t} \\
+\end{align}
+
+For a delta function initial condition $\delta(x-x_0)$ (green function definition), you have:
+\begin{align}
+\psi(x, t) = \sum_n \phi_n(x) e^{- i Et} \braket{n|x_0} = \sum_n \phi_n(x) \phi_n^*(x_0) e^{-i Et}
+\end{align}
+
+The fourier transform components of this object solves the time independent schrodinger equation since they are the $\phi$'s.
 
 
 
