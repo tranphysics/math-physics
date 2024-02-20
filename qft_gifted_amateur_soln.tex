@@ -361,9 +361,12 @@ If $\mathbf{H}(t) = \mathbf{H}$, $\mathbf{U}(t, t' = 0) = e^{-i \mathbf{H} t}$.
 We now derive the fourier decomposition of the retarded propagator (which is a function of 3 variables now, initial and end position and time):
 
 \begin{align}
-G^+(x, x', t) &\equiv \braket{x} e^{-i \mathbf{H}t} \ket{x'}  \theta(t) \\
-& \text{ ( insert complete set of eigenfunctions of $\mathbf{H}, \mathbf{I} \equiv \sum_n \ket{n} \bra{n}$ )} \\
-& = \sum_n \braket{x | n} \bra{n}e^{-i \mathbf{H}t} \ket{n'} \braket{n' | x'} \theta(t) \\
+G^+(x, x', t) &\equiv \bra{x} e^{-i \mathbf{H}t} \ket{x'}  \theta(t) 
+\end{align}
+We can introduce the set of eigenstates $\ket{n}$ of $\mathbf{H}$, satisfying: $\mathbf{H}\ket{n} = E_n \ket{n}$.  Since $\ket{n}$ forms a complete basis, we have:
+\begin{align}
+ \mathbf{I} & = \sum_n \ket{n} \bra{n} \\
+G^{+} (x, x', t)& = \sum_{n, n'} \braket{x | n} \bra{n}e^{-i \mathbf{H}t} \ket{n'} \braket{n' | x'} \theta(t) \\
 \end{align}
 
 Note $\mathbf{H}$ is diagonal in the $\ket{n}$ basis.  Define $\phi_n(x) \equiv \braket{x | n}$.  This becomes
@@ -391,13 +394,13 @@ The way to see this math identity is that $ t < 0$, we can close the contour in 
 Anyways using this identity, we can neatly repackage equation 63:
 
 \begin{align}
-G^+(x, x', t) = {i \over 2 \pi}\int_{-\infty}^\infty dz \sum_n {\phi_n(x) \phi_n^*(x') e^{-i zt} \over z - E_n + i \epsilon}
+G^+(x, x', t) = {i \over 2 \pi}\int_{-\infty}^\infty dz e^{-i zt} \underbrace{ \sum_n {\phi_n(x) \phi_n^*(x') \over z - E_n + i \epsilon}}_{\text{fourier component}}
 \end{align}
 
-Equation 66 is actually a fourier decomposition formula (with $E = - \omega$).  It shows that the fourier transform of the retarded propagator with respect to time is $\tilde{G}$ as defined below:
+Equation 66 is actually a fourier decomposition formula.  It shows that the fourier transform of the retarded propagator with respect to time $\tilde{G}$ is:
 
 \begin{align}
-G^+(x, x', t) \equiv \int dE e^{-i E t} \tilde{G}(x, x', E) \\
+G^+(x, x', t) \equiv \int {dE \over 2 \pi} e^{-i E t} \tilde{G}(x, x', E) \\
 \tilde{G}(x, x', E) = \sum_n {i \phi_n(x) \phi_n^*(x') \over E - E_n + i \epsilon}
 \end{align}
 
