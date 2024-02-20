@@ -372,7 +372,8 @@ G^{+} (x, x', t)& = \sum_{n, n'} \braket{x | n} \bra{n}e^{-i \mathbf{H}t} \ket{n
 Note $\mathbf{H}$ is diagonal in the $\ket{n}$ basis.  Define $\phi_n(x) \equiv \braket{x | n}$.  This becomes
 
 \begin{align}
-G^+(x, x', t) &=\theta(t) \sum_n \phi_n(x) \phi_n^*(x') e^{- i E_n t} 
+G^{+} (x, x', t)& = \sum_{n, n'} \phi_n(x) e^{-i (E_{n'}- E_n) t} \underbrace{\braket{n | n'}}_{\delta_{n n'}} \phi_{n'}^*(x') \theta(t) \\
+&=\theta(t) \sum_n \phi_n(x) \phi_n^*(x') e^{- i E_n t} 
 \end{align}
 
 The next step is to compute the fourier transform of $G^+$ with respect to time.  This would be straightforward, if not for the pesky $\theta$ factor, so we have to establish a few basic facts about complex integration.
@@ -400,23 +401,25 @@ G^+(x, x', t) = {i \over 2 \pi}\int_{-\infty}^\infty dz e^{-i zt} \underbrace{ \
 Equation 66 is actually a fourier decomposition formula.  It shows that the fourier transform of the retarded propagator with respect to time $\tilde{G}$ is:
 
 \begin{align}
-G^+(x, x', t) \equiv \int {dE \over 2 \pi} e^{-i E t} \tilde{G}(x, x', E) \\
-\tilde{G}(x, x', E) = \sum_n {i \phi_n(x) \phi_n^*(x') \over E - E_n + i \epsilon}
+\tilde{G}(x, x', E) \equiv \sum_n {i \phi_n(x) \phi_n^*(x') \over E - E_n + i \epsilon} \\
+G^+(x, x', t) = \int {dE \over 2 \pi} e^{-i E t} \tilde{G}(x, x', E) 
 \end{align}
 
-Furthermore, note that $\tilde{G}(x, x', E)$ in the expression above is the coordinate representation of some abstract operator $\mathbf{\tilde{G}}$
+Note that standard fourier decomposition formula for a function $f(t)$ uses frequencies $\omega$ with a $+$ sign, so $E \rightarrow -\omega$ in the formula above.
+$$ f(t) = \int {d \omega \over 2 \pi} \tilde{f}(\omega) e^{i \omega t}$$
+
+Furthermore, $\tilde{G}(x, x', E)$ in the expression above can be written as the coordinate reprensation of an operator $\mathbf{\tilde{G}}$.
+This abstract operator $\mathbf{\tilde{G}}$ can be expressed neatly in terms of the eigen vectors $\ket{n}$ of the hamiltonian:
 \begin{align}
-G(x, x', E) \equiv \braket{x| \mathbf{\tilde{G}}(E)| x'} \text{ (for some operator $\mathbf{\tilde{G}}$}
-\end{align}
-This abstract operator $\mathbf{\tilde{G}}$ is actually diagonal in the eigenfunction basis of the hamiltonian:
-\begin{align}
-\mathbf{\tilde{G}}(E) = \sum_{n} {i \ket{n} \bra{n} \over E - E_n + i \epsilon}
+\mathbf{\tilde{G}}(E) &\equiv \sum_{n} {i \ket{n} \bra{n} \over E - E_n + i \epsilon} \\
+G(x, x', E) &= \braket{x| \mathbf{\tilde{G}}(E)| x'} \text{ (for some operator $\mathbf{\tilde{G}}$}
 \end{align}
 
-In particular, in this basis, it is obvious that the following equation holds:
+When written in the basis of $\ket{n}$, the operator looks diagonal.  It is obvious in that basis that the operator satisfies this simple equation:
 \begin{align}
 (E - \mathbf{H}) \mathbf{\tilde{G}}(E) =i \mathbf{I}
 \end{align}
+(it is understood in the expression above $E \equiv E \times \mathbf{I}$ since E is a scalar)
 
 The coordinate representation of the equation above is:
 \begin{align}
@@ -426,16 +429,16 @@ The coordinate representation of the equation above is:
 $$\mathbf{H} G = E G$$
 
 Lo and behold, this equation is the \emph{time-independent} Schrodinger's equation!  So the fourier transform with respect to time of propagator for the time-independent hamiltonian gives the green function for the time-independent schrodinger's equation.
-This is not surprising at all.  The schrodinger's equation is a separable PDE when $\mathbf{H}$ is constant and we solve it via exponentials. 
+This is not surprising at all.  The schrodinger's equation is a separable PDE when $\mathbf{H}$ is constant and we solve it via exponentials.  The spatial dependence is solved by the set of orthonormal eigenfunctions $\phi_n(x)$: 
 \begin{align}
 \mathbf{H} \psi(x, t) &= i \partial_t \psi(x, t) \\
-\rightarrow \psi(x, t) &= \phi(x) e^{-i E t} \\
-\rightarrow \mathbf{H} \phi(x) & = E \phi(x)
+\mathbf{H} \phi_n(x) & = E \phi_n(x) \\
+\rightarrow \psi(x, t) &= \phi_n(x) e^{-i E t} 
 \end{align}
 
 The general time evolution of the wavefunction for time-independent Hamiltonian is known to be from intro QM:
 \begin{align}
-\psi(x, t) = \sum_n \phi_n(x) \braket{n|\psi(0)} e^{-i E_n t} \\
+\psi(x, t) = \sum_n \phi_n(x) \braket{n|\psi(t=0)} e^{-i E_n t} \\
 \end{align}
 
 For a delta function initial condition $\delta(x-x_0)$ (green function definition), you have:
@@ -444,6 +447,30 @@ For a delta function initial condition $\delta(x-x_0)$ (green function definitio
 \end{align}
 
 The fourier transform components of this object solves the time independent schrodinger equation since they are the $\phi$'s.
+
+\subsection{Green Function in Perturbation theory}
+Consider now a case where one cannot solve the green function for the time-independent Hamiltonian exactly.  For example, suppose you know how to solve the problem for $\mathbf{H_0}$ but it is "perturbed" by a small perturbation $\Delta \mathbf{H}$:
+ $$\mathbf{H} = \mathbf{H_0} + \Delta \mathbf{H}$$
+
+We will now build a perturbation series for the green function for $\tilde{\mathbf{G}}$ for $\mathbf{H}$, given the green function $\tilde{\mathbf{G_0}}$ for $\mathbf{H_0}$.
+
+We start from equation (72), the central identity:
+$$ (E- \mathbf{H}) \mathbf{\tilde{G}} = i \mathbf{I}$$
+
+To compute a perturbation expansion we solve this equation recursively:
+
+\begin{align}
+\mathbf{\tilde{G}} &= {i \mathbf{I} \over E - \mathbf{H}} \\
+& = {i \mathbf{I} \over E - \mathbf{H_0} - \Delta \mathbf{H}} \\
+& = {i \mathbf{I} \over E - \mathbf{H_0}} \left(\mathbf{I} - {\mathbf{\Delta H} \over E - \mathbf{H_0}} + \left({\mathbf{\Delta H} \over E - \mathbf{H_0}} \right)^2 ...\right)
+\end{align}
+
+This series solution has a (Feynman) diagrammatic representation: the "full" propagator looks like the free propagator with "interaction" terms $\Delta \mathbf{H}$ perturbing it.  Summing the whole geometric series gives you the exact solution.  A simple application of this series solution is for scattering problems, where the first order term is the so called \textbf{Born approximation}.
+
+\subsection{Born approximation}
+Recall the born approximation for scattering.
+
+
 
 
 
