@@ -1,6 +1,7 @@
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}	% Para caracteres en español
 \usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{braket}
 \usepackage{multirow,booktabs}
 \usepackage[table]{xcolor}
 \usepackage{fullpage}
@@ -288,7 +289,145 @@ Because $\frac12 M^{\mu \nu}$ is the generator of lorentz transformation, the eq
 \end{align}
 
 
-\subsection{10.1}
+\subsection{Why keep factors of $\hbar$}
+
+One reason to keep factors of $\hbar$ around is to clarify when doing a semi-classical expansion. The classical limit of the quantum theory is obtained by taking $\hbar \rightarrow 0$, so in some sense, a classical expansion usually is carried out with an expansion around ${1 \over \hbar}$.
+
+\paragraph{Example: WKB approximation}
+
+The WKB approximationj is an expansion in $\hbar$ with the first order producing tunneling amplitude.  In some sense, it reproduces, it is a semi-classical expansion because as the wavelength decreases relative to the size of the variation of the potential term (large action relative to $\hbar$), the expansion becomes more accurate.
+
+$$\psi(x) \propto \exp \left({i \over \hbar} \left(\int dx p(x) + \underbrace{\sum_{n=1}^\infty \hbar^n S_n}_{\text{higher order WKB terms}}  \right) \right) $$
+$$ p(x) \equiv \sqrt{2 m (E-V(x))}$$
+
+\paragraph{Example: Saddle point integration of the path integral}
+
+Consider the typical path integral for some transition amplitude
+$$\braket{\psi_f | e^{i Ht \over \hbar} | \psi_i} \equiv \int \mathcal{D} \phi \exp\left( {i \over \hbar} S[\phi] \right)$$
+This amplitude can be approximated using the saddle point method around the path of least action $\phi_0$ (a minimum) in the limit of $\hbar \rightarrow 0$.  To do so, we parametrize field fluctuations around the minimum path:
+$$ \phi(x)=\phi_0 + \sqrt{\hbar \over i} \epsilon(x)$$
+where fluctuations $\epsilon$ is order 1 and we explicitly keep $\hbar$ to to show the expansion is small.
+
+$$S[\phi] \approx \underbrace{S[\phi_0]}_{S_0} + {\hbar \over i} \underbrace {{\delta^2 \over \delta \phi(x) \delta \phi(y)} S[\phi]}_{\text{Hessian of S}} \epsilon(x) \epsilon(y) + ...$$
+$$ \braket{\psi_f | e^{i Ht \over \hbar} | \psi_i} \approx \exp\left({i \over \hbar} S_0 \right) \exp \left(\frac12 \text{Tr} \ln({\delta^2 \over \delta \phi(x) \delta \phi(y)} S[\phi]\right) \int \mathcal{D}\phi \text{...} $$
+
+The expansion in the limit $\hbar$ goes to 0 shows that the saddle point contribution is the dominant classical limit amplitude.
+
+
+\subsection{Canonical quantization}
+
+\paragraph{Why is setting the commutation relation between conjugate variables to $i \hbar$ the correct recipe to obtaining a quantum theory from a classical theory?}
+
+There are many ways to attack this issue.  The most simple way I can think of quantizing a field is to realize that QFT is just the quantum theory of a continuum of particles.  Consider the classical theory of a single particle, with coordinate $\phi_1$ and momentum $\dot{\pi}_1$ with a hamiltonian of a harmonic oscillator:
+$$H_1 = \frac12 m \omega^2 \phi_1^2 + \frac12 m \dot{\phi_1}^2 = \frac12 m \omega^2 \phi_1^2 + {\pi_1^2 \over 2 m} $$
+
+The quantum theory of this single particle in a spring is described by a hamiltonian operator:
+
+$$\hat{H}_1 = \frac12 m \omega^2 \hat{\phi}_1^2 + {\hat{\pi}_1^2 \over 2 m}$$
+where $\hat{\phi}_1, \hat{\pi}_1$ are position momentum operators with commutation relation
+$$ [\hat{\phi}_1, \hat{\pi}_1] = i \hbar$$
+
+
+Now let's try to take a limit of an infinite number of springs connected together.  This is the theory of a solid lattice:
+
+\subsection{Time dependent Hamiltonian}
+
+The \emph{retarded} propagator $G^+(x, x', t, t')$ is defined as position space basis representation of the time evolution operator $\mathbf{U}$, restricted to positive times:
+
+
+\begin{align}
+\mathbf{U} (t, t') \ket{\psi(t')} &\equiv \ket{\psi(t)} \\
+G^+(x, x', t, t') &\equiv \bra{x} \mathbf{U}(t, t') \ket{x'} \theta(t - t')
+\end{align}
+
+We can show that the time evolution operator satisfies schrodinger equation in operator form as:
+\begin{align}
+\mathbf{H U} = i \partial_t \mathbf{U}
+\end{align}
+In the text, if you use this relation you can show the retarded propagator satisfies a schrodinger PDE as well:
+\begin{align}
+\mathbf{H} G^+(x, x', t, t') = i \partial_t G^+ + i \delta(x - x') \delta(t - t')
+\end{align}
+
+where here the notation $\mathbf{H} G^+$ is understood as the operator H acting on the function G in the coordinate x and t (for example, if H had momentum squared terms, you'd get $\partial_x^2$ operator).
+
+\subsection{Time-independent Hamiltonian}
+
+In the case where the hamiltonian is time independent, we can obtain more interesting relations.  One particular representation we will derive is the fourier representation of the retarded propagator gives key information about the eigenfunctions and eigenvalues of the (time-independent) hamiltonian.
+
+First, WLOG, set $t' = 0$.
+
+If $\mathbf{H}(t) = \mathbf{H}$, $\mathbf{U}(t, t' = 0) = e^{-i \mathbf{H} t}$.
+We now derive the fourier decomposition of the retarded propagator (which is a function of 3 variables now, initial and end position and time):
+
+\begin{align}
+G^+(x, x', t) &\equiv \braket{x} e^{-i \mathbf{H}t} \ket{x'}  \theta(t) \\
+& \text{ ( insert complete set of eigenfunctions of $\mathbf{H}, \mathbf{I} \equiv \sum_n \ket{n} \bra{n}$ )} \\
+& = \sum_n \braket{x | n} \bra{n}e^{-i \mathbf{H}t} \ket{n'} \braket{n' | x'} \theta(t) \\
+\end{align}
+
+Note $\mathbf{H}$ is diagonal in the $\ket{n}$ basis.  Define $\phi_n(x) \equiv \braket{x | n}$.  This becomes
+
+\begin{align}
+G^+(x, x', t) &=\theta(t) \sum_n \phi_n(x) \phi_n^*(x') e^{- i E_n t} 
+\end{align}
+
+The next step is to compute the fourier transform of $G^+$ with respect to time.  This would be straightforward, if not for the pesky $\theta$ factor, so we have to establish a few basic facts about complex integration.
+
+We can re-express the exponential in this expression using the Cauchy integral formula.  Let's first establish a math fact as follow.
+Consider the function f(E) below (this function is called a "Resolvent"):
+\begin{align}
+f(E) = \int_{-\infty}^\infty dz {e^{- i z t} \over z - E + i \epsilon}
+\end{align}
+It turns out this function neatly expresses the $\theta$ function due to the fact it is discontinuous from $t<0$ to $t>0$.  In fact, it is:
+\begin{align}
+f(E) = - 2 \pi i \theta(t) e^{- i E t}
+\end{align}
+
+\paragraph{digression on math identity}
+\emph{
+The way to see this math identity is that $ t < 0$, we can close the contour in the upper half plane.  This contour doesn't contain the $E - i\epsilon$ pole and therefore the closed curve integral is 0.  When $t > 0$, we have to close the contour in the lower half plane to make the semicircle contribution decay, and this cause the closed contour integral to contain the $E - i \epsilon$ pole, giving a non-zero contribution.  This is where the $\theta(t)$ factor comes in.}
+
+Anyways using this identity, we can neatly repackage equation 63:
+
+\begin{align}
+G^+(x, x', t) = {i \over 2 \pi}\int_{-\infty}^\infty dz \sum_n {\phi_n(x) \phi_n^*(x') e^{-i zt} \over z - E_n + i \epsilon}
+\end{align}
+
+Equation 66 is actually a fourier decomposition formula (with $E = - \omega$).  It shows that the fourier transform of the retarded propagator with respect to time is $\tilde{G}$ as defined below:
+
+\begin{align}
+G^+(x, x', t) \equiv \int dE e^{-i E t} \tilde{G}(x, x', E) \\
+\tilde{G}(x, x', E) = \sum_n {\phi_n(x) \phi_n^*(x') \over E - E_n + i \epsilon}
+\end{align}
+
+Furthermore, note that $\tilde{G}(x, x', E)$ in the expression above is the coordinate representation of some abstract operator $\mathbf{\tilde{G}}$
+\begin{align}
+G(x, x', E) \equiv \braket{x| \mathbf{\tilde{G}}(E)| x'} \text{ (for some operator $\mathbf{\tilde{G}}$}
+\end{align}
+This abstract operator $\mathbf{\tilde{G}}$ is actually diagonal in the eigenfunction basis of the hamiltonian:
+\begin{align}
+\mathbf{\tilde{G}}(E) = \sum_{n} {\ket{n} \braket{n} \over E - E_n + i \epsilon}
+\end{align}
+
+In particular, in this basis, it is obvious that the following equation holds:
+\begin{align}
+(E - \mathbf{H}) \mathbf{\tilde{G}}(E) = \mathbf{I}
+\end{align}
+
+The coordinate representation of the equation above is:
+\begin{align}
+(E - \mathbf{H}) \tilde{G}(x, x', E) = \delta(x - x')
+\end{align}
+(it is understood $\mathbf{H}$ operator applies on the coordinate x, leaving x' intact).  This means that the operator equation for $\mathbf{\tilde{G}}$ actually implies that the function $\tilde{G}(x, x', E)$ is some sort of impulse response function (green function), but for a different equation.  This equation is:
+$$\mathbf{H} G = E G$$
+
+Lo and behold, this equation is the \emph{time-independent} Schrodinger's equation!  So the fourier transform with respect to time of propagator for the time-independent hamiltonian gives the green function for the time-independent schrodinger's equation.
+
+
+
+
+
 
 
 
