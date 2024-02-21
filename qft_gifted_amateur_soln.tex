@@ -467,8 +467,69 @@ To compute a perturbation expansion we solve this equation recursively:
 
 This series solution has a (Feynman) diagrammatic representation: the "full" propagator looks like the free propagator with "interaction" terms $\Delta \mathbf{H}$ perturbing it.  Summing the whole geometric series gives you the exact solution.  A simple application of this series solution is for scattering problems, where the first order term is the so called \textbf{Born approximation}.
 
-\subsection{Born approximation}
-Recall the born approximation for scattering.
+\subsection{On the green function as a complex function of energy}
+\newcommand{\tG}{\mathbf{\tilde{G}}}
+Let's discuss further the properties of the object $\tG$(E) as a function of a complex variable in general $\tG(z)$.  Consider a typical quantum , where $V(x)$ is bounded from above, where without loss of generality we set $V(x) < 0$ for all $x$
+
+For such a potential you get the following spectrum, and can specify a energy of orthogonal eigenbasis as follow:
+\begin{itemize}
+\item A discrete spectrum $E_n$ labelled by integer $n$, where states are labelled by $n, l$  where $l$ could be additional quantum numbers (hardness, colors, spin, whatever): $ \mathbf{H} \ket{n, l} = E_n \ket{n, l}$ 
+\item A continuous spectrum $\rho \in (0, \infty)$, with states labelled by $\rho, l$:  $\mathbf{H} \ket{\rho, l} = \rho \ket{\rho, l}$
+\end{itemize}
+
+The object $\tG (z)$ can be more precisely written as (note we introduce the $\pm i \epsilon$ to define the causal and anti-causal solution respectively)
+\begin{align}
+\tG(z) = \sum_{n, l} {i \ket{n, l} \bra{n, l} \over z - E_n} + \sum_l \int_{0}^\infty d\rho {i \ket{\rho, l} \bra{\rho, l} \over z - \rho}
+\end{align}
+
+This object is obviously confusing due to the following observations:
+\begin{itemize}
+\item \emph{Observation 1}: $\tG(z)$ is not well defined for $z = E_n$.  
+\item \emph{Observation 2}: $\tG(z)$ is not well defined on the real axis, for similar reasons.
+\end{itemize}
+
+This means that the green function for real energies is not well defined for all energies.  Instead, we will try to define the following operator:
+\begin{align}
+\tG^\pm(E) \equiv \lim_{\epsilon \rightarrow 0} \tG(E \pm i \epsilon)
+\end{align}
+This operator corresponds to the causal green function and anti-causal green function respectively.  The reason is that the $\pm i \epsilon$ kills $ t \rightarrow \mp \infty$ solutions respectively (adds damping).
+ 
+Let's analyze this operator more carefully and list some observations:
+\begin{itemize}
+\item \emph{Observation 3}: $\tG^\pm(E_n)$ is still undefined.  This is because the first term would be a singular projection operator:
+$$\lim_{\epsilon \rightarrow 0}\tG^\pm(E_n + i \epsilon) = \sum_l \underbrace{{i \ket{n, l} \bra{n, l}}}_{\text{Projection}} \times \underbrace{{1 \over 0}}_{\infty}$$.
+\item \emph{Observation 4}: $\tG(E)$ is well defined on the positive axis, but $\tG(z)$ has a branch cut on the real axis
+\end{itemize}
+
+In fact, for observation 3, while $\tG(E_n \pm i \epsilon)$ is undefined even the limit of $\epsilon \rightarrow 0$, we can still investigate the function $\tG(z)$.  From complex analysis, one can integrate around the poles.  If we do so for $\tG(z)$, we get a projector operator
+$$\oint_{z = E_n} \tG(z) {dz} =  2 \pi i \sum_{l} \ket{n, l} \bra{n, l}$$
+
+For observation 4, we can show this by computing the size of the branch cut:
+\begin{align}
+\tG^+ - \tG^- &= \lim_{\epsilon \rightarrow 0} (\tG(E + i \epsilon) - \tG(E- i \epsilon)) \\
+& = \lim_{\epsilon \rightarrow 0}\sum_l \int_0^\infty \underbrace{2 \epsilon \over (E - \rho)^2 + \epsilon^2}_{\text{\color{blue} Lorentzian}} \ket{\rho, l} \bra{\rho, l}
+\end{align}
+
+The lorentzian shown is actually a delta function in the limit of $\epsilon \rightarrow 0$:
+\begin{align}
+ \int {2 \epsilon \over x^2 + \epsilon^2} dx & = \pi \\
+\rightarrow  \lim_{\epsilon \rightarrow 0} \int {2 \epsilon \over x^2 + \epsilon^2} &= \pi \delta(x)
+\end{align}
+
+Using this identity, we can compute the size of the branch cut: it is just the projection operator onto the energy subspace $E$
+\begin{align}
+\tG^+(E) - \tG^-(E) = 2 \pi \sum_l \ket{E, l} \bra{E, l} 
+\end{align}
+
+Let's now make some remarks about the math we have computed:
+\begin{itemize}
+\item The Green operator $\tG(z)$ as a complex function has poles that correspond to the discrete spectrum of the hamiltonian, and a branch cut on the real axis corresponding to the discontinuity between causal and anti-causal solutions.
+\item The fact causal and anti-causal solutions differ is known from regular ODE due to the fact the original operator has a non-trivial homogeneous solution (another way to say is the operator $(E - \hat{H})$ has a non-zero kernel for that energy.  In the continuous spectrum case, this corresponds to the fact that that E is an energy eigenstates.
+\end{itemize}
+
+These insights, obtained in the contex of single particle QM, will still transfer their usefulness in QFT (albeit with more confusion) so better flesh them out now.
+
+
 
 
 
