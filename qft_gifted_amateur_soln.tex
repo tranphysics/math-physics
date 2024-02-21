@@ -521,9 +521,10 @@ Using this identity, we can compute the size of the branch cut: it is just the p
 \tG^+(E) - \tG^-(E) = 2 \pi \sum_l \ket{E, l} \bra{E, l} 
 \end{align}
 
-Let's now make some remarks about the math we have computed:
+\paragraph{Interpretation}:
 \begin{itemize}
-\item The Green operator $\tG(z)$ as a complex function has poles that correspond to the discrete spectrum of the hamiltonian, and a branch cut on the real axis corresponding to the discontinuity between causal and anti-causal solutions.
+\item The Green operator $\tG(z)$ as a complex function has poles that correspond to the discrete spectrum of the hamiltonian, and a branch cut on the real axis corresponding to the discontinuity between causal and anti-causal solutions.  
+\item The fact that the bound states correspond to poles is due to the fact they are \emph{stationary}.  They have un-damped excitations that run infinitely in time.  In fact, this can be seen in regular ODE's.  For example, an undamped spring has a oscillation that never dies in time.  That oscillation is called the normal mode of the spring, and if one computes the transfer function (the fourier transform of the green function or impulse response function) of the spring, you would get singularities at driving frequencies corresponding to the resonance frequency.
 \item The fact causal and anti-causal solutions differ is known from regular ODE due to the fact the original operator has a non-trivial homogeneous solution (another way to say is the operator $(E - \hat{H})$ has a non-zero kernel for that energy.  In the continuous spectrum case, this corresponds to the fact that that E is an energy eigenstates.
 \end{itemize}
 
