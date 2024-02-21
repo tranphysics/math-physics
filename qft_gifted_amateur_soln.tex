@@ -498,7 +498,7 @@ Let's analyze this operator more carefully and list some observations:
 \begin{itemize}
 \item \emph{Observation 3}: $\tG^\pm(E_n)$ is still undefined.  This is because the first term would be a singular projection operator:
 $$\lim_{\epsilon \rightarrow 0}\tG^\pm(E_n + i \epsilon) = \sum_l \underbrace{{i \ket{n, l} \bra{n, l}}}_{\text{Projection}} \times \underbrace{{1 \over 0}}_{\infty}$$.
-\item \emph{Observation 4}: $\tG(E)$ is well defined on the positive axis, but $\tG(z)$ has a branch cut on the real axis
+\item \emph{Observation 4}: $\tG^\pm(E)$ is well defined on the positive axis, but $\tG(z)$ has a branch cut on the real axis
 \end{itemize}
 
 In fact, for observation 3, while $\tG(E_n \pm i \epsilon)$ is undefined even the limit of $\epsilon \rightarrow 0$, we can still investigate the function $\tG(z)$.  From complex analysis, one can integrate around the poles.  If we do so for $\tG(z)$, we get a projector operator
@@ -528,6 +528,11 @@ Let's now make some remarks about the math we have computed:
 \end{itemize}
 
 These insights, obtained in the contex of single particle QM, will still transfer their usefulness in QFT (albeit with more confusion) so better flesh them out now.
+\begin{figure}
+  \includegraphics[width=\linewidth]{pic_zplane}
+  \caption{Singularity structure of the green operator}
+  \label{fig:boat1}
+\end{figure}
 
 
 
