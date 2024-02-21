@@ -512,20 +512,21 @@ For observation 4, we can show this by computing the size of the branch cut:
 
 The lorentzian shown is actually a delta function in the limit of $\epsilon \rightarrow 0$:
 \begin{align}
- \int {2 \epsilon \over x^2 + \epsilon^2} dx & = \pi \\
-\rightarrow  \lim_{\epsilon \rightarrow 0} \int {2 \epsilon \over x^2 + \epsilon^2} &= \pi \delta(x)
+ \int {2 \epsilon \over x^2 + \epsilon^2} dx & = 2 \pi \\
+\rightarrow  \lim_{\epsilon \rightarrow 0}  {2 \epsilon \over x^2 + \epsilon^2} &= 2 \pi \delta(x)
 \end{align}
 
 Using this identity, we can compute the size of the branch cut: it is just the projection operator onto the energy subspace $E$
 \begin{align}
-\tG^+(E) - \tG^-(E) = 2 \pi \sum_l \ket{E, l} \bra{E, l} 
+\tG^+(E) - \tG^-(E) \text{(E on positive real axis)} &= 2\pi \sum_l \int_0^\infty d\rho  \delta(\rho - E) \ket{\rho, l} \bra{\rho, l} \\
+ &=2 \pi \sum_l \ket{E, l} \bra{E, l} 
 \end{align}
 
 \paragraph{Interpretation}:
 \begin{itemize}
 \item The Green operator $\tG(z)$ as a complex function has poles that correspond to the discrete spectrum of the hamiltonian, and a branch cut on the real axis corresponding to the discontinuity between causal and anti-causal solutions.  
 \item The fact that the bound states correspond to poles is due to the fact they are \emph{stationary}.  They have un-damped excitations that run infinitely in time.  In fact, this can be seen in regular ODE's.  For example, an undamped spring has a oscillation that never dies in time.  That oscillation is called the normal mode of the spring, and if one computes the transfer function (the fourier transform of the green function or impulse response function) of the spring, you would get singularities at driving frequencies corresponding to the resonance frequency.
-\item The fact causal and anti-causal solutions differ is known from regular ODE due to the fact the original operator has a non-trivial homogeneous solution (another way to say is the operator $(E - \hat{H})$ has a non-zero kernel for that energy.  In the continuous spectrum case, this corresponds to the fact that that E is an energy eigenstates.
+\item The fact causal and anti-causal solutions differ is known from regular ODE due to the fact the original operator has a non-trivial homogeneous solution (another way to say is the operator $(E - \hat{H})$ has a non-zero kernel for that energy.  In the continuous spectrum case, this corresponds to the fact that that E is an energy eigenstates.  Because the free propagating states are not bound, they are not stationary and build up energy that blows up.  Relying on the spring analogy, consider a simple PDE like the wave equation.  The free propagating waves without a potential are not bound, yet they are eigenstates of the wave equation.  Those solutions for a given driving frequency (the green operator as a function of $E = \omega$) will have outward propagating wave and inward propagating wave solutions.  Those 2 solutions and their difference corresponds to the branch cut singularity in the green operator seen for the continuous spectrum.
 \end{itemize}
 
 These insights, obtained in the contex of single particle QM, will still transfer their usefulness in QFT (albeit with more confusion) so better flesh them out now.
