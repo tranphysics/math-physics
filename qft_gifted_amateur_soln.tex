@@ -411,7 +411,7 @@ $$ f(t) = \int {d \omega \over 2 \pi} \tilde{f}(\omega) e^{i \omega t}$$
 \paragraph{Interpretation of $G(x, x', E)$}:
 $G(x, x', E)$ can be interpreted as the response function to a sinusoidal (over time) drive of the schrodinger equation.  To illustrate this fact, it may be easiest to work with a simple example.  Consider a simple ODE like that of a damped spring: $$({d^2 \over dt^2} + \lambda {d \over dt} +  \omega_0^2) y = f(t)$$
 The impulse response function (green) function of this system is some damped oscillation. The fourier transform of this green function is a function of the form:
-$$G(\omega) = {1 \over 2 i \lambda \omega - \omega^2 + \omega_0^2}$$
+$$G(\omega) = {1 \over i \lambda \omega - \omega^2 + \omega_0^2}$$
 This is a resonance curve that gives the frequency response of the spring: the amplitude / phase of the spring sinusoidal response to a driving force $f(t)$ at frequency $\omega$.
 
 Furthermore, $\tilde{G}(x, x', E)$ in the expression above can be written as the coordinate reprensation of an operator $\mathbf{\tilde{G}}$.
