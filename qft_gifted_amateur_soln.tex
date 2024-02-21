@@ -372,7 +372,7 @@ G^{+} (x, x', t)& = \sum_{n, n'} \braket{x | n} \bra{n}e^{-i \mathbf{H}t} \ket{n
 Note $\mathbf{H}$ is diagonal in the $\ket{n}$ basis.  Define $\phi_n(x) \equiv \braket{x | n}$.  This becomes
 
 \begin{align}
-G^{+} (x, x', t)& = \sum_{n, n'} \phi_n(x) e^{-i (E_{n'}- E_n) t} \underbrace{\braket{n | n'}}_{\delta_{n n'}} \phi_{n'}^*(x') \theta(t) \\
+G^{+} (x, x', t)& = \sum_{n, n'} \phi_n(x) e^{-i E_{n'} t} \underbrace{\braket{n | n'}}_{\delta_{n n'}} \phi_{n'}^*(x') \theta(t) \\
 &=\theta(t) \sum_n \phi_n(x) \phi_n^*(x') e^{- i E_n t} 
 \end{align}
 
